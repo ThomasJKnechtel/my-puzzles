@@ -1,0 +1,41 @@
+.popupContainer{
+    position: relative;
+    
+}
+.popup{
+    
+    position:absolute;
+    flex-direction:column;
+    background-color:white;
+    align-items:center;
+    border-radius: 3px;
+    border: 1px solid grey;
+    margin-right: 10px;
+    left: -90px;
+}
+
+.popup *{
+    font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+    
+    font-weight: 500;
+    display:block;
+    color: #fff;
+}
+
+
+.popup_header{
+    
+    padding-top: 10px;
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+
+.popup main button{
+    margin: 10px;
+    width: 120px;
+}
+
+
+
