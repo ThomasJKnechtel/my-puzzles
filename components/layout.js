@@ -61,13 +61,16 @@ export default function Layout({ search }){
             
             <main className='h-full'>
                 {search&&
-                <><GamesTable games={games} loggedIn={session}>
+                <><GamesTable games={games} setGames={setGames} loggedIn={session}>
 
                     </GamesTable>
                     <div className='w-full inline-flex flex-row justify-center'>
-                        <button className="button-3 green text-l font-semibold">
+                    {games.length!=0&&
+                         <button className="button-3 green text-l font-semibold">
                             Generate Puzzles
                         </button>
+                    }
+                       
                     </div>
                         
                     
