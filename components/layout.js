@@ -5,13 +5,15 @@ import LogIn from './login-btn'
 import styles from "./layout.module.css"
 import { Popup} from "./popup"
 import { parse } from '@mliebelt/pgn-parser'
-import { useState} from 'react'
+import { createContext, useState} from 'react'
 import { GamesTable } from "@/components/table";
 
-export default function Layout({ search }){
+export const LayoutContext = createContext({})
+
+export default function Layout({ search, children }){
     const { data : session } = useSession()
     const [games , setGames ] = useState([])
-
+    
     async function getGames(){
         fetch("https://lichess.org/api/games/user/chessiandoceo?vs=jdrc&rated=true&analysed=false&tags=true&clocks=false&evals=false&opening=false&max=8&since=1651377600000&until=1651723200000&perfType=ultraBullet%2Cbullet%2Cblitz%2Crapid%2Cclassical%2Ccorrespondence").then(response => {
             if(!response.ok){
@@ -60,22 +62,10 @@ export default function Layout({ search }){
             </header> 
             
             <main className='h-full'>
-                {search&&
-                <><GamesTable games={games} setGames={setGames} loggedIn={session}>
-
-                    </GamesTable>
-                    <div className='w-full inline-flex flex-row justify-center'>
-                    {games.length!=0&&
-                         <button className="button-3 green text-l font-semibold">
-                            Generate Puzzles
-                        </button>
-                    }
-                       
-                    </div>
-                        
-                    
-
-                </>
+                {
+                <LayoutContext.Provider value={{games:games, setGames:setGames, session:session}}>
+                    {children}
+                </LayoutContext.Provider>
                     
                     }
             </main>
