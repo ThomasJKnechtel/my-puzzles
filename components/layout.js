@@ -13,7 +13,7 @@ export const LayoutContext = createContext({})
 
 export default function Layout({ search, children }){
     const { data : session } = useSession()
-    const [gamesData , setGamesData ] = useState([])
+    const [gamesPgns , setGamesPgns ] = useState([])
     
     async function getGames(){
         fetch("https://lichess.org/api/games/user/chessiandoceo?vs=jdrc&rated=true&analysed=false&tags=true&clocks=false&evals=false&opening=false&max=8&since=1651377600000&until=1651723200000&perfType=ultraBullet%2Cbullet%2Cblitz%2Crapid%2Cclassical%2Ccorrespondence").then(response => {
@@ -22,8 +22,9 @@ export default function Layout({ search, children }){
             }
             return response.text()
         }).then(gamesStr=> {
-            setGamesData(parse(gamesStr))
-           console.log(gamesData)
+            const gameList = gamesStr.split(/\n\s*\n\s*\n/)
+            setGamesPgns(gameList)
+           console.log(gamesPgns)
         })
         
     }
@@ -64,7 +65,7 @@ export default function Layout({ search, children }){
             
             <main className='h-full'>
                 {
-                <LayoutContext.Provider value={{gamesData:gamesData, setGamesData:setGamesData, session:session}}>
+                <LayoutContext.Provider value={{gamesPgns:gamesPgns, setGamesPgns:setGamesPgns, session:session}}>
                     {children}
                 </LayoutContext.Provider>
                     
