@@ -5,6 +5,7 @@ import LogIn from './login-btn'
 import styles from "./layout.module.css"
 import { Popup} from "./popup"
 import { parse } from '@mliebelt/pgn-parser'
+
 import { createContext, useState} from 'react'
 import { GamesTable } from "@/components/table";
 
@@ -12,7 +13,7 @@ export const LayoutContext = createContext({})
 
 export default function Layout({ search, children }){
     const { data : session } = useSession()
-    const [games , setGames ] = useState([])
+    const [gamesData , setGamesData ] = useState([])
     
     async function getGames(){
         fetch("https://lichess.org/api/games/user/chessiandoceo?vs=jdrc&rated=true&analysed=false&tags=true&clocks=false&evals=false&opening=false&max=8&since=1651377600000&until=1651723200000&perfType=ultraBullet%2Cbullet%2Cblitz%2Crapid%2Cclassical%2Ccorrespondence").then(response => {
@@ -21,8 +22,8 @@ export default function Layout({ search, children }){
             }
             return response.text()
         }).then(gamesStr=> {
-            setGames(parse(gamesStr))
-           console.log(games)
+            setGamesData(parse(gamesStr))
+           console.log(gamesData)
         })
         
     }
@@ -63,7 +64,7 @@ export default function Layout({ search, children }){
             
             <main className='h-full'>
                 {
-                <LayoutContext.Provider value={{games:games, setGames:setGames, session:session}}>
+                <LayoutContext.Provider value={{gamesData:gamesData, setGamesData:setGamesData, session:session}}>
                     {children}
                 </LayoutContext.Provider>
                     

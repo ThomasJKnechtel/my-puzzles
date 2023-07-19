@@ -12,7 +12,7 @@ export default function LoginPage() {
         <LayoutContext.Consumer>
           {
             (context)=>{
-              return (context.games.length!==0? (
+              return (context.gamesData.length!==0? (
                 <div className='w-full inline-flex flex-row justify-center'>
                     
                          <button className="button-3 green text-l font-semibold">
