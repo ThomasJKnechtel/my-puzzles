@@ -12,7 +12,7 @@ function GameLayout(){
   
     return(
         <div className=" w-full inline-flex justify-center flex-row mt-5 ">
-            <PgnViewer pgn={gamePgn}></PgnViewer>
+            <PgnViewer pgn='1. e4 c5 (1... e5 2. Nf3 (2. Nc3)) 2. Nf3'></PgnViewer>
         </div>
     )
 }
