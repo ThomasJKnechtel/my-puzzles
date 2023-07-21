@@ -1,110 +1,48 @@
 const {  parseGame } = require("@mliebelt/pgn-parser");
 const { Chess } = require("chess.js");
 const { useState, useEffect } = require("react");
-/**
- * Generates a component for a tree of subvariations 
- * @param {parseGame.move object} move 
- */
-function SubVariation(move, isVariation, pgn){
+
+function Variation({moves, currentVariation, depth}){
     
-    if(isVariation){
-         return (
-         <><label className="ml-1  text-gray-600">{move.moveNumber}.</label><label variation = {getPgn(move, game)} className=" text-gray-600 hover:text-gray-800 hover:font-semibold">{move.notation.notation}</label>
-         {move.variations.length !== 0&&(
-            <>
-            <label className=" text-gray-600 m-1">(</label>
-            {move.variations.map(variation=>{
-                return variation.map((move)=>{
-                    return SubVariation(move, true, variationObj)
-                })
-            })}
-            <label className=" text-gray-600 m-1">)</label>
-            </>
-        )}</>
-        )
     
-    }else{
-        game.history.pop()
-        return <>{move.variations.length !== 0&&(
-            <>
-            <label className=" text-gray-600 m-1">(</label>
-            {move.variations.map(variation=>{
-                return variation.map((move)=>{
-                    return SubVariation(move, true, variationObj)
-                })
-            })}
-            <label className="m-1 text-gray-600">)</label>
-            </>)
-        }</>
+    function removeLastMove(){
+        const copy = [...currentVariation]
+        copy.pop()
+        return copy
     }
-   
-}
-function pgnViewObject(pgnObject){
-    console.log(pgnObject)
-    const moves = pgnObject.moves
-    const movePairs = []
-    //if Blacks turn then add to own pair
-    if(moves[0].turn.Black)movePairs.pop([moves.shift()])
-    //add set of pairs to movePairs
-    moves.map((move, index)=>{
+    function updateVariation(move, isNewVariation){
         
-        if (index % 2 === 0)
-          movePairs.push(moves.slice(index, index + 2));
-      });
-    return movePairs
+        currentVariation.push(move.notation.notation)
+        return [...currentVariation]
+    }
+    function depthClass(){
+        const FONT_COLOR = 950-depth*200
+        if(depth!==0) return " text-sm text-gray-500 font-[400]"
+    }
+    return (
+        moves.map((move, index)=>{
+            
+            return (
+                <>
+                <div key={move.turn+move.notation.notation+"div"} className={depthClass()+" inline-block font-[400] focus-within:bg-blue-200 hover:font-medium"}>
+                {move.moveNumber&&<label key={move.moveNumber}>{move.moveNumber+"."}</label>}
+                <button key={move.turn+move.notation.notation} variation = {updateVariation(move)} className={"mr-1"}>{move.notation.notation}</button>
+                </div>
+                {move.variations.length!==0&&
+                    
+                    move.variations.map(variation=>{
+                    return <><br></br><label className="mr-1">(</label><Variation moves={variation} currentVariation={removeLastMove()} depth={depth+1}></Variation><label className="mr-1">)</label></>
+                    })
+                }
+                </>
+                )
+        })
+    )
 }
-function getPgn(move, variation){
-   variation.move(move.notation.notation)
-   return variation.pgn()
-    
-}
-
-
     
 export default function PgnViewer({pgn}){
    
-    const [pgnObject, setPgnObject] = useState(parseGame(pgn))
-    const MAIN_VARIATION = new Chess()
-    
-    return ( 
-    <div className="ml-4 overflow-y-scroll max-h-[480px]">
-    <table className='h-3/4 w-64  border-collapse border-2 border-black'>
-        
-        <thead className="bg-slate-500 sticky"><tr><th className="w-2/12 "></th><th className="w-[5/12] border-r-2 border-black"><label className="p-3">WHITE</label></th><th className="w-[5/12]"><label className="p-3">BLACK</label></th></tr></thead>
-        <tbody>
-            {   
-                pgnViewObject(pgnObject).map((movePair)=>{
-                if(movePair.length == 2){
-                
-                    return (<>
+    const PGN_OBJECT = parseGame(pgn)
 
-                   <tr id={movePair[0].moveNumber}>
-                    <td className= "border-2 bg-slate-500 border-black ">{movePair[0].moveNumber}</td>
-                    <td id={movePair[0].moveNumber+"White"} className="border-r-2 border-b-2 border-black hover:font-medium focus:bg-blue-200">
-                        <button variation={getPgn(movePair[0], MAIN_VARIATION)}>{movePair[0].notation.notation}</button>
-                    </td>
-                    <td id={movePair[1].moveNumber+"Black"} className="border-r-2 border-b-2 border-black hover:font-medium focus-within:bg-blue-200">
-                        <button variation={getPgn(movePair[1], MAIN_VARIATION)}>{movePair[1].notation.notation}</button>
-                    </td>
-                    </tr>
-                   {movePair[0].variations.length!==0&&<tr><td className= "border-2 bg-slate-200 border-black" colSpan="3">{SubVariation(movePair[0], false, MAIN_VARIATION)}</td></tr>}
-                   {movePair[1].variations.length!==0&&<tr><td className= "border-2 bg-slate-200 border-black" colSpan="3">{SubVariation(movePair[1], false,  MAIN_VARIATION)}</td></tr>}
-                    </>)
-                }else if(movePair[0].turn==="w"){
-                    return <tr id={movePair[0].moveNumber}><td className= "border-2 bg-slate-500 border-black ">{movePair[0].moveNumber}</td><td id={movePair[0].moveNumber+"White"} className="border-r-2 border-b-2 border-black hover:font-medium focus-within:bg-blue-200"><button>{movePair[0].notation.notation}</button></td><td></td></tr>
-                }else{
-                    return <tr id={movePair[0].moveNumber}><td className= "border-2 bg-slate-500 border-black">{movePair[0].moveNumber}</td><td></td><td id={movePair[0].moveNumber+"Black"} className="border-r-2 border-b-2 border-black hover:font-medium focus-within:bg-blue-200"><button>{movePair[0].notation.notation}</button></td></tr>
-                }
-                
-               })
-            
-               
-               
-            }
-        </tbody>
-        
-
-    </table>
-    </div>
-    )
+    return ( <div className="w-48 h-64 bg-white p-2 shadow-md border-solid"><div className="h-1/6 w-full bg-slate-400"></div><div className="w-full h-5/6 bg-amber-50"><Variation moves={PGN_OBJECT.moves} currentVariation={[]} depth={0}></Variation></div></div>)
 }
