@@ -9,6 +9,7 @@ import { Chess } from "chess.js";
 import PgnViewer from "@/components/pgn-viewer";
 import LegalChess from "@/components/chessboard";
 import { parseGame } from "@mliebelt/pgn-parser";
+import Timer from "@/components/timer";
 function GameLayout(){
     const searchParams = useSearchParams()
  
@@ -32,6 +33,7 @@ function GameLayout(){
   }
     return(
         <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
+            <Timer start time={15*60*1000}/>
             <LegalChess variation={currentVariaton} gamePgnObject = {gamePgnObject} setGamePgnObject = {setGamePgnObject} setCurrentVariation={setCurrentVariation}></LegalChess>
             <PgnViewer pgnObject={gamePgnObject} onMoveClick={onMoveClick}></PgnViewer>
         </div>
