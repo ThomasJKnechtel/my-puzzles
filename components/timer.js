@@ -2,41 +2,48 @@ import { useEffect, useState } from "react"
 
 export default function Timer({time, start, reset, pause, restart}){
     
-    const [timeLeft, setTimeLeft] = useState( time)
+    const [timeLeft, setTimeLeft] = useState(getTime(time))
     const [endTime, setEndTime] = useState( Date.now()+time)
     const [pauseTime, setPauseTime] = useState(null)
+
     
-    let timeObject = getTime(calculateTimeLeft())
     useEffect(()=>{
-        if(timeLeft<0) setTimeLeft(0)
         if(reset){
-            setTimeLeft(time)
+            setTimeLeft(getTime(time))
             setEndTime(Date.now()+time)
-            timeObject = getTime(timeLeft)
+            
         }
-        if(restart){
+    }, [reset])
+    useEffect(()=>{
+        if(restart && pauseTime){
             const timePaused = Date.now()-pauseTime
             setEndTime(timePaused+endTime)
-            timeObject = getTime(timeLeft)
+            
         }
-        else if(start){
-            if(timeLeft > 0){
+    }, [restart])
+    useEffect(()=>{
+        if(pause){
+            setPauseTime(Date.now())
+          
+        }
+    }, [pause])
+    useEffect(()=>{
+        if(timeLeft<0) setTimeLeft(0)
+        else if(start && !pause){
+            if(timeLeft.total > 0){
                 const timer = setTimeout(()=>{
-
-                setTimeLeft(calculateTimeLeft())
-                timeObject = getTime(timeLeft)
-                 }, 1000)
+                if(!pause){
+                    setTimeLeft(getTime(calculateTimeLeft()))
+                }
+                
+               
+                 }, 100)
             
             }
             
         }
-        else if(pause){
-            setPauseTime(Date.now())
-            timeObject = getTime(timeLeft)
-        }
-        if(timeLeft < 0)
         return ()=> clearTimeout()
-    })
+    }, [start, timeLeft, endTime])
     function calculateTimeLeft(){
         return endTime - Date.now()
     }
@@ -46,31 +53,31 @@ export default function Timer({time, start, reset, pause, restart}){
             hours : Math.floor((milli % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
             minutes : Math.floor((milli % (1000 * 60 * 60)) / (1000 * 60)),
             seconds :  Math.floor((milli % (1000 * 60)) / 1000),
-            microseconds : Math.floor((milli % (1000))/100)
+            microseconds : Math.floor((milli % (1000))/100),
+            total : milli
         }
     }
     return (
-        <div className="bg-slate-700 h-fit m-4 p-1 rounded-lg border-solid border-4 border-gray-600">
-        
-        {timeObject.days !== 0&&(
+        <div className="bg-slate-700 h-fit m-1 p-1 rounded-lg border-solid border-4 border-gray-600">
+        {timeLeft.days !== 0&&(
             <>
-            <span className="bg-slate-500"><label>{timeObject.days}</label></span>
+            <span className="bg-slate-500"><label>{timeLeft.days}</label></span>
             <span className="font-bold text-2xl">:</span></>)
-        }{timeObject.hours !== 0&&(<>
-            <span><label>{timeObject.hours}</label></span>
+        }{timeLeft.hours !== 0&&(<>
+            <span><label>{timeLeft.hours}</label></span>
             <span className="font-bold text-2xl">:</span> </>)
-        }{timeObject.minutes !== 0&&(<>
-            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg "><label className=" w-32">{timeObject.minutes/10 < 1&&0}{timeObject.minutes}</label></span>
+        }{timeLeft.minutes !== 0&&(<>
+            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg "><label className=" w-32">{timeLeft.minutes/10 < 1&&0}{timeLeft.minutes}</label></span>
             <span className="font-bold text-2xl">:</span></>)
-        }{timeObject.seconds !== 0?(<>
-            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg"><label>{timeObject.seconds/10 < 1&&0}{timeObject.seconds}</label></span>
+        }{timeLeft.seconds !== 0?(<>
+            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg"><label>{timeLeft.seconds/10 < 1&&0}{timeLeft.seconds}</label></span>
            </>):(<>
             <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg"><label>00</label></span>
             
             </>
                 
             )
-        }{(timeObject.minutes !== 0)?(<></>):(timeObject.microseconds === 0 && timeObject.minutes === 0)?(<>
+        }{(timeLeft.minutes !== 0)?(<></>):(timeLeft.microseconds === 0 && timeLeft.minutes === 0)?(<>
             <span className="font-bold text-2xl">:</span>
             <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg"><label>0</label></span>
            
@@ -78,7 +85,7 @@ export default function Timer({time, start, reset, pause, restart}){
                 
             ):(<>
             <span className="font-bold text-2xl">:</span>
-            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg"><label>{timeObject.microseconds}</label></span></>
+            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg"><label>{timeLeft.microseconds}</label></span></>
            )
         }
            
