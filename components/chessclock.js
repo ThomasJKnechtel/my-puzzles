@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Timer from "./timer";
 
-export default function ChessClock({isLeftTurn, pause}){
+export default function ChessClock({isLeftTurn, pause, timeLeft=0, timeRight=0}){
     const [leftTurn, setLeftTurn] = useState(isLeftTurn)
     function onButtonClick(){
         setLeftTurn(!leftTurn)
     }
     return (
-        <div className="inline-flex flex-col">
+        <div className="inline-flex flex-col self-center m-4">
         <div className=" inline-flex items-end w-full justify-between">
             {leftTurn?(
                 <button onClick={onButtonClick} className="w-0 h-0 
@@ -35,9 +35,9 @@ export default function ChessClock({isLeftTurn, pause}){
             
         </div>
         
-        <div className="inline-flex bg-red-700">
-            <Timer time={15*60*1000} pause={!leftTurn} start restart={leftTurn}></Timer>
-            <Timer time={15*60*1000} pause = {leftTurn} start restart={!leftTurn}></Timer>
+        <div className="inline-flex bg-red-700 ">
+            <Timer time={timeLeft} pause={(!leftTurn)|pause} start restart={leftTurn&!pause}></Timer>
+            <Timer time={timeRight} pause = {leftTurn|pause} start restart={!leftTurn&!pause}></Timer>
         </div>
         
         </div>

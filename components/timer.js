@@ -28,7 +28,7 @@ export default function Timer({time, start, reset, pause, restart}){
         }
     }, [pause])
     useEffect(()=>{
-        if(timeLeft<0) setTimeLeft(0)
+        if(timeLeft.total<0) setTimeLeft(getTime(0))
         else if(start && !pause){
             if(timeLeft.total > 0){
                 const timer = setTimeout(()=>{

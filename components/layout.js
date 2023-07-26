@@ -1,12 +1,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import LogIn from './login-btn'
-import styles from "./layout.module.css"
-import { Popup} from "./popup"
-import { parse } from '@mliebelt/pgn-parser'
 
-import { createContext, useState} from 'react'
+import { Popup} from "./popup"
+
+
+import { createContext, useEffect, useState} from 'react'
 import { GamesTable } from "@/components/table";
 
 export const LayoutContext = createContext({})
@@ -24,11 +23,25 @@ export default function Layout({ search, children }){
         }).then(gamesStr=> {
             const gameList = gamesStr.split(/\n\s*\n\s*\n/)
             setGamesPgns(gameList)
-           console.log(gamesPgns)
+            
+            
+          
         })
         
     }
-
+    useEffect(()=>{
+        if(gamesPgns.length !== 0){
+             sessionStorage.setItem('gamePgns', JSON.stringify(gamesPgns))
+        }
+       
+    }, [gamesPgns])
+    useEffect(()=>{
+        const storedPgns = JSON.parse(sessionStorage.getItem('gamePgns'))
+        if(storedPgns){
+            setGamesPgns(storedPgns)
+        }
+        
+    }, [])
     return (
         <div className="relative inline-flex flex-col align-middle h-full w-full">
             

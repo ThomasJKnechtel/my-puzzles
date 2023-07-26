@@ -35,7 +35,7 @@ export default function LegalChess({variation, gamePgnObject, setGamePgnObject, 
       turn : game.turn(),
       moveNumber : game.moveNumber(),
       notation: {from: sourceSquare, to: targetSquare, notation: ''},
-      variations: []
+      variations: [],
     }
     try{
       game.move({from: sourceSquare, to: targetSquare, promotion: 'q'})

@@ -4,6 +4,20 @@ import { GamesTable } from "@/components/table";
 
 
 export default function LoginPage() {
+ async function generatePuzzles(gamesPgns){
+  fetch("/api/generatePuzzles", {
+    method : "POST",
+    headers : { "Content-Type" : "application/json"},
+    body : JSON.stringify({"gamePgns": gamesPgns})
+  }).then((response)=>{
+    if(!response.ok){
+      console.log(response.status)
+    }
+    return response.json()
+  }).then((puzzles)=>{
+    console.log(puzzles)
+  })
+ }
  
   return (
 
@@ -15,7 +29,7 @@ export default function LoginPage() {
               return (context.gamesPgns.length!==0? (
                 <div className='w-full inline-flex flex-row justify-center'>
                     
-                         <button className="button-3 green text-l font-semibold">
+                         <button onClick ={()=>{generatePuzzles(context.gamesPgns)}} className="button-3 green text-l font-semibold">
                             Generate Puzzles
                         </button>
                     

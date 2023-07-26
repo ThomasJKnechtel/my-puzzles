@@ -56,5 +56,5 @@ export default function PgnViewer({pgnObject, onMoveClick}){
    
     
 
-    return ( <div className="w-48 h-64 bg-white p-2 shadow-md border-solid m-4"><div className="h-1/6 w-full bg-slate-400"></div><div className="w-full h-5/6 bg-amber-50"><Variation moves={pgnObject.moves} currentVariation={[]} depth={0} parentVariations={[]} onMoveClick={onMoveClick} coordinates={[]}></Variation></div></div>)
+    return ( <div className="w-48 h-64 shadow-md border-solid  overflow-auto bg-white"><div className="h-1/6 w-full bg-slate-400"></div><div className="w-full h-5/6"><Variation moves={pgnObject.moves} currentVariation={[]} depth={0} parentVariations={[]} onMoveClick={onMoveClick} coordinates={[]}></Variation></div></div>)
 }
