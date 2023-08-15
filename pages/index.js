@@ -1,23 +1,34 @@
 import { LayoutContext } from "@/components/layout";
 import Layout from "@/components/layout";
 import { GamesTable } from "@/components/table";
-
+import io from 'socket.io-client'
+import { useEffect } from "react";
 
 export default function LoginPage() {
- async function generatePuzzles(gamesPgns){
-  fetch("/api/generatePuzzles", {
-    method : "POST",
-    headers : { "Content-Type" : "application/json"},
-    body : JSON.stringify({"gamePgns": gamesPgns})
-  }).then((response)=>{
-    if(!response.ok){
-      console.log(response.status)
-    }
-    return response.json()
-  }).then((puzzles)=>{
-    console.log(puzzles)
-  })
- }
+ 
+  useEffect(() => {
+    fetch('/api/socketio').finally(() => {
+      const socket = io('http://localhost:3000')
+
+      socket.on('connect', () => {
+        console.log('connect')
+        socket.emit('hello')
+      })
+
+      socket.on('hello', data => {
+        console.log('hello', data)
+      })
+
+      socket.on('a user connected', () => {
+        console.log('a user connected')
+      })
+
+      socket.on('disconnect', () => {
+        console.log('disconnect')
+      })
+    })
+  }, []) 
+  
  
   return (
 
