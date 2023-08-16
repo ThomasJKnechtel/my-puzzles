@@ -1,4 +1,6 @@
 import { Server } from 'socket.io'
+import { spawn } from 'child_process'
+
 
 const ioHandler = (req, res) => {
   if (!res.socket.server.io) {
@@ -7,10 +9,16 @@ const ioHandler = (req, res) => {
     const io = new Server(res.socket.server)
 
     io.on('connection', socket => {
-      socket.broadcast.emit('a user connected')
+     
       socket.on('hello', msg => {
         socket.emit('hello', 'world!')
       })
+
+      socket.on('gamesPgns', async gamePgns =>{
+        console.log('test')
+       
+        
+    })
     })
 
     res.socket.server.io = io
@@ -25,5 +33,36 @@ export const config = {
     bodyParser: false
   }
 }
+
+async function generatePuzzles(gamePgns){
+  
+    console.log('test');
+    
+    return new Promise((resolve, reject) => {
+      const pythonProcess = spawn('python', [process.env.WEBSITE_PATH+"/Modules/PuzzleGenerator/PuzzleGenerator.py", JSON.stringify(gamePgns)]);
+      let result = null;
+  
+      pythonProcess.stdout.on('data', (data) => {
+        result = data.toString();
+        console.log(result);
+      });
+  
+      pythonProcess.stderr.on('data', (data) => {
+        console.error(`Error executing Python script: ${data.toString()}`);
+        reject(data.toString());
+      });
+  
+      pythonProcess.on('close', (code) => {
+        if (code === 0) {
+          console.log(result);
+          resolve(result);
+        } else {
+          console.log(`Python script exited with code ${code}`);
+          reject(`Python script exited with code ${code}`);
+        }
+      });
+    });
+  }
+  
 
 export default ioHandler

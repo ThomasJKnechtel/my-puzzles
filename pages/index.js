@@ -2,34 +2,35 @@ import { LayoutContext } from "@/components/layout";
 import Layout from "@/components/layout";
 import { GamesTable } from "@/components/table";
 import io from 'socket.io-client'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
+let socket
 export default function LoginPage() {
- 
+  
   useEffect(() => {
-    fetch('/api/socketio').finally(() => {
-      const socket = io('http://localhost:3000')
+    fetch('http://localhost:5050/getPuzzles').finally(() => {
+      socket = io('http://localhost:5050')
 
-      socket.on('connect', () => {
-        console.log('connect')
-        socket.emit('hello')
+      socket.on('puzzles', puzzles=>{
+        let puzzleList
+        if(puzzleList = sessionStorage.getItem('puzzles')){
+          sessionStorage.setItem('puzzles', puzzleList.concat(puzzles))
+        }else{
+          sessionStorage.setItem('puzzles', puzzles)
+        }
       })
-
-      socket.on('hello', data => {
-        console.log('hello', data)
-      })
-
-      socket.on('a user connected', () => {
-        console.log('a user connected')
-      })
-
       socket.on('disconnect', () => {
         console.log('disconnect')
       })
     })
   }, []) 
   
- 
+  function generatePuzzles(gamesPgns){
+    if(gamesPgns.length>0){
+       socket.emit('gamesPgns', JSON.stringify(gamesPgns))
+    }
+   
+  }
   return (
 
       <Layout search >
