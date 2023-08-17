@@ -1,35 +1,19 @@
 import { LayoutContext } from "@/components/layout";
 import Layout from "@/components/layout";
 import { GamesTable } from "@/components/table";
-import io from 'socket.io-client'
+import getSocket from "@/utils/socket";
+
 import { useEffect, useState } from "react";
 
-let socket
-export default function LoginPage() {
-  
-  useEffect(() => {
-    fetch('http://localhost:5050/getPuzzles').finally(() => {
-      socket = io('http://localhost:5050')
 
-      socket.on('puzzles', puzzles=>{
-        let puzzleList
-        if(puzzleList = sessionStorage.getItem('puzzles')){
-          sessionStorage.setItem('puzzles', puzzleList.concat(puzzles))
-        }else{
-          sessionStorage.setItem('puzzles', puzzles)
-        }
-      })
-      socket.on('disconnect', () => {
-        console.log('disconnect')
-      })
-    })
-  }, []) 
+export default function LoginPage({socket, setSocket}) {
   
+
   function generatePuzzles(gamesPgns){
     if(gamesPgns.length>0){
-       socket.emit('gamesPgns', JSON.stringify(gamesPgns))
+       window.location.href="/select_puzzles"
     }
-   
+    
   }
   return (
 
