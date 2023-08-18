@@ -16,7 +16,6 @@ export default function App({
     const newSocket = io('http://localhost:5050')
     setSocket(newSocket)
     
-    
     return () => {
        socket.disconnect();
       };
