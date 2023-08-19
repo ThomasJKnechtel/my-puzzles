@@ -18,13 +18,13 @@ function Puzzle({white, black, date, fen, continuation, puzzles, setPuzzles, dat
         setPuzzles(lst)
     }
     async function savePuzzle(){
-        const id = session.user.id
+        const username = session.user.name
         await fetch('/api/db/addPuzzle', {
             method: "POST",
             headers:{
                 "content-type": "application/json"
             },
-            body: JSON.stringify({white, black, date, fen, continuation, dateUploaded, id})
+            body: JSON.stringify({white, black, date, fen, continuation, dateUploaded, username})
         })
 
     }
