@@ -1,5 +1,6 @@
 
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 
 
 const Chessboard = dynamic(() => import('chessboardjsx'), {
@@ -32,26 +33,45 @@ function Puzzle({white, black, date, fen, continuation, puzzles, setPuzzles, dat
   
 }
 
-export default function PuzzleTable({puzzles, setPuzzles, session}){
-    return (
-        <div className=" overflow-y-auto h-1/2">
+export default function PuzzleTable({puzzles, setPuzzles, session,  popdown, setPopDown}){
 
+    useEffect(()=>{
+        if(popdown){
+            document.querySelector('#puzzleTableBody').style='display: table-row-group;'
+        }else{
+            document.querySelector('#puzzleTableBody').style='display: none;'
+        }
+    }, [popdown])
+    return (
         
-        <table className="mx-auto w-4/5 m-10 table-fixed ">
+        <div className="flex flex-col items-center mt-6 ">
+        
+        <div className="  w-4/5  overflow-y-auto h-[400px]  ">
+        <div className=" bg-slate-400 w-fit pt-1 px-1 rounded-t-md shadow-md border-2 border-slate-300">
+        <button onClick={()=>{setPopDown(!popdown)}}><label className="text-lg font-bold">Puzzles</label>{popdown?<label className="text-lg m-2 text-center">&#9650;</label>:<label className="text-lg m-2 text-center">&#9660;</label>}</button>
+            
+        </div>
+        
+        
+        <table className=" w-full table-fixed h-1/2">
             
             <thead className=" bg-slate-300 mb-2  shadow-lg h-10 sticky top-0 z-10"><tr className="h-14 sticky top-0 z-10" ><th className="rounded-l-md sticky top-0 z-10"></th><th  className=" sticky top-0 z-10">White</th><th className="sticky top-0 z-10">Black</th><th className="sticky top-0 z-10">Date</th><th className=" sticky top-0 z-10">Date Uploaded</th>{session&&<th className="w-13 sticky top-0 z-10"><button onClick={()=>setPuzzles([])} className="button-3 font-medium text-sm green hover:bg-green-500">Save</button></th>}<th className="w-13 sticky top-0 z-10"><button onClick={()=>setPuzzles([])} className="button-3 font-medium text-sm bg-red-700 hover:bg-red-800">Delete</button></th></tr></thead>
          <tbody>
              <tr className="h-10"></tr>
          </tbody>   
         
-        <tbody class="border-2" >
-            {   puzzles&&(
+        <tbody id="puzzleTableBody" className="border-2" >
+            {   puzzles &&(
                  puzzles.map((puzzle) =>{
                         return <Puzzle white={puzzle.white} black = {puzzle.black} date = {puzzle.date} fen = {puzzle.fen} continuation={puzzle.continuation} puzzles={puzzles} setPuzzles={setPuzzles} session={session}></Puzzle>
                     })
             )
- }   
+        }   
         </tbody>
-        </table> </div>
+        
+        </table>
+        </div>
+        </div>
+        
     )
 }

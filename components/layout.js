@@ -76,7 +76,7 @@ export default function Layout({ search, children }){
                 }
             </header> 
             
-            <main className='h-full'>
+            <main className='h-full overflow-auto'>
                 {
                 <LayoutContext.Provider value={{gamesPgns:gamesPgns, setGamesPgns:setGamesPgns, session:session}}>
                     {children}

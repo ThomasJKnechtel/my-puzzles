@@ -25,7 +25,7 @@ export function Popup({buttonChildren, buttonStyle, children, headerChildren}){
     }
     document.addEventListener('mousedown', closeOpenPopup)
     return (
-        <div className = "mr-0 ml-auto relative ">
+        <div className = "mr-0 ml-auto relative z-50">
             <button className="rounded-lg focus:border-2 border-gray-400" onClick={popupButtonClicked}>{buttonChildren}</button>
             {isOpen&& (
                 <div ref={popupRef} className = "absolute border-2 border-gray-400 left-[-135px] bg-gray-400 rounded-lg shadow-lg">

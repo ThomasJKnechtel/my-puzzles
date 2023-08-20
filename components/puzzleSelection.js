@@ -1,15 +1,15 @@
-import { useState } from "react"
 
-export default function PuzzleFormSelection({loggedIn}){
-    const [popdown, setPopDown] = useState(false)
+
+export default function PuzzleFormSelection({loggedIn, popdown, setPopDown}){
+    
     return (
         <div className="w-4/5 mt-6">
         <div className=" bg-slate-400 w-fit pt-1 px-1 rounded-t-md shadow-md border-2 border-slate-300">
-        <button onClick={()=>{setPopDown(!popdown)}}><label className="text-lg font-bold">Select Puzzles</label>{popdown?<label className="text-lg m-2 text-center">&#9650;</label>:<label className="text-lg m-2 text-center">&#9660;</label>}</button>
+        <button onClick={()=>{setPopDown(popdown)}}><label className="text-lg font-bold">Select Puzzles</label>{popdown?<label className="text-lg m-2 text-center">&#9650;</label>:<label className="text-lg m-2 text-center">&#9660;</label>}</button>
             
         </div>
         {popdown?(
-            <form className=" p-2 bg-slate-300 rounded-b-md rounded-r-md mb-4 w-full shadow-md  ">
+            <form action='/getPuzzles' method="POST" className=" p-2 bg-slate-300 rounded-b-md rounded-r-md mb-4 w-full shadow-md  ">
            
            <fieldset className="bg-slate-200 my-2 rounded-md flex">
                <div className=" w-1/2"><label className="m-2 mr-6" for="player">Player</label><input className="m-2 w-4/5 rounded-sm" type="text" name="player"></input></div>
@@ -35,6 +35,10 @@ export default function PuzzleFormSelection({loggedIn}){
 
                </div>
               
+           </fieldset>
+           <fieldset className="border-2 border-slate-500 p-2">
+            <legend>Sort Criteria</legend>
+            <div className=" flex flex-row justify-between items-center"><div><label className="mr-20">Date Played</label><input type="radio" name="sortCriteria" value="datePlayed"></input></div><div><label  className="mr-20">Date Uploaded</label><input type="radio" name="sortCriteria" value="dateUploaded"></input></div><div><label  className="mr-20">Most Attempts</label><input type="radio" name="sortCriteria" value="mostAttempts"></input></div><div><label className="mr-20">Least Attempts</label><input type="radio" name="sortCriteria" value="leastAttempts"></input></div><div><label className="mr-20">Low Success Rate</label><input type="radio" name="sortCriteria" value="lowSuccessRate"></input></div></div>
            </fieldset>
 <div className="flex flex-row justify-between w-1/2 px-2 m-2 bg-slate-200 p-2 rounded-md">
             <label className="mx-2">Number of Games</label><input className="mr-8 w-60" type="number"></input>

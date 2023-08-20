@@ -32,6 +32,12 @@ const nextConfig = {
             port: '',
             pathname: '/material-outlined/96/trash--v2.png',
           },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
+            pathname: '/material-outlined/48/puzzle.png'
+          }
 
         ],
       },
