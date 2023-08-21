@@ -10,5 +10,5 @@ export default async function getPuzzles(searchParams){
     numberOfPuzzles=numberOfPuzzles?(numberOfPuzzles):20
     const query = `EXEC get_puzzles @player=${player}, @opponent=${opponent}, @fromDatePlayed=${startDate}, @toDatePlayed=${endDate}, @fromDateUploaded=${startDateUploaded}, @toDateUploaded=${endDateUploaded}, @attempts=NULL, @success_rate=NULL, @sortCriteria='datePlayed', @numberOfPuzzles=${numberOfPuzzles}, @username=NULL`
     const result = await db.query(query)
-    return result.recordsets
+    return result.recordsets[0]
 }

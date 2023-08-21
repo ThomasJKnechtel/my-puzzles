@@ -7,17 +7,15 @@ import LoadingIcon from "@/components/loadingIcon";
 
 import getPuzzles from "./api/db/getPuzzles";
 
-export default function SelectPuzzlesPage({ socket}){
+export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
     const { data : session } = useSession()
-    const [puzzles, setPuzzles] = useState(null)
+    const [puzzles, setPuzzles] = useState(JSON.parse(puzzlesFromSearch))
     const [popDownTable, setPopDownTable] = useState(true)
     const [progress,  setProgress] = useState(0)
     const [displayProgress, setDisplayProgress] = useState(false)
-    
+   
     useEffect(() => {
-      
-      console.log(props)
-        if(socket && puzzles){
+        if(socket && !puzzles){
             
             socket.emit('gamesPgns', sessionStorage.getItem('gamePgns'))
             sessionStorage.setItem('gamePgns',JSON.stringify([]))
@@ -27,6 +25,7 @@ export default function SelectPuzzlesPage({ socket}){
 
       }, [socket]) 
       useEffect(()=>{
+        console.log(puzzles)
         if(socket){
             socket.on('puzzles', newPuzzles=>{
                 newPuzzles = JSON.parse(newPuzzles)
@@ -50,7 +49,7 @@ export default function SelectPuzzlesPage({ socket}){
         sessionStorage.setItem('puzzles', JSON.stringify(puzzles))
       }, [puzzles, socket])
       return (
-        <Layout><div className=" flex flex-col justify-between items-center overflow-hidden"><PuzzleFormSelection loggedIn={session} popdown={!popDownTable} setPopDown={setPopDownTable}></PuzzleFormSelection><PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} popdown={popDownTable} setPopDown={setPopDownTable}></PuzzleTable>{displayProgress&&<LoadingIcon progress={progress}></LoadingIcon>}</div></Layout>
+        <Layout><div className=" flex flex-col justify-between items-center overflow-hidden"><PuzzleFormSelection loggedIn={session} popdown={!popDownTable} setPopDown={setPopDownTable}></PuzzleFormSelection><PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} popdown={popDownTable} setPopDown={setPopDownTable} saved={saved}></PuzzleTable>{displayProgress&&<><LoadingIcon progress={progress}></LoadingIcon><label>{progress}%</label></>}</div></Layout>
       )
 
 }
@@ -60,6 +59,5 @@ export async function getServerSideProps(context){
   if(Object.keys(context.query).length){
     puzzles = await getPuzzles(context.query)
   }
-  console.log(puzzles)
-  return { props : { 'puzzles': JSON.stringify(puzzles) }}
+  return { props : { 'puzzlesFromSearch': JSON.stringify(puzzles), 'saved':true }}
 }

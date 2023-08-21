@@ -2,14 +2,14 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
+import formatDate from "@/utils/formatDate";
 
 const Chessboard = dynamic(() => import('chessboardjsx'), {
     ssr: false  // <- this do the magic ;)
     });
 
-function Puzzle({white, black, date, fen, continuation, puzzles, setPuzzles, dateUploaded, session }){
-   
+function Puzzle({white, black, date, fen, continuation, puzzles, setPuzzles, dateUploaded, session, saved }){
+    const [isSaved, setSaved] = useState(saved)
     function removePuzzle(){
         const lst = []
         puzzles.map((puzzle)=>{
@@ -21,6 +21,7 @@ function Puzzle({white, black, date, fen, continuation, puzzles, setPuzzles, dat
     }
     async function savePuzzle(){
         const username = session.user.name
+        setSaved(true)
         await fetch('/api/db/addPuzzle', {
             method: "POST",
             headers:{
@@ -30,11 +31,11 @@ function Puzzle({white, black, date, fen, continuation, puzzles, setPuzzles, dat
         })
 
     }
-    return(<tr className="bg-slate-50 p-4 odd:bg-slate-300 "><td className="text-left align-middle"><button className=" border-slate-400 hover:border-2"><Chessboard position={fen} id={fen} width={140}></Chessboard></button></td><td>{white}</td><td>{black}</td><td>{date}</td>{dateUploaded?<td>{dateUploaded}</td>:<td>N/A</td>}{session&&<td><button onClick={()=>{savePuzzle()}} className="button-3 text-xl font-medium green  hover:bg-green-500 h-14 w-24 ">Save</button></td>}<td><button onClick={()=>{removePuzzle(puzzles, setPuzzles)}} className="button-3 text-xl font-medium bg-red-700 hover:bg-red-800 h-14 w-24 ">Delete</button></td></tr>)
+    return(<tr className="bg-slate-50 p-4 odd:bg-slate-300 "><td className="text-left align-middle"><button className=" border-slate-400 hover:border-2"><Chessboard position={fen} id={fen} width={140}></Chessboard></button></td><td>{white}</td><td>{black}</td><td>{date}</td>{dateUploaded?<td>{dateUploaded}</td>:<td>N/A</td>}<td>{(session&&!isSaved)&&<button onClick={()=>{savePuzzle()}} className="button-3 text-xl font-medium green  hover:bg-green-500 h-14 w-24 ">Save</button>}</td><td><button onClick={()=>{removePuzzle(puzzles, setPuzzles)}} className="button-3 text-xl font-medium bg-red-700 hover:bg-red-800 h-14 w-24 ">Delete</button></td></tr>)
   
 }
 
-export default function PuzzleTable({puzzles, setPuzzles, session,  popdown, setPopDown}){
+export default function PuzzleTable({puzzles, setPuzzles, session,  popdown, setPopDown, saved}){
     const router = useRouter()
    
     useEffect(()=>{
@@ -65,7 +66,10 @@ export default function PuzzleTable({puzzles, setPuzzles, session,  popdown, set
         <tbody id="puzzleTableBody" className="border-2" >
             {   puzzles &&(
                  puzzles.map((puzzle) =>{
-                        return <Puzzle white={puzzle.white} black = {puzzle.black} date = {puzzle.date} fen = {puzzle.fen} continuation={puzzle.continuation} puzzles={puzzles} setPuzzles={setPuzzles} session={session}></Puzzle>
+                        if(puzzle){
+                             return <Puzzle white={puzzle.white} black = {puzzle.black} date = {formatDate(puzzle.date)} fen = {puzzle.fen} continuation={puzzle.continuation} puzzles={puzzles} setPuzzles={setPuzzles} dateUploaded={formatDate(puzzle.date_uploaded) } saved={saved}session={session}></Puzzle>
+                        }
+                       
                     })
             )
         }   
