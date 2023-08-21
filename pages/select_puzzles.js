@@ -4,18 +4,24 @@ import Layout from "../components/layout"
 import PuzzleFormSelection from "@/components/puzzleSelection"
 import { useSession } from "next-auth/react";
 import LoadingIcon from "@/components/loadingIcon";
-export default function SelectPuzzlesPage({socket}){
+
+import getPuzzles from "./api/db/getPuzzles";
+
+export default function SelectPuzzlesPage({ socket}){
     const { data : session } = useSession()
-    const [puzzles, setPuzzles] = useState([])
+    const [puzzles, setPuzzles] = useState(null)
     const [popDownTable, setPopDownTable] = useState(true)
     const [progress,  setProgress] = useState(0)
     const [displayProgress, setDisplayProgress] = useState(false)
+    
     useEffect(() => {
-        if(socket){
+      
+      console.log(props)
+        if(socket && puzzles){
             
             socket.emit('gamesPgns', sessionStorage.getItem('gamePgns'))
             sessionStorage.setItem('gamePgns',JSON.stringify([]))
-            setDisplayProgress(true)
+            
                
         }   
 
@@ -27,7 +33,7 @@ export default function SelectPuzzlesPage({socket}){
             
                 const newPuzzlesList = newPuzzles.concat(puzzles)
                 setPuzzles(newPuzzlesList)
-                
+                setDisplayProgress(true)
                 
                 })
                 socket.on('disconnect', () => {
@@ -47,4 +53,13 @@ export default function SelectPuzzlesPage({socket}){
         <Layout><div className=" flex flex-col justify-between items-center overflow-hidden"><PuzzleFormSelection loggedIn={session} popdown={!popDownTable} setPopDown={setPopDownTable}></PuzzleFormSelection><PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} popdown={popDownTable} setPopDown={setPopDownTable}></PuzzleTable>{displayProgress&&<LoadingIcon progress={progress}></LoadingIcon>}</div></Layout>
       )
 
+}
+export async function getServerSideProps(context){
+  console.log(context.query)
+  let puzzles = null
+  if(Object.keys(context.query).length){
+    puzzles = await getPuzzles(context.query)
+  }
+  console.log(puzzles)
+  return { props : { 'puzzles': JSON.stringify(puzzles) }}
 }

@@ -17,7 +17,10 @@ export default function App({
     setSocket(newSocket)
     
     return () => {
-       socket.disconnect();
+        if(socket){
+            socket.disconnect();
+        }
+       
       };
    }, [])
     return (

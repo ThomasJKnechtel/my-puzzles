@@ -1,5 +1,6 @@
 
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 
@@ -34,7 +35,8 @@ function Puzzle({white, black, date, fen, continuation, puzzles, setPuzzles, dat
 }
 
 export default function PuzzleTable({puzzles, setPuzzles, session,  popdown, setPopDown}){
-
+    const router = useRouter()
+   
     useEffect(()=>{
         if(popdown){
             document.querySelector('#puzzleTableBody').style='display: table-row-group;'
