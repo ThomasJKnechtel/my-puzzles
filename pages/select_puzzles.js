@@ -56,8 +56,10 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
 export async function getServerSideProps(context){
   console.log(context.query)
   let puzzles = null
+  let saved = false
   if(Object.keys(context.query).length){
     puzzles = await getPuzzles(context.query)
+    saved = true
   }
-  return { props : { 'puzzlesFromSearch': JSON.stringify(puzzles), 'saved':true }}
+  return { props : { 'puzzlesFromSearch': JSON.stringify(puzzles), 'saved':saved }}
 }

@@ -8,7 +8,7 @@ const Chessboard = dynamic(() => import('chessboardjsx'), {
     ssr: false  // <- this do the magic ;)
     });
 
-function Puzzle({white, black, date, fen, continuation, puzzles, setPuzzles, dateUploaded, session, saved }){
+function Puzzle({white, black, date, fen, continuation, puzzles, setPuzzles, dateUploaded, session, saved, turn }){
     const [isSaved, setSaved] = useState(saved)
     function removePuzzle(){
         const lst = []
@@ -27,7 +27,7 @@ function Puzzle({white, black, date, fen, continuation, puzzles, setPuzzles, dat
             headers:{
                 "content-type": "application/json"
             },
-            body: JSON.stringify({white, black, date, fen, continuation, dateUploaded, username})
+            body: JSON.stringify({white, black, date, fen, continuation, dateUploaded, username, turn})
         })
 
     }
@@ -67,7 +67,7 @@ export default function PuzzleTable({puzzles, setPuzzles, session,  popdown, set
             {   puzzles &&(
                  puzzles.map((puzzle) =>{
                         if(puzzle){
-                             return <Puzzle white={puzzle.white} black = {puzzle.black} date = {formatDate(puzzle.date)} fen = {puzzle.fen} continuation={puzzle.continuation} puzzles={puzzles} setPuzzles={setPuzzles} dateUploaded={formatDate(puzzle.date_uploaded) } saved={saved}session={session}></Puzzle>
+                             return <Puzzle white={puzzle.white} black = {puzzle.black} date = {formatDate(puzzle.date)} fen = {puzzle.fen} continuation={puzzle.continuation} puzzles={puzzles} setPuzzles={setPuzzles} dateUploaded={formatDate(puzzle.date_uploaded) } saved={saved}session={session} turn={puzzle.turn}></Puzzle>
                         }
                        
                     })

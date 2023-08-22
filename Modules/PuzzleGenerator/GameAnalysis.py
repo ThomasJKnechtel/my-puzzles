@@ -21,8 +21,9 @@ class GameAnalysis:
         self.engine.configure({"hash":hash})
         self.game = game
         self.puzzles = []
-        self.currentContinuation = ''
+        self.currentContinuation = []
         self.fen = self.board.fen()
+        self.turn = None
         self.currNode = None
         self.state = STATE.ANALYSE_MOVE
     def getAnalysis(self, topMoveCount: int, infoType):
@@ -87,13 +88,14 @@ class GameAnalysis:
                 if self.isOnlyMove():
                     self.state = STATE.WINNING_TURN
                     self.fen=self.board.fen()
+                    self.turn = self.board.turn
                 else: self.state=STATE.ANALYSE_MOVE
             elif self.state== STATE.WINNING_TURN:
                 move = self.getMove(0)
                 if move == None:
                     self.state = STATE.PUZZLE_END
                 else:
-                    self.currentContinuation += self.moveToString(move)
+                    self.currentContinuation.append(self.moveToString(move))
                     self.updateBoard(move)
                     self.state = STATE.LOSING_TURN
                     
@@ -104,7 +106,7 @@ class GameAnalysis:
                     self.updateBoard(move)
                     self.getAnalysis(2, engine.INFO_SCORE|engine.INFO_PV)
                     if self.isOnlyMove():
-                        self.currentContinuation += self.moveToString(move)+" " 
+                        self.currentContinuation.append(self.moveToString(move)) 
                         self.state = STATE.WINNING_TURN
                     else: self.state = STATE.PUZZLE_END
                 else: 
@@ -112,8 +114,8 @@ class GameAnalysis:
             elif self.state==STATE.PUZZLE_END:
                 self.board.set_fen(self.fen)
                 if(len(self.currentContinuation)>0):
-                    self.puzzles.append({'white':self.game.headers["White"],'black': self.game.headers["Black"], 'date':self.game.headers["Date"],'fen': self.fen,'continuation':self.currentContinuation,'event': self.game.headers["Event"],'attempts':0,'success_rate':0,})
-                self.currentContinuation=''
+                    self.puzzles.append({'white':self.game.headers["White"],'black': self.game.headers["Black"], 'date':self.game.headers["Date"],'fen': self.fen,'continuation':self.currentContinuation,'event': self.game.headers["Event"],'attempts':0,'success_rate':0, 'turn':self.turn})
+                self.currentContinuation.clear()
                 self.state = STATE.ANALYSE_MOVE
             elif self.state == STATE.ALL_PUZZLES_GENERATED:
                 self.stopEngine()
