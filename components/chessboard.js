@@ -1,74 +1,69 @@
 import dynamic from 'next/dynamic';
 
-import { Component } from 'react';
-import PropTypes from 'prop-types';
-
+import {useEffect, useState } from 'react';
 import { Chess } from 'chess.js';
-import { parseGame } from '@mliebelt/pgn-parser';
-import { checkIfMoveExists, getMoveFromPgn, getNextMove } from './pgn_utilities';
+
+
+import { addMove, getMove } from '@/utils/PGNViewerObject';
 
 
 
-export default function LegalChess({variation, gamePgnObject, setGamePgnObject, setCurrentVariation}) {
-  const game = new Chess()
-  
-  if(variation.moves.length!=0||variation.parentVariations.length!=0){
-    game.reset()
-    console.log(variation)
-    variation.parentVariations.map(variation=>{
-  
-      variation.map((move, index)=>{
-        if(index!=variation.length-1){
+export default function LegalChess({fen, currentMove, setCurrentMove, pgnViewerObject, setPgnViewerObject}) {
+  let game = new Chess()
+  const [gameFen, setGameFen] = useState(fen)
+ 
+  useEffect(()=>{
+    if(currentMove){
+      game.reset()
+      currentMove.variation.map(move=>{
+        try{
            game.move(move)
+        }catch(err){
+          console.log(err)
         }
        
       })
-    })
-    variation.moves.map(move=>{
-        game.move(move)
-    })
-  }
+      setGameFen(game.fen())
+    }
+  }, [currentMove])
 
 //Ignore spaghetti code
   function onDrop({sourceSquare, targetSquare}){
-    const MOVE_OBJECT = {
-      turn : game.turn(),
-      moveNumber : game.moveNumber(),
-      notation: {from: sourceSquare, to: targetSquare, notation: ''},
-      variations: [],
+    game = new Chess(gameFen)
+    const turn = game.turn()
+    const moveNumber = game.moveNumber()
+    const MOVE_OBJ = {
+      'from': sourceSquare,
+      'to':targetSquare,
+      'promotion':'q'
     }
+   
     try{
-      game.move({from: sourceSquare, to: targetSquare, promotion: 'q'})
+      const MOVE = game.move(MOVE_OBJ)
+      const tempPgnViewerObject = pgnViewerObject
       
-      MOVE_OBJECT.notation.notation = game.history().pop()
-      const [NEXT_MOVE, moves] = getNextMove(gamePgnObject, variation.coordinates, 1)
-      
-      if(!NEXT_MOVE){ //if last move in variation
-        variation.moves.push(MOVE_OBJECT.notation.notation)
-        variation.coordinates[variation.coordinates.length-1][0] += 1
-        moves.push(
-          MOVE_OBJECT
-        )
-      }else if(checkIfMoveExists(NEXT_MOVE, MOVE_OBJECT.notation.notation)){
-        console.log("move exists")
+      let moveCoordinates = null
+      if(currentMove){
+        moveCoordinates = addMove(tempPgnViewerObject, currentMove.coordinates, {'turn': turn, 'moveNumber': moveNumber, 'notation': {notation:MOVE.san }}  )
       }else{
-          NEXT_MOVE.variations.push([MOVE_OBJECT])
-          variation.moves.push(NEXT_MOVE.notation.notation)
-          variation.parentVariations.push(variation.moves)
-          variation.moves = [MOVE_OBJECT.notation.notation]
-          variation.depth += 1
-          variation.coordinates[variation.coordinates.length-1][0] += 1
-          variation.coordinates[variation.coordinates.length-1].push(NEXT_MOVE.variations.length-1)
-          variation.coordinates.push([0])
+        moveCoordinates = addMove(tempPgnViewerObject, null,  {'turn': turn, 'moveNumber': moveNumber, 'notation': {notation:MOVE.san }})
       }
+      const newCurrentMove = getMove(tempPgnViewerObject, moveCoordinates)
+      newCurrentMove.variation.map(move=>{
+        try{
+           game.move(move)
+        }catch(err){
+          console.log(err)
+        }
+       
+      })
+      setGameFen(game.fen())
+      setPgnViewerObject(tempPgnViewerObject)
+      setCurrentMove(newCurrentMove)
       
-      setGamePgnObject(structuredClone(gamePgnObject))
-      setCurrentVariation(structuredClone(variation))
       
-      }
-      
-    catch(error){
-      console.error(error)
+    }catch(err){
+      console.log(err)
     }
   }
     const Chessboard = dynamic(() => import('chessboardjsx'), {
@@ -76,7 +71,7 @@ export default function LegalChess({variation, gamePgnObject, setGamePgnObject, 
         });
 
     
-    return <Chessboard id="game" position={game.fen()} onDrop={onDrop} draggable={true}></Chessboard>
+    return <Chessboard id="game" position={gameFen} onDrop={onDrop} draggable={true}></Chessboard>
 
 }
 

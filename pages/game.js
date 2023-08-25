@@ -5,46 +5,46 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation'
 
 
-import { Chess } from "chess.js";
-import PgnViewer from "@/components/pgn-viewer";
 import LegalChess from "@/components/chessboard";
-import { parseGame } from "@mliebelt/pgn-parser";
-import Timer from "@/components/timer";
-import getTimeInMillis from "@/utils/getTimeMillis";
-import ChessClock from "@/components/chessclock";
+
 import Link from "next/link";
+import getPGNViewerObject, { addMove } from "@/utils/PGNViewerObject";
+import PGNViewer from "@/components/pgnViewer";
+import GameDataDisplay from "@/components/displayGameData";
 function GameLayout(){
-    const searchParams = useSearchParams()
- 
-  const gamePgn = JSON.parse(decodeURIComponent(searchParams.get('pgn')))
-  const [currentVariaton, setCurrentVariation] = useState({moves:[], startingMove:0, firstMove: '', depth:0, parentVariations:[]})
-  const [gamePgnObject, setGamePgnObject] = useState(parseGame(gamePgn))
- 
+   
 
-  function onMoveClick(event){
-    const moveComponent = event.target
-    setCurrentVariation(
-        {   
-            moves:JSON.parse(moveComponent.getAttribute('variation')), 
-            startingMove: moveComponent.getAttribute('variationStart'), 
-            firstMove: moveComponent.getAttribute('variationFirstMove'),
-            depth: moveComponent.getAttribute('depth'),
-            parentVariations: JSON.parse(moveComponent.getAttribute('parentVariations')),
-            coordinates: JSON.parse(moveComponent.getAttribute('coordinates'))
-         })
 
-  }
+  const [pgnViewerObject, setPgnViewerObject] = useState(null)
+  const [currentMove, setCurrentMove] = useState(null)
+  const [fen, setFen] = useState("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+  const [gamePgn, setGamePgn] = useState(null)
+ 
+    
+  useEffect(()=>{
+    const searchParams = new URLSearchParams(location.search)
+    setGamePgn(JSON.parse(decodeURIComponent(searchParams.get('pgn'))))
+   
+        setPgnViewerObject(getPGNViewerObject(JSON.parse(decodeURIComponent(searchParams.get('pgn')))))
+    
+    
+}, [])
+   
     return(
         <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
-            <ChessClock isLeftTurn={true} pause={true} timeLeft={getTimeInMillis(gamePgnObject.tags.TimeControl[0])} timeRight={getTimeInMillis(gamePgnObject.tags.TimeControl[0])}/>
+            
             <div>
             
-                <span className=" inline-flex justify-between w-full font-medium"><label>{gamePgnObject.tags.White}</label><label>{gamePgnObject.tags.WhiteElo}</label></span>
-                <LegalChess variation={currentVariaton} gamePgnObject = {gamePgnObject} setGamePgnObject = {setGamePgnObject} setCurrentVariation={setCurrentVariation}></LegalChess>
-                <span className=" inline-flex justify-between w-full font-medium"><label>{gamePgnObject.tags.Black}</label><label>{gamePgnObject.tags.BlackElo}</label></span>
+                
+                <LegalChess fen={fen} setFen={setFen} currentMove={currentMove} setCurrentMove={setCurrentMove} pgnViewerObject={pgnViewerObject} setPgnViewerObject={setPgnViewerObject}></LegalChess>
+                
             </div>
-            <div className="m-4">
-                <PgnViewer pgnObject={gamePgnObject} onMoveClick={onMoveClick}></PgnViewer>
+            <div className="ml-1">
+                <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PGNViewer>
+                
+            </div>
+            <div className=" ml-2">
+                <GameDataDisplay pgn={gamePgn}></GameDataDisplay>
                 <Link href="/"><button className="button-3 green mt-4">Back to Search</button></Link>
             </div>
             

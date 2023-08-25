@@ -96,7 +96,8 @@ export default function PGNViewer({pgnViewerObject, currentMove, setCurrentMove}
   
     
     return (
-    <div className=" h-full">
+    <div>
+        <div className=" h-[500px] overflow-y-scroll">
         
             <table className=" bg-white p-2 border-2 w-[20.5rem] h-4/5">
             <thead className=" border-b-2"><tr><th></th><th>White</th><th>Black</th></tr></thead>
@@ -111,8 +112,11 @@ export default function PGNViewer({pgnViewerObject, currentMove, setCurrentMove}
             </tbody>
                 
             </table>
-            <button onClick={onBackMoveClick} className=" w-[10.25rem] bg-white p-1 border-2 mt-1">Back</button><button onClick ={onNextMoveClick} className=" w-[10.25rem] bg-white p-1 border-2">Next</button>
+           
         
     </div>
+    <button onClick={onBackMoveClick} className=" w-[10.25rem] bg-white p-1 border-2 mt-1">Back</button><button onClick ={onNextMoveClick} className=" w-[10.25rem] bg-white p-1 border-2">Next</button>
+    </div>
+    
     )
 }
