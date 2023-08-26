@@ -50,6 +50,7 @@ export default function PuzzleChess({ gameState, setGameState,  currentMove, set
     
       if(turn == gameState.playerTurn && gameState.state == "PLAYERS_TURN"){
         const MOVE = game.move(MOVE_OBJ)
+        setGameFen(game.fen())
         const tempPgnViewerObject = pgnViewerObject
         
         let moveCoordinates = null
@@ -64,9 +65,14 @@ export default function PuzzleChess({ gameState, setGameState,  currentMove, set
         setCurrentMove(newCurrentMove)
         const newGameState = structuredClone(gameState)
         addMoveToGameState(newGameState, MOVE.san, game.fen())
-        game.move(newGameState.nextMove)
-        playMove(newGameState, game.fen)
+        const nextMove = newGameState.nextMove
+        if(nextMove){
+          game.move(newGameState.nextMove)
+          playMove(newGameState, game.fen())
+        }
+        
         setGameState(newGameState)
+        
     }
       
       

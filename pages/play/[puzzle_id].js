@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import getPuzzle from "../api/db/getPuzzle";
 import PuzzleChess from "@/components/puzzleChess";
 import PGNViewer from "@/components/pgnViewer";
+import DisplayPuzzleData from "@/components/puzzleDataDisplay";
 
 export default function PlayPuzzlePage({puzzle, session}){
     const [gameState, setGameState] = useState(null)
     const [pgnViewerObject, setPgnViewerObject] = useState([])
     const [currentMove, setCurrentMove] = useState(null)
+    const {puzzle_id, continuation, fen, turn, success_rate, attempts}=JSON.parse(puzzle)
     useEffect(()=>{
-        const {puzzle_id, continuation, fen, turn}=JSON.parse(puzzle)
+       
         const startState = {
             "puzzle_id": puzzle_id,
             "start_time": Date.now(),
@@ -26,6 +28,7 @@ export default function PlayPuzzlePage({puzzle, session}){
     }, [puzzle])
 
     return (
+    
         <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
             
             <div>
@@ -36,11 +39,15 @@ export default function PlayPuzzlePage({puzzle, session}){
             </div>
             <div className="ml-1">
                 <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PGNViewer>
-                
             </div>
-    
-            
+            {gameState&&gameState.state=="COMPLETED"&&
+        <div className=" absolute mx-auto z-10 top-10">
+        <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={"10 min 5 sec"} solution={"1. e4 e5 2. Nf3"}></DisplayPuzzleData>
         </div>
+            
+        }
+        </div>
+        
     )
 }
 
