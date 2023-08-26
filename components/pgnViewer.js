@@ -35,6 +35,7 @@ export default function PGNViewer({pgnViewerObject, currentMove, setCurrentMove}
             variation.map((move, index)=>{
             if(isMainVariation){
                 move.isMainVariation = true
+                movePair=[]
                 if(move.turn=="w"){
                     movePair = [move]
                 }else{
@@ -69,12 +70,17 @@ export default function PGNViewer({pgnViewerObject, currentMove, setCurrentMove}
                     if(row.length == 2){
                         const white = row[0]
                         const black = row[1]
-                        return <tr className=" border-t-2 border-gray-50"><td>{white.moveNumber}</td><td  className=" w-36"><button id={JSON.stringify(white.coordinates)} onClick={onMoveClick} className={JSON.stringify(currentMove) == JSON.stringify(white)?"w-full bg-blue-100":"w-full"} coordinates={JSON.stringify(white.coordinates)}>{white.notation.notation}</button></td><td  className=" w-36"><button id={JSON.stringify(black.coordinates)} onClick={onMoveClick} className={JSON.stringify(currentMove)==JSON.stringify(black)?"w-full bg-blue-100":"w-full"} coordinates={JSON.stringify(black.coordinates)}>{black.notation.notation}</button></td></tr>
+                        return <tr className=" border-t-2 border-gray-50 h-fit"><td>{white.moveNumber}</td><td  className=" w-36"><button id={JSON.stringify(white.coordinates)} onClick={onMoveClick} className={JSON.stringify(currentMove) == JSON.stringify(white)?"w-full bg-blue-100":"w-full"} coordinates={JSON.stringify(white.coordinates)}>{white.notation.notation}</button></td><td  className=" w-36"><button id={JSON.stringify(black.coordinates)} onClick={onMoveClick} className={JSON.stringify(currentMove)==JSON.stringify(black)?"w-full bg-blue-100":"w-full"} coordinates={JSON.stringify(black.coordinates)}>{black.notation.notation}</button></td></tr>
                     }else if(row.length == 1){
-                        return <tr className=" border-t-2 border-gray-50"><td>{row[0].moveNumber}</td><td><button id={row[0].coordinates} onClick={onMoveClick} coordinates={JSON.stringify(row[0].coordinates)} className={JSON.stringify(currentMove)==JSON.stringify(row[0])?"w-full bg-blue-100":"w-full"}>{row[0].notation.notation}</button></td><td></td></tr>
+                        if(row.turn == "w"){
+                            return <tr className=" border-t-2 border-gray-50 h-fit"><td>{row[0].moveNumber}</td><td><button id={row[0].coordinates} onClick={onMoveClick} coordinates={JSON.stringify(row[0].coordinates)} className={JSON.stringify(currentMove)==JSON.stringify(row[0])?"w-full bg-blue-100":"w-full"}>{row[0].notation.notation}</button></td><td></td></tr>
+                        }else{
+                            return <tr className=" border-t-2 border-gray-50 h-fit"><td>{row[0].moveNumber}</td><td></td><td><button id={row[0].coordinates} onClick={onMoveClick} coordinates={JSON.stringify(row[0].coordinates)} className={JSON.stringify(currentMove)==JSON.stringify(row[0])?"w-full bg-blue-100":"w-full"}>{row[0].notation.notation}</button></td></tr>
+                        }
+                        
                     }
                 }else{
-                    return <tr className=" border-t-2 border-gray-50 bg-slate-50"><td colSpan="3">{createPgnTable(row, false)}</td></tr>
+                    return <tr className=" border-t-2 border-gray-50 bg-slate-50 h-fit"><td colSpan="3">{createPgnTable(row, false)}</td></tr>
                 }
         })}else{
         return  tableObject.map((moveSet, index)=>{
@@ -97,9 +103,9 @@ export default function PGNViewer({pgnViewerObject, currentMove, setCurrentMove}
     
     return (
     <div>
-        <div className=" h-[500px] overflow-y-scroll">
+        <div className=" h-[500px] overflow-y-scroll bg-white">
         
-            <table className=" bg-white p-2 border-2 w-[20.5rem] h-4/5">
+            <table className=" bg-white p-2 border-2 w-[20.5rem]">
             <thead className=" border-b-2"><tr><th></th><th>White</th><th>Black</th></tr></thead>
             <colgroup><col className=" bg-slate-200 w-10"></col><col className=" border-r-2"></col><col></col></colgroup>
             <tbody>

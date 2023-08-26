@@ -61,8 +61,11 @@ export function addMove(moves, coordinatesOfLastMove, move){
             'moveNumber':move.moveNumber,
             'turn':move.turn,
             'notation':{ notation : move.notation.notation},
-            'coordinates':{ index:0, variationIndex: null }
+            'coordinates':[{ index:0, variationIndex: null }],
+            'variations':[],
+            'variation':[move.notation.notation]
         })
+        return [{ index:0, variationIndex: null }]
     }
     coordinatesOfLastMove.map(({index, variationIndex})=>{
         if(variationIndex==null){

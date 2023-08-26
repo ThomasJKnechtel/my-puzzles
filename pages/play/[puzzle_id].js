@@ -1,22 +1,47 @@
 
 import { useEffect, useState } from "react";
 import getPuzzle from "../api/db/getPuzzle";
-import playPuzzle from "@/Modules/playPuzzle";
-import PuzzleChess from "@/components/puzzleBoard";
-import getPGN from "@/utils/jsonToPGN";
-export default function PlayPuzzlePage({puzzle, session}){
-    const [gameData, setGameData] = useState(null)
-    const [currentVariaton, setCurrentVariation] = useState({moves:[], startingMove:0, firstMove: '', depth:0, parentVariations:[]})
+import PuzzleChess from "@/components/puzzleChess";
+import PGNViewer from "@/components/pgnViewer";
 
+export default function PlayPuzzlePage({puzzle, session}){
+    const [gameState, setGameState] = useState(null)
+    const [pgnViewerObject, setPgnViewerObject] = useState([])
+    const [currentMove, setCurrentMove] = useState(null)
     useEffect(()=>{
-        sessionStorage.setItem('puzzle', puzzle)
-        puzzle = JSON.parse(puzzle)
-        const gameData = {'fen': puzzle.fen, 'continuation':JSON.parse(puzzle.continuation), 'movesLeft':JSON.parse(puzzle.continuation), 'playerColour':puzzle.turn, 'progress':"IN_PROGRESS" }
-        sessionStorage.setItem('puzzle-game', JSON.stringify(gameData))
-        
-        setGameData(playPuzzle(gameData, 'Qb6'))
+        const {puzzle_id, continuation, fen, turn}=JSON.parse(puzzle)
+        const startState = {
+            "puzzle_id": puzzle_id,
+            "start_time": Date.now(),
+            "continuation" : JSON.parse(continuation),
+            "nextMove" : [...JSON.parse(continuation)][0],
+            "state" : "PLAYERS_TURN",
+            "fen" : fen,
+            "playerTurn" : turn?"w":"b",
+            "currentTurn" : turn?"w":"b",
+            "startingFEN" : fen, 
+            "currentMoveNumber" : 0
+        }
+        setGameState(startState)
     }, [puzzle])
-    return (<>{getPGN(gameData.fen, gameData.continuation)}</>)
+
+    return (
+        <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
+            
+            <div>
+                {gameState&&
+                    <PuzzleChess gameState={gameState} setGameState={setGameState} pgnViewerObject={pgnViewerObject} setPgnViewerObject={setPgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PuzzleChess>  
+                }
+                
+            </div>
+            <div className="ml-1">
+                <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PGNViewer>
+                
+            </div>
+    
+            
+        </div>
+    )
 }
 
 export async function getServerSideProps(context){
