@@ -4,11 +4,13 @@ import getPuzzle from "../api/db/getPuzzle";
 import PuzzleChess from "@/components/puzzleChess";
 import PGNViewer from "@/components/pgnViewer";
 import DisplayPuzzleData from "@/components/puzzleDataDisplay";
+import Stopwatch from "@/components/stopwatch";
 
 export default function PlayPuzzlePage({puzzle, session}){
     const [gameState, setGameState] = useState(null)
     const [pgnViewerObject, setPgnViewerObject] = useState([])
     const [currentMove, setCurrentMove] = useState(null)
+    const [timeSpent, setTimeSpent] = useState(null)
     const {puzzle_id, continuation, fen, turn, success_rate, attempts}=JSON.parse(puzzle)
     useEffect(()=>{
        
@@ -26,10 +28,14 @@ export default function PlayPuzzlePage({puzzle, session}){
         }
         setGameState(startState)
     }, [puzzle])
+    
 
     return (
     
         <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
+        {gameState&&
+            <Stopwatch start={true} stop={gameState.state=="COMPLETED"||gameState.state=="FAILED"} setTimeSpent={setTimeSpent}></Stopwatch>
+        }
             
             <div>
                 {gameState&&
@@ -40,9 +46,9 @@ export default function PlayPuzzlePage({puzzle, session}){
             <div className="ml-1">
                 <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PGNViewer>
             </div>
-            {gameState&&gameState.state=="COMPLETED"&&
-        <div className=" absolute mx-auto z-10 top-10">
-        <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={"10 min 5 sec"} solution={"1. e4 e5 2. Nf3"}></DisplayPuzzleData>
+            {(gameState&&timeSpent&&(gameState.state=="COMPLETED"||gameState.state=="FAILED"))&&
+        <div className=" absolute mx-auto z-10 top-10 shadow-2xl">
+        <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={timeSpent} solution={"1. e4 e5 2. Nf3"} result={gameState.state}></DisplayPuzzleData>
         </div>
             
         }

@@ -66,7 +66,7 @@ export default function PuzzleChess({ gameState, setGameState,  currentMove, set
         const newGameState = structuredClone(gameState)
         addMoveToGameState(newGameState, MOVE.san, game.fen())
         const nextMove = newGameState.nextMove
-        if(nextMove){
+        if(nextMove&&newGameState.state=="OPPONENTS_TURN"){
           game.move(newGameState.nextMove)
           playMove(newGameState, game.fen())
         }
