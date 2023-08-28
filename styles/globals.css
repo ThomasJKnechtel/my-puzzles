@@ -39,7 +39,7 @@
   width: 20px;
   left: 0px;
   
-  background-color: white;
+  background-color: rgb(245, 245, 245);
   -webkit-transition: .4s;
   transition: .4s;
 }

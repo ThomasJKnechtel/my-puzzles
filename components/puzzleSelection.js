@@ -5,59 +5,87 @@ export default function PuzzleFormSelection({loggedIn, popdown, setPopDown}){
 
     
     return (
-        <div className="w-4/5 mt-6">
-        <div className=" bg-slate-400 w-fit pt-1 px-1 rounded-t-md shadow-md border-2 border-slate-300">
-        <button onClick={()=>{setPopDown(popdown)}}><label className="text-lg font-bold">Select Puzzles</label>{popdown?<label className="text-lg m-2 text-center">&#9650;</label>:<label className="text-lg m-2 text-center">&#9660;</label>}</button>
+        
             
-        </div>
-        {popdown?(
-            <form id="puzzleForm" action="" method="GET" className=" p-2 bg-slate-300 rounded-b-md rounded-r-md mb-4 w-full shadow-md  ">
+            <form id="puzzleForm" action="" method="GET" className=" bg-white pt-2  pr-8 relative w-full hidden">
            
-           <fieldset className="bg-slate-200 my-2 rounded-md flex">
-               <div className=" w-1/2"><label className="m-2 mr-6" htmlFor="player">Player</label><input className="m-2 w-4/5 rounded-sm" type="text" name="player" id="player"></input></div>
-               <div className=" w-1/2"><label className="m-2 mr-6" htmlFor="opponent">Opponent</label><input className="m-2 w-4/5 rounded-sm" type="text" name="opponent"></input></div>
+           
+
+           
+           <fieldset className=" border-t-2 ">
+               <div className=" flex-col items-start my-2 mx-10"><label className=" font-medium block" htmlFor="player">Player</label><input className=" border-2 shadow-sm bg-slate-100  w-full" type="text" name="player" id="player"></input></div>
+               <div className=" fex-col items-end my-2 mx-10"><label className=" font-medium block" htmlFor="opponent">Opponent</label><input className="border-2 shadow-sm bg-slate-100  w-full" type="text" name="opponent"></input></div>
                
            </fieldset>
-          
-           <fieldset className=" border-2 border-slate-500 p-2">
-               <legend>Date Played</legend>
-               <div className="bg-slate-200 flex justify-evenly rounded-md items-center flex-row">
-               <div className="w-1/2 h-fit flex justify-between"> <label className="m-2 h-fit my-auto" htmlFor="startDate">From:</label><input className="mx-10 my-2 p-2 text-center rounded-sm w-60" type="date" name="startDate"></input></div>
-               <div className="w-1/2 h-fit flex justify-between"><label className="m-2 h-fit  my-auto" htmlFor="endDate">To:</label><input className="mx-10 my-2 p-2 rounded-sm text-center w-60" type="date" name = "endDate"></input></div>
+          <fieldset className=" border-t-2 flex flex-row">
+                <div className=" inline-flex w-full mx-10 justify-between my-2">
+                    <label className=" font-medium text-lg">Select Dates Played</label>
+                    <div>
+                        <div className=" inline-flex flex-col items-start mx-20">
+                            <label className=" font-medium " htmlFor="startDate">From </label><input className=" border-2 shadow-sm bg-slate-100 px-2"  type="date" name="startDate"></input>
+                        </div>
+                        <div className=" inline-flex flex-col items-start"><label className=" font-medium" htmlFor="endDate">To</label><input className=" border-2 shadow-sm bg-slate-100 px-2"  type="date" name = "endDate"></input></div>
+                    </div></div>
+            </fieldset>
+            <fieldset className="  flex flex-row">
+                <div className=" inline-flex w-full mx-10 justify-between my-2">
+                    <label className=" font-medium text-lg">Select Dates Uploaded</label>
+                    <div>
+                         <div className=" inline-flex flex-col items-start mx-20"><label className=" font-medium" htmlFor="startDateUploaded">From</label><input className=" border-2 shadow-sm bg-slate-100 px-2" type="date" name="startDateUploaded"></input></div>
+                    <div className=" inline-flex flex-col items-start  "><label className=" font-medium" htmlFor="endDateUploaded">To</label><input className=" border-2 shadow-sm bg-slate-100 px-2" type="date" name = "endDateUploaded"></input></div>
+                    </div>
+                   
+                </div>
                
-               </div>
-
-           </fieldset>
-           <fieldset className="border-2 border-slate-500 p-2">
-               <legend>Date Uploaded</legend>
-
-               <div className="bg-slate-200 flex justify-evenly rounded-md">
-               <div className="w-1/2 flex justify-between"><label className="m-2 my-auto" htmlFor="startDateUploaded">From:</label><input className="mx-10 my-2 p-2 rounded-sm text-center w-60" type="date" name="startDateUploaded"></input></div>
-               <div className="w-1/2 flex justify-between"><label className="m-2 my-auto" htmlFor="endDateUploaded">To:</label><input className="mx-10 my-2 p-2 rounded-sm text-center w-60" type="date" name = "endDateUploaded"></input></div>
-
-               </div>
+              </fieldset>
               
-           </fieldset>
-           <fieldset className="border-2 border-slate-500 p-2">
+                <fieldset className="flex flex-row border-t-2">
+                    <div className=" mx-10 inline-flex flex-row w-full my-2">
+                        <label className="font-medium text-lg">Sort Criteria</label>
+                        <div className=" mx-32">
+                            <div><input type="radio" name="sortCriteria" value="datePlayed"></input><label className=" font-medium mx-2">Date Played</label></div>
+                            <div><input type="radio" name="sortCriteria" value="dateUploaded"></input><label  className=" font-medium mx-2">Date Uploaded</label></div>
+                            <div><input type="radio" name="sortCriteria" value="mostAttempts"></input><label  className=" font-medium mx-2">Most Attempts</label></div>
+                            <div><input type="radio" name="sortCriteria" value="leastAttempts"></input><label className=" font-medium mx-2">Least Attempts</label></div>
+                            <div><input type="radio" name="sortCriteria" value="lowSuccessRate"></input><label className=" font-medium mx-2">Low Success Rate</label></div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset className=" flex flex-row border-t-2">
+                <div className=" flex flex-row justify-end w-full my-2">
+
+                
+                <div className=" inline-flex flex-col mx-10">
+                    <label className=" font-medium" htmlFor="numberOfPuzzles">Number of Puzzles</label><input className=" border-2 shadow-sm bg-slate-100 px-2" type="number" name="numberOfPuzzles"></input>
+                </div>
+                    {loggedIn&&(
+                        <div className=" inline-flex flex-col items-end  mx-10"><label className=" font-medium" htmlFor="myPuzzles">From my puzzles</label><label className="switch"><input className=" opacity-0 w-0 h-0" type="checkbox" name="myPuzzles"></input><span className="slider"></span></label></div>)
+                    }
+                    <input type="submit"  className="button-3 green m-2 w-24 self-end  mx-10"></input></div>
+                </fieldset>
+           {/* 
+
+           
+           
+           
+           <fieldset className="">
             <legend>Sort Criteria</legend>
-            <div className=" flex flex-row justify-between items-center"><div><label className="mr-20">Date Played</label><input type="radio" name="sortCriteria" value="datePlayed"></input></div><div><label  className="mr-20">Date Uploaded</label><input type="radio" name="sortCriteria" value="dateUploaded"></input></div><div><label  className="mr-20">Most Attempts</label><input type="radio" name="sortCriteria" value="mostAttempts"></input></div><div><label className="mr-20">Least Attempts</label><input type="radio" name="sortCriteria" value="leastAttempts"></input></div><div><label className="mr-20">Low Success Rate</label><input type="radio" name="sortCriteria" value="lowSuccessRate"></input></div></div>
+            <div className=" "><div><label className="">Date Played</label><input type="radio" name="sortCriteria" value="datePlayed"></input></div><div><label  className="">Date Uploaded</label><input type="radio" name="sortCriteria" value="dateUploaded"></input></div><div><label  className="mr-20">Most Attempts</label><input type="radio" name="sortCriteria" value="mostAttempts"></input></div><div><label className="mr-20">Least Attempts</label><input type="radio" name="sortCriteria" value="leastAttempts"></input></div><div><label className="mr-20">Low Success Rate</label><input type="radio" name="sortCriteria" value="lowSuccessRate"></input></div></div>
            </fieldset>
-<div className="flex flex-row justify-between w-1/2 px-2 m-2 bg-slate-200 p-2 rounded-md">
-            <label className="mx-2" htmlFor="numberOfPuzzles">Number of Puzzles</label><input className="mr-8 w-60" type="number" name="numberOfPuzzles"></input>
+<div className="">
+            <label className="" htmlFor="numberOfPuzzles">Number of Puzzles</label><input className="" type="number" name="numberOfPuzzles"></input>
            </div>
-           <div className="flex flex-row justify-between">
-             {loggedIn&&(<div className="inline-flex flex-row justify-between w-1/2 bg-slate-200 p-2 rounded-md m-2"><label className="" htmlFor="myPuzzles">From my puzzles</label><label className="switch"><input className=" opacity-0 w-0 h-0" type="checkbox" name="myPuzzles"></input><span className="slider"></span></label></div>)}
+           <div className="">
+             {loggedIn&&(<div className=""><label className="" htmlFor="myPuzzles">From my puzzles</label><label className="switch"><input className=" opacity-0 w-0 h-0" type="checkbox" name="myPuzzles"></input><span className="slider"></span></label></div>)}
            <input type="submit"  className="button-3 green m-2 w-24 self-end"></input>
            
-           </div>
+           </div> */}
           
            
-       </form>):(
-        <div className=" h-6 bg-slate-300 rounded-b-md rounded-r-md"></div>
-       )
+       </form>
        
-    }
     
-        </div>
+    
+        
     )
 }

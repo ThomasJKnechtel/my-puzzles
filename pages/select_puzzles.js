@@ -10,17 +10,13 @@ import getPuzzles from "./api/db/getPuzzles";
 export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
     const { data : session } = useSession()
     const [puzzles, setPuzzles] = useState(JSON.parse(puzzlesFromSearch))
-    const [popDownTable, setPopDownTable] = useState(true)
     const [progress,  setProgress] = useState(0)
     const [displayProgress, setDisplayProgress] = useState(false)
-   
+   const [displayTable, setDisplayTable] = useState(true)
     useEffect(() => {
         if(socket && !puzzles){
-            
             socket.emit('gamesPgns', sessionStorage.getItem('gamePgns'))
             sessionStorage.setItem('gamePgns',JSON.stringify([]))
-            
-               
         }   
 
       }, [socket]) 
@@ -48,8 +44,37 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
         }
         sessionStorage.setItem('puzzles', JSON.stringify(puzzles))
       }, [puzzles, socket])
+      
+      function onTableButtonClick(e){
+        document.getElementById('puzzleTable').style.display="block"
+        document.getElementById('puzzleForm').style.display="none"
+        document.getElementById('formButton').style.opacity=0.5
+        document.getElementById('tableButton').style.opacity=1
+        setDisplayTable(true)
+
+      }
+      function onFormButtonClick(e){
+        document.getElementById('puzzleTable').style.display="none"
+        document.getElementById('puzzleForm').style.display="block"
+        document.getElementById('formButton').style.opacity=1
+        document.getElementById('tableButton').style.opacity=0.5
+        setDisplayTable(false)
+        
+      }
+      //
       return (
-        <Layout><div className=" flex flex-col justify-between items-center overflow-hidden"><PuzzleFormSelection loggedIn={session} popdown={!popDownTable} setPopDown={setPopDownTable}></PuzzleFormSelection><PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} popdown={popDownTable} setPopDown={setPopDownTable} saved={saved}></PuzzleTable>{displayProgress&&<><LoadingIcon progress={progress}></LoadingIcon><label>{progress}%</label></>}</div></Layout>
+        <Layout>
+        <div className=" flex flex-col items-center w-full ">
+
+        
+        <div className=" bg-white pl-8 w-full"><button  id="tableButton" onClick={onTableButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600">Puzzles</button><button id="formButton" onClick={onFormButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600 opacity-50">Select Puzzles</button>
+        <PuzzleFormSelection loggedIn={session} ></PuzzleFormSelection>
+        <PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} saved={saved}></PuzzleTable></div>
+        {displayProgress&&<><LoadingIcon progress={progress}></LoadingIcon>
+        <label>{progress}%</label></>
+        }
+        {displayTable&&<button className=" button-3 green my-4 font-medium text-xl">Play</button>}</div>
+        </Layout>
       )
 
 }

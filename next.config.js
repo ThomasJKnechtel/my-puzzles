@@ -37,6 +37,12 @@ const nextConfig = {
             hostname: 'img.icons8.com',
             port: '',
             pathname: '/ios-filled/50/FFFFFF/puzzle.png'
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
+            pathname: '/ios/50/delete-trash.png'
           }
 
         ],
