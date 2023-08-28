@@ -43,6 +43,12 @@ const nextConfig = {
             hostname: 'img.icons8.com',
             port: '',
             pathname: '/ios/50/delete-trash.png'
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
+            pathname: '/external-smashingstocks-detailed-outline-smashing-stocks/66/external-parameters-festivals-and-events-smashingstocks-detailed-outline-smashing-stocks.png'
           }
 
         ],

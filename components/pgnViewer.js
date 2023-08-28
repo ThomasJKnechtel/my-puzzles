@@ -30,12 +30,11 @@ export default function PGNViewer({pgnViewerObject, currentMove, setCurrentMove}
     }
     function convertToTable(variation, isMainVariation){
         const displayVariation  = []
-        let movePair = null
+        let movePair = []
         if(variation){
             variation.map((move, index)=>{
             if(isMainVariation){
                 move.isMainVariation = true
-                movePair=[]
                 if(move.turn=="w"){
                     movePair = [move]
                 }else{

@@ -1,6 +1,6 @@
 
 
-export default function PuzzleFormSelection({loggedIn, popdown, setPopDown}){
+export default function PuzzleFormSelection({loggedIn}){
 
 
     
@@ -8,9 +8,6 @@ export default function PuzzleFormSelection({loggedIn, popdown, setPopDown}){
         
             
             <form id="puzzleForm" action="" method="GET" className=" bg-white pt-2  pr-8 relative w-full hidden">
-           
-           
-
            
            <fieldset className=" border-t-2 ">
                <div className=" flex-col items-start my-2 mx-10"><label className=" font-medium block" htmlFor="player">Player</label><input className=" border-2 shadow-sm bg-slate-100  w-full" type="text" name="player" id="player"></input></div>
@@ -63,24 +60,6 @@ export default function PuzzleFormSelection({loggedIn, popdown, setPopDown}){
                     }
                     <input type="submit"  className="button-3 green m-2 w-24 self-end  mx-10"></input></div>
                 </fieldset>
-           {/* 
-
-           
-           
-           
-           <fieldset className="">
-            <legend>Sort Criteria</legend>
-            <div className=" "><div><label className="">Date Played</label><input type="radio" name="sortCriteria" value="datePlayed"></input></div><div><label  className="">Date Uploaded</label><input type="radio" name="sortCriteria" value="dateUploaded"></input></div><div><label  className="mr-20">Most Attempts</label><input type="radio" name="sortCriteria" value="mostAttempts"></input></div><div><label className="mr-20">Least Attempts</label><input type="radio" name="sortCriteria" value="leastAttempts"></input></div><div><label className="mr-20">Low Success Rate</label><input type="radio" name="sortCriteria" value="lowSuccessRate"></input></div></div>
-           </fieldset>
-<div className="">
-            <label className="" htmlFor="numberOfPuzzles">Number of Puzzles</label><input className="" type="number" name="numberOfPuzzles"></input>
-           </div>
-           <div className="">
-             {loggedIn&&(<div className=""><label className="" htmlFor="myPuzzles">From my puzzles</label><label className="switch"><input className=" opacity-0 w-0 h-0" type="checkbox" name="myPuzzles"></input><span className="slider"></span></label></div>)}
-           <input type="submit"  className="button-3 green m-2 w-24 self-end"></input>
-           
-           </div> */}
-          
            
        </form>
        
