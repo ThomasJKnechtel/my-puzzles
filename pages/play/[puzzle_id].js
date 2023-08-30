@@ -18,7 +18,7 @@ export default function PlayPuzzlePage({puzzle, session}){
             "puzzle_id": puzzle_id,
             "start_time": Date.now(),
             "continuation" : JSON.parse(continuation),
-            "nextMove" : [...JSON.parse(continuation)][0],
+            "nextMove" : JSON.parse([continuation][0]),
             "state" : "PLAYERS_TURN",
             "fen" : fen,
             "playerTurn" : turn?"w":"b",
@@ -48,7 +48,7 @@ export default function PlayPuzzlePage({puzzle, session}){
             </div>
             {(gameState&&timeSpent&&(gameState.state=="COMPLETED"||gameState.state=="FAILED"))&&
         <div className=" absolute mx-auto z-10 top-10 shadow-2xl">
-        <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={timeSpent} solution={"1. e4 e5 2. Nf3"} result={gameState.state}></DisplayPuzzleData>
+        <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={timeSpent} solution={gameState.continuation} result={gameState.state}></DisplayPuzzleData>
         </div>
             
         }
@@ -58,9 +58,9 @@ export default function PlayPuzzlePage({puzzle, session}){
 }
 
 export async function getServerSideProps(context){
-   
+    
     const {puzzle_id} = context.query
-    console.log(puzzle_id)
-    const puzzle = await getPuzzle(parseInt(puzzle_id))
+    
+    let puzzle = await getPuzzle(parseInt(puzzle_id))
     return { props : { 'puzzle': JSON.stringify(puzzle)}}
 }

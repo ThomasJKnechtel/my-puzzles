@@ -6,33 +6,42 @@ import { useSession } from "next-auth/react";
 import LoadingIcon from "@/components/loadingIcon";
 
 import getPuzzles from "./api/db/getPuzzles";
+import PlayForm from "@/components/playForm";
 
 export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
     const { data : session } = useSession()
     const [puzzles, setPuzzles] = useState(JSON.parse(puzzlesFromSearch))
     const [progress,  setProgress] = useState(0)
     const [displayProgress, setDisplayProgress] = useState(false)
-   const [displayTable, setDisplayTable] = useState(true)
+    const [displayTable, setDisplayTable] = useState(true)
+    const [popupOpen, setPopupOpen] = useState(false)
+
     useEffect(() => {
         if(socket && !puzzles){
             socket.emit('gamesPgns', sessionStorage.getItem('gamePgns'))
-            sessionStorage.setItem('gamePgns',JSON.stringify([]))
+            sessionStorage.setItem('gamePgns',JSON.stringify([])) 
+            setProgress(0)
+            setDisplayProgress(true)
         }   
 
       }, [socket]) 
       useEffect(()=>{
-        console.log(puzzles)
         if(socket){
             socket.on('puzzles', newPuzzles=>{
                 newPuzzles = JSON.parse(newPuzzles)
-            
-                const newPuzzlesList = newPuzzles.concat(puzzles)
-                setPuzzles(newPuzzlesList)
-                setDisplayProgress(true)
+               
+                if(puzzles){
+                  setPuzzles(newPuzzles.concat(puzzles))
+                  
+                }else{
+                  setPuzzles(newPuzzles)
+                  
+                }
                 
                 })
-                socket.on('disconnect', () => {
-                console.log('disconnect')
+            socket.on('disconnect', () => {
+                setDisplayProgress(false)
+                setProgress(0)
             })
             socket.on('progress', progress=>{
               setProgress(progress)
@@ -43,7 +52,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
             })
         }
         sessionStorage.setItem('puzzles', JSON.stringify(puzzles))
-      }, [puzzles, socket])
+      }, [socket, puzzles])
       
       function onTableButtonClick(e){
         document.getElementById('puzzleTable').style.display="block"
@@ -67,13 +76,17 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
         <div className=" flex flex-col items-center w-full ">
 
         
-        <div className=" bg-white pl-8 w-full"><button  id="tableButton" onClick={onTableButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600">Puzzles</button><button id="formButton" onClick={onFormButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600 opacity-50">Select Puzzles</button>
-        <PuzzleFormSelection loggedIn={session} ></PuzzleFormSelection>
-        <PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} saved={saved}></PuzzleTable></div>
-        {displayProgress&&<><LoadingIcon progress={progress}></LoadingIcon>
-        <label>{progress}%</label></>
-        }
-        {displayTable&&<button className=" button-3 green my-4 font-medium text-xl">Play</button>}</div>
+          <div className=" bg-white pl-8 w-full"><button  id="tableButton" onClick={onTableButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600">Puzzles</button><button id="formButton" onClick={onFormButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600 opacity-50">Select Puzzles</button>
+            <PuzzleFormSelection loggedIn={session} ></PuzzleFormSelection>
+            <PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} saved={saved}></PuzzleTable>
+          </div>
+          {displayProgress&&<><LoadingIcon progress={progress}></LoadingIcon>
+            <label>{progress}%</label></>
+          }
+          <button onClick={()=>setPopupOpen(true)} className=" button-3 green my-4 font-medium text-xl">Play</button>
+          {popupOpen&&<div className=" absolute mx-auto z-10"> <PlayForm setOpen={setPopupOpen} puzzles={puzzles}></PlayForm></div> }
+        
+        </div>
         </Layout>
       )
 

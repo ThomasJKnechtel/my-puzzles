@@ -39,7 +39,10 @@ export default function DisplayPuzzleData({timeSpent, successRate, attempts, sol
             <label className=" font-medium m-2">Attempts:</label><label>{attempts}</label>
         </div> 
         <div>
-            <label className=" font-medium m-2">Solution:</label><label className=" bg-black hover:bg-opacity-0">{solution}</label>
+            <label className=" font-medium m-2">Solution:</label><label className=" bg-black hover:bg-opacity-0">{solution.map((move, index )=>{
+                if(index%2) return Math.ciel((index+1)/2)+". "+move+" "
+                else return " "+move
+            })}</label>
         </div>
         <div className=" text-center ">
            <button className="button-3 green font-medium w-20">Exit</button> <button className="button-3 green font-medium w-20 m-2 ">Next</button>

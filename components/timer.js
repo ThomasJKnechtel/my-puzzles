@@ -58,34 +58,34 @@ export default function Timer({time, start, reset, pause, restart}){
         }
     }
     return (
-        <div className="bg-slate-700 h-fit m-1 p-1 rounded-lg border-solid border-4 border-gray-600">
+        <div className="bg-slate-700 h-fit m-1 rounded-lg border-solid border-4 border-gray-600 w-fit relative inline-flex flex-row">
         {timeLeft.days !== 0&&(
             <>
-            <span className="bg-slate-500"><label>{timeLeft.days}</label></span>
+            <span className="bg-slate-500 w-8 inline-block text-center "><label>{timeLeft.days}</label></span>
             <span className="font-bold text-2xl">:</span></>)
         }{timeLeft.hours !== 0&&(<>
             <span><label>{timeLeft.hours}</label></span>
             <span className="font-bold text-2xl">:</span> </>)
         }{timeLeft.minutes !== 0&&(<>
-            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg "><label className=" w-32">{timeLeft.minutes/10 < 1&&0}{timeLeft.minutes}</label></span>
+            <span className="bg-slate-600 m-1 rounded-md p-1 w-8 font-medium text-white text-lg inline-block text-center "><label className=" w-32">{timeLeft.minutes/10 < 1&&0}{timeLeft.minutes}</label></span>
             <span className="font-bold text-2xl">:</span></>)
         }{timeLeft.seconds !== 0?(<>
-            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg"><label>{timeLeft.seconds/10 < 1&&0}{timeLeft.seconds}</label></span>
+            <span className="bg-slate-600 m-1 rounded-md p-1 w-8 font-medium text-white text-lg inline-block text-center"><label>{timeLeft.seconds/10 < 1&&0}{timeLeft.seconds}</label></span>
            </>):(<>
-            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg"><label>00</label></span>
+            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label>00</label></span>
             
             </>
                 
             )
         }{(timeLeft.minutes !== 0)?(<></>):(timeLeft.microseconds === 0 && timeLeft.minutes === 0)?(<>
             <span className="font-bold text-2xl">:</span>
-            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg"><label>0</label></span>
+            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium w-8 text-white text-lg inline-block text-center"><label>0</label></span>
            
             </>
                 
             ):(<>
             <span className="font-bold text-2xl">:</span>
-            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg"><label>{timeLeft.microseconds}</label></span></>
+            <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label>{timeLeft.microseconds}</label></span></>
            )
         }
            
