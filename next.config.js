@@ -49,6 +49,18 @@ const nextConfig = {
             hostname: 'img.icons8.com',
             port: '',
             pathname: '/external-smashingstocks-detailed-outline-smashing-stocks/66/external-parameters-festivals-and-events-smashingstocks-detailed-outline-smashing-stocks.png'
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
+            pathname: '/color/48/puzzle.png'
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
+            pathname: '/emoji/48/cross-mark-emoji.png'
           }
 
         ],

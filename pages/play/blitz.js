@@ -3,12 +3,15 @@ import PGNViewer from "@/components/pgnViewer";
 import PuzzleChess from "@/components/puzzleChess";
 import Timer from "@/components/timer";
 import getTimeInMillis from "@/utils/getTimeMillis";
+import PuzzleResultsDisplay from "@/components/puzzleResultsDisplay";
+import GameResultDisplay from "@/components/gameResultDisplay";
 export default function Blitz({socket}){
     const [currentMove, setCurrentMove] = useState(null)
     const [gameState, setGameState] = useState(null)
     const [puzzles, setPuzzles] = useState([])
     const [pgnViewerObject, setPgnViewerObject] = useState([])
     const [gameFinished, setGameFinished] = useState(false)
+    const [finishedPuzzlesStats, setFinishedPuzzlesStats] = useState([])
     useEffect(()=>{
         if(socket){
           
@@ -21,14 +24,12 @@ export default function Blitz({socket}){
     }, [socket])
     useEffect(()=>{
         let puzzleList = JSON.parse(sessionStorage.getItem('puzzles'))
-        let puzzle = puzzleList.pop()
-        if(!puzzle) puzzle=puzzleList.pop()
         const {puzzle_id, continuation, fen, turn, success_rate, attempts} = puzzleList.pop()
         const startState = {
             "puzzle_id": puzzle_id,
             "start_time": Date.now(),
-            "continuation" : continuation,
-            "nextMove" : [...continuation][0],
+            "continuation" : JSON.parse(continuation),
+            "nextMove" : [...JSON.parse(continuation)][0],
             "state" : "PLAYERS_TURN",
             "fen" : fen,
             "playerTurn" : turn?"w":"b",
@@ -42,14 +43,18 @@ export default function Blitz({socket}){
     useEffect(()=>{
         if(gameState){
             if(gameState.state == "COMPLETED" || gameState.state == "FAILED"){
+                let tempPuzzleStatas = finishedPuzzlesStats
+                const {start_time, state} = gameState
+                tempPuzzleStatas.push({start_time, state, finish_time: Date.now()})
+                setFinishedPuzzlesStats(structuredClone(tempPuzzleStatas))
                 const puzzle = puzzles.pop()
                 if(puzzle){
                     const {puzzle_id, continuation, fen, turn, success_rate, attempts} = puzzles.pop()
                     const startState = {
                         "puzzle_id": puzzle_id,
                         "start_time": Date.now(),
-                        "continuation" : continuation,
-                        "nextMove" : [...continuation][0],
+                        "continuation" : JSON.parse(continuation),
+                        "nextMove" : [...JSON.parse(continuation)][0],
                         "state" : "PLAYERS_TURN",
                         "fen" : fen,
                         "playerTurn" : turn?"w":"b",
@@ -62,7 +67,7 @@ export default function Blitz({socket}){
                     setPuzzles([...puzzles])
                     setGameState(startState)
                 }else{
-                    console.log('complete')
+                   setGameFinished(true)
                 }
                
                 
@@ -71,18 +76,30 @@ export default function Blitz({socket}){
     }, [gameState])
 
     return (
-    <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
-        <div>
-            <Timer time={gameFinished?0:3*60*1000} start={true} pause={gameFinished}></Timer>
-        </div>
-        <div>
-            {gameState&&
-                <PuzzleChess gameState={gameState} setGameState={setGameState} pgnViewerObject={pgnViewerObject} setPgnViewerObject={setPgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PuzzleChess>  
-            }
+    <div className=" w-full inline-flex flex-col justify-center items-center">
+        <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
+        {gameFinished&&
+            <div className=" absolute z-50 m-10">
+                <GameResultDisplay puzzleStats={finishedPuzzlesStats}></GameResultDisplay>
+            </div>
+        }
             
+            <div>
+                <Timer time={gameFinished?0:3*60*1000} start={true} pause={gameFinished}></Timer>
+            </div>
+            
+            <div>
+                {gameState&&
+                    <PuzzleChess gameState={gameState} setGameState={setGameState} pgnViewerObject={pgnViewerObject} setPgnViewerObject={setPgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PuzzleChess>  
+                }
+                
+            </div>
+            <div className="ml-1">
+                    <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PGNViewer>
+            </div>
         </div>
-        <div className="ml-1">
-                <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PGNViewer>
+        <div className="">
+                    <PuzzleResultsDisplay puzzlesStats={finishedPuzzlesStats}></PuzzleResultsDisplay>
         </div>
     </div>
     )

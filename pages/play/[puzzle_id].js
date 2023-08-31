@@ -80,11 +80,10 @@ export default function PlayPuzzlePage({puzzle, session}){
                 <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PGNViewer>
             </div>
             {(gameState&&timeSpent&&(gameState.state=="COMPLETED"||gameState.state=="FAILED"))&&
-        <div className=" absolute mx-auto z-10 top-10 shadow-2xl">
-        <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={timeSpent} solution={gameState.continuation} result={gameState.state}></DisplayPuzzleData>
-        </div>
-            
-        }
+                <div className=" absolute mx-auto z-10 top-10 shadow-2xl">
+                <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={timeSpent} solution={gameState.continuation} result={gameState.state}></DisplayPuzzleData>
+                </div>
+            }
         </div>
         
     )
