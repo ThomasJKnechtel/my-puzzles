@@ -33,7 +33,7 @@ export default function DisplayPuzzleData({timeSpent, successRate, attempts, sol
         <label className=" font-medium m-2">Solving Time:</label><label>{convertToDateString()}</label>
         </div>
         <div>
-            <label className=" font-medium m-2">Success Rate:</label><label>{successRate}</label>
+            <label className=" font-medium m-2">Success Rate:</label><label>{(successRate/attempts*100).toFixed(0)+"%"}</label>
         </div>
         <div>
             <label className=" font-medium m-2">Attempts:</label><label>{attempts}</label>

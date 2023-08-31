@@ -11,7 +11,9 @@ export default function PlayPuzzlePage({puzzle, session}){
     const [pgnViewerObject, setPgnViewerObject] = useState([])
     const [currentMove, setCurrentMove] = useState(null)
     const [timeSpent, setTimeSpent] = useState(null)
-    const {puzzle_id, continuation, fen, turn, success_rate, attempts}=JSON.parse(puzzle)
+    const {puzzle_id, continuation, fen, turn}=JSON.parse(puzzle)
+    const [success_rate, setSuccessRate] = useState(0)
+    const [attempts, setAttempts] = useState(0)
     useEffect(()=>{
        
         const startState = {
@@ -28,7 +30,38 @@ export default function PlayPuzzlePage({puzzle, session}){
         }
         setGameState(startState)
     }, [puzzle])
-    
+    useEffect(()=>{
+        if(gameState){
+            if(gameState.state == "COMPLETED" || gameState.state == "FAILED"){
+                fetch("/api/db/getPuzzleStats", {
+                    'method': "POST",
+                    'headers':{
+                        'content-type': 'application/text'
+                    },
+                    'body': puzzle_id
+                }).then( response => {
+                    if(!response.ok){
+                        console.log(response.status)
+                    }
+                    return response.json()
+                }).then( result => {
+                    console.log(result)
+                    let [newSuccessRate, newAttempts] = [result.success_rate, result.attempts+1]
+                    if(gameState.state == "COMPLETED") newSuccessRate += 1
+                    fetch('/api/db/updatePuzzleStats', {
+                        'method':"POST",
+                        'headers':{
+                            'content-type':'application/json'
+                        },
+                        'body':JSON.stringify({puzzle_id, newSuccessRate, newAttempts})
+                    })
+                    setAttempts(newAttempts)
+                    setSuccessRate(newSuccessRate)
+                })
+            }
+        }
+        
+    }, [gameState])
 
     return (
     
