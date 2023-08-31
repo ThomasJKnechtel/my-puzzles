@@ -66,9 +66,9 @@ export default function PlayPuzzlePage({puzzle, session}){
     return (
     
         <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
-        {gameState&&
-            <Stopwatch start={true} stop={gameState.state=="COMPLETED"||gameState.state=="FAILED"} setTimeSpent={setTimeSpent}></Stopwatch>
-        }
+       
+            <Stopwatch start={true} stop={gameState&&(gameState.state=="COMPLETED"||gameState.state=="FAILED")} setTimeSpent={setTimeSpent}></Stopwatch>
+        
             
             <div>
                 {gameState&&

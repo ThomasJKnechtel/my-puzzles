@@ -51,37 +51,41 @@ export default function Stopwatch({start, stop, setTimeSpent}){
         }
     }
     function convertToDateTime(startTime, currentTime){
-        const timePast = getTime(currentTime-startTime)
+        const {days, hours, minutes, seconds, microseconds}= getTime(currentTime-startTime)
         return ( 
            
             <div className="">
            
-
-            
-                {timePast.days != 0 &&
+                
+                {days<=0&&hours<=0&&minutes<=0&&seconds<=0 && <>
+                    <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label>00</label></span>
+                    <span className="font-bold text-2xl inline-block">:</span>
+                    <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label>00</label></span>
+                </>}
+                {days > 0 &&
                     <>
-                    <span className="bg-slate-500 w-8 inline-block text-center"><label>{timePast.days}</label></span>
+                    <span className="bg-slate-500 w-8 inline-block text-center"><label>{days}</label></span>
                     <span className="font-bold text-2xl w-8 inline-block">:</span></>
 
                 }
-                {timePast.hours != 0 &&
+                {hours > 0 &&
                     <>
-                    <span className="w-8 inline-block font-bold text-2xl text-center"><label>{timePast.hours}</label></span>
+                    <span className="w-8 inline-block font-bold text-2xl text-center"><label>{hours}</label></span>
                     <span className="font-bold text-2xl w-8 inline-block">:</span> </>
                 }
-                {timePast.minutes != 0 && timePast.days==0 ?
+                {minutes > 0 && days==0 ?
                     <>
-                    <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label className=" w-32">{timePast.minutes/10 < 1&&0}{timePast.minutes}</label></span>
+                    <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label className=" w-32">{minutes/10 < 1&&0}{minutes}</label></span>
                     <span className="font-bold text-2xl">:</span></>
-                    : timePast.days == 0 ?
+                    :days == 0 ?
                     <>
                     <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label className=" w-32">00</label></span>
                     <span className="font-bold text-2xl">:</span></>
                     :<></>
                 }
-                {(timePast.seconds != 0 && timePast.hours == 0)?<>
-                    <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label>{timePast.seconds/10 < 1&&0}{timePast.seconds}</label></span></>
-                    :timePast.hours == 0?(<>
+                {(seconds != 0 && hours == 0)?<>
+                    <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label>{seconds/10 < 1&&0}{seconds}</label></span></>
+                    :hours == 0?(<>
                         <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block"><label>00</label></span>
             
                     </>):(<></>)
@@ -93,7 +97,7 @@ export default function Stopwatch({start, stop, setTimeSpent}){
     }
 
     return (
-        startTime&&currentTime&&
+        
         <div className="bg-slate-700 h-fit m-1 p-1 rounded-lg border-solid border-4 border-gray-600 relative">
         {
             convertToDateTime(startTime, currentTime)
