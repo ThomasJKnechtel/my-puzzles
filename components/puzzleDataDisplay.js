@@ -3,17 +3,19 @@ import Image from "next/image"
 import Link from "next/link"
 export default function DisplayPuzzleData({timeSpent, successRate, attempts, solution, result, puzzle_id}){
     const [exit, setExit] = useState(false)
-    function convertToDateString(){
+    function convertToDateString(){ 
         let dateStr = ""
-        const { days, hours, minutes, seconds} = timeSpent
-        if(days == 1)dateStr += days + " day "
-        else if(days != 0) dateStr += days + " days "
-        if(hours == 1) dateStr += hours + " hour "
-        else if(hours != 0) dateStr += hours + " hours "
-        if(minutes == 1) dateStr += minutes + " minute "
-        else if(minutes != 0) dateStr += minutes + " minutes "
-        if(seconds == 1) dateStr += seconds + " second"
-        else if(seconds != 0) dateStr += seconds+ " seconds"
+        if(timeSpent){
+            const { days, hours, minutes, seconds} = timeSpent
+            if(days == 1)dateStr += days + " day "
+            else if(days != 0) dateStr += days + " days "
+            if(hours == 1) dateStr += hours + " hour "
+            else if(hours != 0) dateStr += hours + " hours "
+            if(minutes == 1) dateStr += minutes + " minute "
+            else if(minutes != 0) dateStr += minutes + " minutes "
+            if(seconds == 1) dateStr += seconds + " second"
+            else if(seconds != 0) dateStr += seconds+ " seconds"
+        }
         return dateStr
     }
     return (
@@ -40,7 +42,7 @@ export default function DisplayPuzzleData({timeSpent, successRate, attempts, sol
             <label className=" font-medium m-2">Attempts:</label><label>{attempts}</label>
         </div> 
         <div>
-            <label className=" font-medium m-2">Solution:</label><label className=" bg-black hover:bg-opacity-0">{solution.map((move, index )=>{
+            <label className=" font-medium m-2">Solution:</label><label className=" bg-black hover:bg-opacity-0">{solution&&solution.map((move, index )=>{
                 if(index%2) return Math.ceil((index+1)/2)+". "+move+" "
                 else return " "+move
             })}</label>

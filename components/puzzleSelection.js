@@ -56,7 +56,7 @@ export default function PuzzleFormSelection({loggedIn}){
                     <label className=" font-medium" htmlFor="numberOfPuzzles">Number of Puzzles</label><input className=" border-2 shadow-sm bg-slate-100 px-2" type="number" name="numberOfPuzzles"></input>
                 </div>
                     {loggedIn&&(
-                        <div className=" inline-flex flex-col items-end  mx-10"><label className=" font-medium" htmlFor="myPuzzles">From my puzzles</label><label className="switch"><input className=" opacity-0 w-0 h-0" type="checkbox" name="myPuzzles"></input><span className="slider"></span></label></div>)
+                        <div className=" inline-flex flex-col items-end  mx-10"><label className=" font-medium" htmlFor="myPuzzles">From my puzzles</label><label className="switch"><input className=" opacity-0 w-0 h-0" type="checkbox" name="username" value={loggedIn.user.name}></input><span className="slider"></span></label></div>)
                     }
                     <input type="submit"  className="button-3 green m-2 w-24 self-end  mx-10"></input></div>
                 </fieldset>

@@ -37,7 +37,8 @@ export default function PuzzleChess({ gameState, setGameState,  currentMove, set
 
 //Ignore spaghetti code
   function onDrop({sourceSquare, targetSquare}){
-    game = new Chess(gameFen)
+    if(gameState){
+      game = new Chess(gameFen)
     const turn = game.turn()
     const moveNumber = game.moveNumber()
     const MOVE_OBJ = {
@@ -84,12 +85,14 @@ export default function PuzzleChess({ gameState, setGameState,  currentMove, set
     }catch(err){
       console.log(err)
     }
+    }
+    
   }
     const Chessboard = dynamic(() => import('chessboardjsx'), {
         ssr: false  // <- this do the magic ;)
         });
 
     
-    return <Chessboard id="game" position={gameFen} onDrop={onDrop} draggable={true} orientation={(gameState.playerTurn == "w")?'white':'black'}></Chessboard>
+    return <Chessboard id="game" position={gameFen} onDrop={onDrop} draggable={true} orientation={gameState&&(gameState.playerTurn == "w")?'white':'black'}></Chessboard>
 
 }

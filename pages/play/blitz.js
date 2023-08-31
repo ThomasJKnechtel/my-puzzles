@@ -34,6 +34,8 @@ export default function Blitz({socket}){
     }, [socket])
     useEffect(()=>{
         let puzzleList = JSON.parse(sessionStorage.getItem('puzzles'))
+        const gameContianer = document.getElementById('container')
+        setTimeout(()=>{gameContianer.style.display = "inline-flex"}, 300)
         const {puzzle_id, continuation, fen, turn, success_rate, attempts} = puzzleList.pop()
         const startState = {
             "puzzle_id": puzzle_id,
@@ -59,9 +61,11 @@ export default function Blitz({socket}){
                 setFinishedPuzzlesStats(structuredClone(tempPuzzleStatas))
                 const puzzle = puzzles.pop()
                 if(puzzle){
-                    const {puzzle_id, continuation, fen, turn, success_rate, attempts} = puzzles.pop()
+                    const { continuation, fen, turn, success_rate, attempts} = puzzle
+                    const gameContianer = document.getElementById('container')
+                    gameContianer.style.display = "none"
+                    setTimeout(()=>{gameContianer.style.display = "inline-flex"}, 300)
                     const startState = {
-                        "puzzle_id": puzzle_id,
                         "start_time": Date.now(),
                         "continuation" : JSON.parse(continuation),
                         "nextMove" : [...JSON.parse(continuation)][0],
@@ -72,10 +76,12 @@ export default function Blitz({socket}){
                         "startingFEN" : fen, 
                         "currentMoveNumber" : 0
                     }
+                   
                     setPgnViewerObject([])
                     setCurrentMove(null)
                     setPuzzles([...puzzles])
                     setGameState(startState)
+                    
                 }else{
                    setGameFinished(true)
                 }
@@ -86,7 +92,7 @@ export default function Blitz({socket}){
     }, [gameState])
 
     return (
-    <div className=" w-full inline-flex flex-col justify-center items-center">
+    <div id="container" className=" w-full flex-col justify-center items-center hidden">
         <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
         {gameFinished&&
             <div className=" absolute z-50 m-10">
@@ -99,16 +105,16 @@ export default function Blitz({socket}){
             </div>
             
             <div>
-                {gameState&&
+                
                     <PuzzleChess gameState={gameState} setGameState={setGameState} pgnViewerObject={pgnViewerObject} setPgnViewerObject={setPgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PuzzleChess>  
-                }
+                
                 
             </div>
             <div className="ml-1">
                     <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PGNViewer>
             </div>
         </div>
-        <div className="">
+        <div id="gameContainer" className=" hidden">
                     <PuzzleResultsDisplay puzzlesStats={finishedPuzzlesStats}></PuzzleResultsDisplay>
         </div>
     </div>

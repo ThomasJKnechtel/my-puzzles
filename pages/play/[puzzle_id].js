@@ -15,7 +15,9 @@ export default function PlayPuzzlePage({puzzle, session}){
     const [success_rate, setSuccessRate] = useState(0)
     const [attempts, setAttempts] = useState(0)
     useEffect(()=>{
-       
+        const gameContianer = document.getElementById('container')
+                    
+        setTimeout(()=>{gameContianer.style.display = "inline-flex"}, 500)
         const startState = {
             "puzzle_id": puzzle_id,
             "start_time": Date.now(),
@@ -33,6 +35,13 @@ export default function PlayPuzzlePage({puzzle, session}){
     useEffect(()=>{
         if(gameState){
             if(gameState.state == "COMPLETED" || gameState.state == "FAILED"){
+                const gameContianer = document.getElementById('container')
+                const displayContainer = document.getElementById('displayContainer')    
+                gameContianer.style.display = "none"
+                setTimeout(()=>{
+                    gameContianer.style.display = "inline-flex"
+                    displayContainer.style.display = "block"
+                }, 300)
                 fetch("/api/db/getPuzzleStats", {
                     'method': "POST",
                     'headers':{
@@ -65,25 +74,25 @@ export default function PlayPuzzlePage({puzzle, session}){
 
     return (
     
-        <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
+        <div id="container" className=" w-full justify-center flex-row mt-5 hidden "> 
        
             <Stopwatch start={true} stop={gameState&&(gameState.state=="COMPLETED"||gameState.state=="FAILED")} setTimeSpent={setTimeSpent}></Stopwatch>
         
             
             <div>
-                {gameState&&
+                
                     <PuzzleChess gameState={gameState} setGameState={setGameState} pgnViewerObject={pgnViewerObject} setPgnViewerObject={setPgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PuzzleChess>  
-                }
+                
                 
             </div>
             <div className="ml-1">
                 <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PGNViewer>
             </div>
-            {(gameState&&timeSpent&&(gameState.state=="COMPLETED"||gameState.state=="FAILED"))&&
-                <div className=" absolute mx-auto z-10 top-10 shadow-2xl">
-                <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={timeSpent} solution={gameState.continuation} result={gameState.state} puzzle_id={puzzle_id}></DisplayPuzzleData>
+            
+                <div id="displayContainer" className=" absolute mx-auto z-10 top-10 shadow-2xl hidden">
+                <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={timeSpent} solution={gameState&&gameState.continuation} result={gameState&&gameState.state} puzzle_id={puzzle_id}></DisplayPuzzleData>
                 </div>
-            }
+            
         </div>
         
     )

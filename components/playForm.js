@@ -4,8 +4,13 @@ import { useState } from "react"
 export default function PlayForm({puzzles}){
     const [mode, setMode] = useState("3 Minute")
     const [popupOpen, setPopupOpen] = useState(false)
-
+    
     function play(){
+        puzzles.map(puzzle => {
+            if(typeof puzzle.continuation != 'string'){
+                puzzle.continuation = JSON.stringify(puzzle.continuation)
+            }
+        })
          sessionStorage.setItem('puzzles', JSON.stringify(puzzles))
          if(mode=="3 Minute" && puzzles){
             window.location.href = "./play/blitz?timeControl=3" 
@@ -39,8 +44,8 @@ export default function PlayForm({puzzles}){
                  {popupOpen&&
                      <div className=" absolute green z-10 inline-flex flex-col w-28 top-10 left-11 rounded-md border-2 shadow-xl" >
                         <button className=" font-medium" value="Infinite" onClick={()=>{setMode("Random"); setPopupOpen(false)}} >Random</button>
-                        <button  className=" font-medium" value="3" onClick={()=>{setMode("3 Minute"); setPopupOpen(false)}}>3 Minute</button>
-                        <button className=" font-medium" value="5" onClick={()=>{setMode("5 minute"); setPopupOpen(false)}}>5 Minute</button>
+                        <button  className=" font-medium" onClick={()=>{setMode("3 Minute"); setPopupOpen(false)}}>3 Minute</button>
+                        <button className=" font-medium" onClick={()=>{setMode("5 Minute"); setPopupOpen(false)}}>5 Minute</button>
                     </div>
                  }
                    
