@@ -2,7 +2,6 @@ import Layout from "@/components/layout";
 
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from 'next/navigation'
 
 
 import LegalChess from "@/components/chessboard";

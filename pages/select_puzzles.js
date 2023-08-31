@@ -83,8 +83,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
           {displayProgress&&<><LoadingIcon progress={progress}></LoadingIcon>
             <label>{progress}%</label></>
           }
-          <button onClick={()=>setPopupOpen(true)} className=" button-3 green my-4 font-medium text-xl">Play</button>
-          {popupOpen&&<div className=" absolute mx-auto z-10"> <PlayForm setOpen={setPopupOpen} puzzles={puzzles}></PlayForm></div> }
+          <PlayForm puzzles={puzzles}></PlayForm>
         
         </div>
         </Layout>

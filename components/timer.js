@@ -5,7 +5,10 @@ export default function Timer({time, start, reset, pause, restart}){
     const [timeLeft, setTimeLeft] = useState(getTime(time))
     const [endTime, setEndTime] = useState( Date.now()+time)
     const [pauseTime, setPauseTime] = useState(null)
-
+    useEffect(()=>{
+        setTimeLeft(time)
+        setEndTime(Date.now()+time)
+    }, [time])
     
     useEffect(()=>{
         if(reset){

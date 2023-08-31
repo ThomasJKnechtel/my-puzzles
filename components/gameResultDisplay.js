@@ -9,8 +9,9 @@ export default function GameResultDisplay({puzzleStats}){
             puzzleStats.map(stat => {
                 if(stat.state == "COMPLETED") successfulPuzzles ++
             })
+             return (successfulPuzzles/puzzlesAttempted*100).toFixed(0)
         }
-        return (successfulPuzzles/puzzlesAttempted*100).toFixed(0)
+        return 0
     }
     return (
         <div className=" bg-white border-2 rounded-md border-green-600">

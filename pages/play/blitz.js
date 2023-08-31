@@ -5,6 +5,7 @@ import Timer from "@/components/timer";
 import getTimeInMillis from "@/utils/getTimeMillis";
 import PuzzleResultsDisplay from "@/components/puzzleResultsDisplay";
 import GameResultDisplay from "@/components/gameResultDisplay";
+import { useSearchParams } from "next/navigation";
 export default function Blitz({socket}){
     const [currentMove, setCurrentMove] = useState(null)
     const [gameState, setGameState] = useState(null)
@@ -12,10 +13,19 @@ export default function Blitz({socket}){
     const [pgnViewerObject, setPgnViewerObject] = useState([])
     const [gameFinished, setGameFinished] = useState(false)
     const [finishedPuzzlesStats, setFinishedPuzzlesStats] = useState([])
+    const [timeControl, setTimeControl] = useState(3)
     useEffect(()=>{
         if(socket){
-          
-            socket.emit('playBlitz')
+            const searchParams = new URLSearchParams(location.search)
+            const timeControl = searchParams.get('timeControl')
+            if(timeControl=="5"){
+                socket.emit('play5')
+                setTimeControl(5)
+            } 
+            else{
+                socket.emit('play3')
+                setTimeControl(3)
+            } 
             socket.on('timesUp', ()=>{
                 setGameFinished(true)
             })
@@ -85,7 +95,7 @@ export default function Blitz({socket}){
         }
             
             <div>
-                <Timer time={gameFinished?0:3*60*1000} start={true} pause={gameFinished}></Timer>
+                <Timer time={timeControl*60*1000} start={true} pause={gameFinished}></Timer>
             </div>
             
             <div>
