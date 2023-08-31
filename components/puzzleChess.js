@@ -25,7 +25,7 @@ export default function PuzzleChess({ gameState, setGameState,  currentMove, set
         }
        
       })
-      setGameFen(game.fen())
+      if(gameFen != game.fen())setGameFen(game.fen())
     }
   }, [currentMove])
   useEffect(()=>{
@@ -47,11 +47,10 @@ export default function PuzzleChess({ gameState, setGameState,  currentMove, set
     }
    
     try{
-    
-      if(turn == gameState.playerTurn && gameState.state == "PLAYERS_TURN"){
+     if(turn == gameState.playerTurn && gameState.state == "PLAYERS_TURN"){
         const MOVE = game.move(MOVE_OBJ)
         setGameFen(game.fen())
-        const tempPgnViewerObject = pgnViewerObject
+        const tempPgnViewerObject = structuredClone(pgnViewerObject)
         
         let moveCoordinates = null
         if(currentMove){
@@ -59,7 +58,7 @@ export default function PuzzleChess({ gameState, setGameState,  currentMove, set
         }else{
             moveCoordinates = addMove(tempPgnViewerObject, null,  {'turn': turn, 'moveNumber': moveNumber, 'notation': {notation:MOVE.san }})
         }
-        const newCurrentMove = getMove(tempPgnViewerObject, moveCoordinates)
+        let newCurrentMove = getMove(tempPgnViewerObject, moveCoordinates)
         
         setPgnViewerObject(tempPgnViewerObject)
         setCurrentMove(newCurrentMove)
@@ -67,7 +66,12 @@ export default function PuzzleChess({ gameState, setGameState,  currentMove, set
         addMoveToGameState(newGameState, MOVE.san, game.fen())
         const nextMove = newGameState.nextMove
         if(nextMove&&newGameState.state=="OPPONENTS_TURN"){
-          game.move(newGameState.nextMove)
+          const [turn, moveNumber] = [game.turn(), game.moveNumber()]
+          const MOVE = game.move(newGameState.nextMove)
+          moveCoordinates = addMove(tempPgnViewerObject, newCurrentMove.coordinates, {'turn':turn, 'moveNumber': moveNumber, 'notation': {notation:MOVE.san }}  )
+          newCurrentMove = getMove(tempPgnViewerObject, moveCoordinates)
+          setPgnViewerObject(tempPgnViewerObject)
+          setCurrentMove(newCurrentMove)
           playMove(newGameState, game.fen())
         }
         

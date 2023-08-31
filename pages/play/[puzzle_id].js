@@ -20,7 +20,7 @@ export default function PlayPuzzlePage({puzzle, session}){
             "puzzle_id": puzzle_id,
             "start_time": Date.now(),
             "continuation" : JSON.parse(continuation),
-            "nextMove" : JSON.parse([continuation][0]),
+            "nextMove" : JSON.parse(continuation)[0],
             "state" : "PLAYERS_TURN",
             "fen" : fen,
             "playerTurn" : turn?"w":"b",
@@ -81,7 +81,7 @@ export default function PlayPuzzlePage({puzzle, session}){
             </div>
             {(gameState&&timeSpent&&(gameState.state=="COMPLETED"||gameState.state=="FAILED"))&&
                 <div className=" absolute mx-auto z-10 top-10 shadow-2xl">
-                <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={timeSpent} solution={gameState.continuation} result={gameState.state}></DisplayPuzzleData>
+                <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={timeSpent} solution={gameState.continuation} result={gameState.state} puzzle_id={puzzle_id}></DisplayPuzzleData>
                 </div>
             }
         </div>

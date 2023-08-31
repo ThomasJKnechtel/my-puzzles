@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Image from "next/image"
-export default function DisplayPuzzleData({timeSpent, successRate, attempts, solution, result}){
+import Link from "next/link"
+export default function DisplayPuzzleData({timeSpent, successRate, attempts, solution, result, puzzle_id}){
     const [exit, setExit] = useState(false)
     function convertToDateString(){
         let dateStr = ""
@@ -40,12 +41,32 @@ export default function DisplayPuzzleData({timeSpent, successRate, attempts, sol
         </div> 
         <div>
             <label className=" font-medium m-2">Solution:</label><label className=" bg-black hover:bg-opacity-0">{solution.map((move, index )=>{
-                if(index%2) return Math.ciel((index+1)/2)+". "+move+" "
+                if(index%2) return Math.ceil((index+1)/2)+". "+move+" "
                 else return " "+move
             })}</label>
         </div>
         <div className=" text-center ">
-           <button className="button-3 green font-medium w-20">Exit</button> <button className="button-3 green font-medium w-20 m-2 ">Next</button>
+           <button className="button-3 green font-medium w-20"><Link href={{'pathname':'/select_puzzles'}}>Exit</Link></button>
+            <button className="button-3 green font-medium w-20 m-2 " onClick={async ()=>{
+                let previousPuzzles = JSON.parse(sessionStorage.getItem('previousPuzzles'))
+                if(!previousPuzzles) previousPuzzles = [puzzle_id]
+                else if(previousPuzzles.length == 3) previousPuzzles.pop()
+                previousPuzzles.unshift(puzzle_id)
+                sessionStorage.setItem('previousPuzzles', JSON.stringify(previousPuzzles))
+                const [lastPuzzle, secondLastPuzzle, thirdLastPuzzle] = previousPuzzles
+                await fetch('/api/db/getRandomPuzzle', { 
+                    method:"POST",
+                    headers:{
+                        'content-type':'application/json'
+                    },
+                    body : JSON.stringify({lastPuzzle, secondLastPuzzle, thirdLastPuzzle})
+                } ).then( response => {
+                    if(!response.ok) console.log(response.status)
+                    return response.text()
+                }).then( puzzle_id => {
+                    window.location.href="/play/"+puzzle_id
+                })
+            }}>Next</button>
         </div>
         
         
