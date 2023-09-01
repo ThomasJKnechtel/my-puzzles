@@ -114,7 +114,7 @@ export default function Blitz({socket}){
                     <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PGNViewer>
             </div>
         </div>
-        <div id="gameContainer" className=" hidden">
+        <div id="gameContainer">
                     <PuzzleResultsDisplay puzzlesStats={finishedPuzzlesStats}></PuzzleResultsDisplay>
         </div>
     </div>
