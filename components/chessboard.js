@@ -1,33 +1,18 @@
 import dynamic from 'next/dynamic';
 
-import {useEffect, useState } from 'react';
+import {useCallback} from 'react';
 import { Chess } from 'chess.js';
 
 
-import { addMove, getMove } from '@/utils/PGNViewerObject';
+const Chessboard = dynamic(() => import('chessboardjsx'), {
+        ssr: false  // <- this do the magic ;)
+});
 
+export default function LegalChess({fen, addMove}) {
 
-
-export default function LegalChess({fen='', currentMove, setCurrentMove, pgnViewerObject, setPgnViewerObject}) {
-  const [gameFen, setGameFen] = useState(fen)
- 
-  useEffect(()=>{
-    if(currentMove){
-      const game = new Chess(fen)
-      currentMove.variation.map(move=>{
-        try{
-           game.move(move)
-        }catch(err){
-          console.log(err)
-        }
-       
-      })
-      setGameFen(game.fen())
-    }
-  }, [currentMove, fen])
-
-  function onDrop({sourceSquare, targetSquare}){
-    const game = new Chess(gameFen)
+  
+  const onDrop = useCallback(({sourceSquare, targetSquare})=>{
+    const game = new Chess(fen)
     const turn = game.turn()
     const moveNumber = game.moveNumber()
     const MOVE_OBJ = {
@@ -38,38 +23,15 @@ export default function LegalChess({fen='', currentMove, setCurrentMove, pgnView
    
     try{
       const MOVE = game.move(MOVE_OBJ)
-      const tempPgnViewerObject = pgnViewerObject
-      
-      let moveCoordinates = null
-      if(currentMove){
-        moveCoordinates = addMove(tempPgnViewerObject, currentMove.coordinates, {'turn': turn, 'moveNumber': moveNumber, 'notation': {notation:MOVE.san }}  )
-      }else{
-        moveCoordinates = addMove(tempPgnViewerObject, null,  {'turn': turn, 'moveNumber': moveNumber, 'notation': {notation:MOVE.san }})
-      }
-      const newCurrentMove = getMove(tempPgnViewerObject, moveCoordinates)
-      newCurrentMove.variation.map(move=>{
-        try{
-           game.move(move)
-        }catch(err){
-          console.log(err)
-        }
-       
-      })
-      setGameFen(game.fen())
-      setPgnViewerObject(tempPgnViewerObject)
-      setCurrentMove(newCurrentMove)
-      
-      
+      addMove({turn, moveNumber, notation :{notation:MOVE.san}}, game.fen())
     }catch(err){
       console.log(err)
     }
-  }
-    const Chessboard = dynamic(() => import('chessboardjsx'), {
-        ssr: false  // <- this do the magic ;)
-        });
+  }, [addMove, fen])
+    
 
     
-    return <Chessboard id="game" position={gameFen} onDrop={onDrop} draggable={true}></Chessboard>
+    return <Chessboard transitionDuration={100} id="game" position={fen} onDrop={onDrop} draggable/>
 
 }
 
