@@ -23,24 +23,28 @@ function GameLayout(){
   useEffect(()=>{
     const searchParams = new URLSearchParams(location.search)
     setGamePgn(JSON.parse(decodeURIComponent(searchParams.get('pgn'))))
-   
-        setPgnViewerObject(getPGNViewerObject(JSON.parse(decodeURIComponent(searchParams.get('pgn')))))
-    
-    
+    setPgnViewerObject(getPGNViewerObject(JSON.parse(decodeURIComponent(searchParams.get('pgn')))))
 }, [])
-   
+useEffect(()=>{
+    console.log(pgnViewerObject)
+}, [pgnViewerObject])
+useEffect(()=>{
+    console.log(currentMove)
+}, [currentMove])
+useEffect(()=>{
+    console.log(fen)
+}, [fen])
+useEffect(()=>{
+    console.log(gamePgn)
+}, [gamePgn])
     return(
         <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
             
             <div>
-            
-                
-                <LegalChess fen={fen} setFen={setFen} currentMove={currentMove} setCurrentMove={setCurrentMove} pgnViewerObject={pgnViewerObject} setPgnViewerObject={setPgnViewerObject}></LegalChess>
-                
+                <LegalChess fen={fen} setFen={setFen} currentMove={currentMove} setCurrentMove={setCurrentMove} pgnViewerObject={pgnViewerObject} setPgnViewerObject={setPgnViewerObject}></LegalChess>              
             </div>
             <div className="ml-1">
                 <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PGNViewer>
-                
             </div>
             <div className=" ml-2">
                 <GameDataDisplay pgn={gamePgn}></GameDataDisplay>

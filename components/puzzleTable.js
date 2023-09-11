@@ -63,9 +63,9 @@ export default function PuzzleTable({puzzles, setPuzzles, session, saved}){
         
         <tbody id="puzzleTableBody" className="border-2" >
             {   puzzles &&(
-                 puzzles.map((puzzle) =>{
+                 puzzles.map((puzzle, index) =>{
                         if(puzzle){
-                             return <Puzzle id={puzzle.puzzle_id} white={puzzle.white} black = {puzzle.black} date = {formatDate(puzzle.date)} fen = {puzzle.fen} continuation={puzzle.continuation} puzzles={puzzles} setPuzzles={setPuzzles} dateUploaded={puzzle.dateUploaded?formatDate(puzzle.date_uploaded):"N/A" } saved={saved}session={session} turn={puzzle.turn} attempts={puzzle.attempts} success_rate={puzzle.success_rate}></Puzzle>
+                             return <Puzzle key={index} id={puzzle.puzzle_id} white={puzzle.white} black = {puzzle.black} date = {formatDate(puzzle.date)} fen = {puzzle.fen} continuation={puzzle.continuation} puzzles={puzzles} setPuzzles={setPuzzles} dateUploaded={puzzle.dateUploaded?formatDate(puzzle.date_uploaded):"N/A" } saved={saved}session={session} turn={puzzle.turn} attempts={puzzle.attempts} success_rate={puzzle.success_rate}></Puzzle>
                         }
                        
                     })

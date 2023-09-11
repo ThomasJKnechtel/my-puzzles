@@ -42,8 +42,7 @@ export default function Layout({ search, children }){
                     <Popup 
                         buttonChildren={<Image src={session.user.image} alt="profilePick" width={50} height={50} className="rounded-lg focus:border-2 border-gray-400 "/>}
                         headerChildren={<><h3 className="text-center my-2  font-bold">{session.user.name}</h3><label className="text-center text-xs mx-2 font-semibold">{session.user.email}</label></>}
-                        children={<><button className='button-3 green'>Profile</button><br></br><button className='button-3 green' onClick={()=>{signOut()}}>Log Out</button></>}
-                    ></Popup>
+                    ><><button className='button-3 green'>Profile</button><br></br><button className='button-3 green' onClick={()=>{signOut()}}>Log Out</button></></Popup>
                         
                     
                 ):(

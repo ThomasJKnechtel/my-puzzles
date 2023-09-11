@@ -41,8 +41,8 @@ export function GamesTable(){
         
         <tbody class="border-2" >
             {
-                context.gamesPgns.map((pgn) =>{
-                        return <Game gamesPgns={context.gamesPgns}  setGamesPgns={context.setGamesPgns} pgn = {pgn} className="bg-slate-400"  ></Game>
+                context.gamesPgns.map((pgn, index) =>{
+                        return <Game key={index} gamesPgns={context.gamesPgns}  setGamesPgns={context.setGamesPgns} pgn = {pgn} className="bg-slate-400"  ></Game>
                     })
             }   
         </tbody>

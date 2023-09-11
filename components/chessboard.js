@@ -8,13 +8,12 @@ import { addMove, getMove } from '@/utils/PGNViewerObject';
 
 
 
-export default function LegalChess({fen, currentMove, setCurrentMove, pgnViewerObject, setPgnViewerObject}) {
-  let game = new Chess()
+export default function LegalChess({fen='', currentMove, setCurrentMove, pgnViewerObject, setPgnViewerObject}) {
   const [gameFen, setGameFen] = useState(fen)
  
   useEffect(()=>{
     if(currentMove){
-      game.reset()
+      const game = new Chess(fen)
       currentMove.variation.map(move=>{
         try{
            game.move(move)
@@ -25,11 +24,10 @@ export default function LegalChess({fen, currentMove, setCurrentMove, pgnViewerO
       })
       setGameFen(game.fen())
     }
-  }, [currentMove])
+  }, [currentMove, fen])
 
-//Ignore spaghetti code
   function onDrop({sourceSquare, targetSquare}){
-    game = new Chess(gameFen)
+    const game = new Chess(gameFen)
     const turn = game.turn()
     const moveNumber = game.moveNumber()
     const MOVE_OBJ = {

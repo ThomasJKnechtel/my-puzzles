@@ -8,7 +8,7 @@ export default function GameDataDisplay({pgn}){
             setGameData( parseGame(pgn).tags)
         }
         
-}, [pgn])
+    }, [pgn])
     
     
     return (<>{gameData?(

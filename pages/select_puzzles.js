@@ -24,7 +24,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
             setDisplayProgress(true)
         }   
 
-      }, [socket]) 
+      }, [socket, puzzles]) 
       useEffect(()=>{
         if(socket){
             socket.on('puzzles', newPuzzles=>{

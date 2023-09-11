@@ -62,29 +62,31 @@ export default function PGNViewer({pgnViewerObject, currentMove, setCurrentMove}
         return displayVariation
     }
     function createPgnTable(tableObject, isRow){
+        let key = 0
         if(isRow){
         return tableObject.map((row)=>{
-            
+                key++
                 if(row[0].isMainVariation){
                     if(row.length == 2){
                         const white = row[0]
                         const black = row[1]
-                        return <tr className=" border-t-2 border-gray-50 h-fit"><td>{white.moveNumber}</td><td  className=" w-36"><button id={JSON.stringify(white.coordinates)} onClick={onMoveClick} className={JSON.stringify(currentMove) == JSON.stringify(white)?"w-full bg-blue-100":"w-full"} coordinates={JSON.stringify(white.coordinates)}>{white.notation.notation}</button></td><td  className=" w-36"><button id={JSON.stringify(black.coordinates)} onClick={onMoveClick} className={JSON.stringify(currentMove)==JSON.stringify(black)?"w-full bg-blue-100":"w-full"} coordinates={JSON.stringify(black.coordinates)}>{black.notation.notation}</button></td></tr>
+                        return <tr key={key} className=" border-t-2 border-gray-50 h-fit"><td>{white.moveNumber}</td><td  className=" w-36"><button id={JSON.stringify(white.coordinates)} onClick={onMoveClick} className={JSON.stringify(currentMove) == JSON.stringify(white)?"w-full bg-blue-100":"w-full"} coordinates={JSON.stringify(white.coordinates)}>{white.notation.notation}</button></td><td  className=" w-36"><button id={JSON.stringify(black.coordinates)} onClick={onMoveClick} className={JSON.stringify(currentMove)==JSON.stringify(black)?"w-full bg-blue-100":"w-full"} coordinates={JSON.stringify(black.coordinates)}>{black.notation.notation}</button></td></tr>
                     }else if(row.length == 1){
                         if(row[0].turn == "w"){
-                            return <tr className=" border-t-2 border-gray-50 h-fit"><td>{row[0].moveNumber}</td><td><button id={row[0].coordinates} onClick={onMoveClick} coordinates={JSON.stringify(row[0].coordinates)} className={JSON.stringify(currentMove)==JSON.stringify(row[0])?"w-full bg-blue-100":"w-full"}>{row[0].notation.notation}</button></td><td></td></tr>
+                            return <tr key={key} className=" border-t-2 border-gray-50 h-fit"><td>{row[0].moveNumber}</td><td><button id={row[0].coordinates} onClick={onMoveClick} coordinates={JSON.stringify(row[0].coordinates)} className={JSON.stringify(currentMove)==JSON.stringify(row[0])?"w-full bg-blue-100":"w-full"}>{row[0].notation.notation}</button></td><td></td></tr>
                         }else{
-                            return <tr className=" border-t-2 border-gray-50 h-fit"><td>{row[0].moveNumber}</td><td></td><td><button id={row[0].coordinates} onClick={onMoveClick} coordinates={JSON.stringify(row[0].coordinates)} className={JSON.stringify(currentMove)==JSON.stringify(row[0])?"w-full bg-blue-100":"w-full"}>{row[0].notation.notation}</button></td></tr>
+                            return <tr key={key} className=" border-t-2 border-gray-50 h-fit"><td>{row[0].moveNumber}</td><td></td><td><button id={row[0].coordinates} onClick={onMoveClick} coordinates={JSON.stringify(row[0].coordinates)} className={JSON.stringify(currentMove)==JSON.stringify(row[0])?"w-full bg-blue-100":"w-full"}>{row[0].notation.notation}</button></td></tr>
                         }
                         
                     }
                 }else{
-                    return <tr className=" border-t-2 border-gray-50 bg-slate-50 h-fit"><td colSpan="3">{createPgnTable(row, false)}</td></tr>
+                    return <tr key={key} className=" border-t-2 border-gray-50 bg-slate-50 h-fit"><td colSpan="3">{createPgnTable(row, false)}</td></tr>
                 }
         })}else{
         return  tableObject.map((moveSet, index)=>{
+            key++
                 if(Array.isArray(moveSet)){
-                    return <span><label>(</label>{createPgnTable(moveSet, false)}<label>)</label></span>
+                    return <span key={key}><label>(</label>{createPgnTable(moveSet, false)}<label>)</label></span>
                 }else{
                     let moveStr = ''
                     if(moveSet.turn=="w"){

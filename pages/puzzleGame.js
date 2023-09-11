@@ -16,7 +16,7 @@ export default function PuzzlePage({pgn=""}){
    useEffect(()=>{
      console.log(currentMove)
      console.log(getNextMove(pgnViewerObject, currentMove))
-   }, [currentMove])
+   }, [currentMove, pgnViewerObject])
   
    function onMoveClick(){
     const tempPgnViewerObject = structuredClone(pgnViewerObject)

@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import style from "./popup.module.css"
 
 
-export function Popup({buttonChildren, buttonStyle, children, headerChildren}){
+export function Popup({buttonChildren, buttonStyle, headerChildren, ...children}){
     const [isOpen, setOpen] = useState(false)
     const popupRef = useRef(null)
     const openPopup = ()=>{

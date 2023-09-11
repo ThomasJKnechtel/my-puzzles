@@ -6,7 +6,7 @@ export default function Timer({time, start, reset, pause, restart}){
     const [endTime, setEndTime] = useState( Date.now()+time)
     const [pauseTime, setPauseTime] = useState(null)
     useEffect(()=>{
-        setTimeLeft(time)
+        setTimeLeft(getTime(time))
         setEndTime(Date.now()+time)
     }, [time])
     
@@ -16,14 +16,14 @@ export default function Timer({time, start, reset, pause, restart}){
             setEndTime(Date.now()+time)
             
         }
-    }, [reset])
+    }, [reset, time])
     useEffect(()=>{
         if(restart && pauseTime){
             const timePaused = Date.now()-pauseTime
-            setEndTime(timePaused+endTime)
+            setEndTime(endTime => endTime+timePaused)
             
         }
-    }, [restart])
+    }, [restart, pauseTime])
     useEffect(()=>{
         if(pause){
             setPauseTime(Date.now())
@@ -31,25 +31,26 @@ export default function Timer({time, start, reset, pause, restart}){
         }
     }, [pause])
     useEffect(()=>{
+
+        function calculateTimeLeft(){
+            return endTime - Date.now()
+        }
+
         if(timeLeft.total<0) setTimeLeft(getTime(0))
         else if(start && !pause){
             if(timeLeft.total > 0){
                 const timer = setTimeout(()=>{
-                if(!pause){
-                    setTimeLeft(getTime(calculateTimeLeft()))
-                }
-                
-               
-                 }, 100)
-            
+                    if(!pause){
+                        setTimeLeft(getTime(calculateTimeLeft()))
+                    }
+                }, 100)
+                return ()=> clearTimeout(timer)
             }
             
         }
-        return ()=> clearTimeout()
-    }, [start, timeLeft, endTime])
-    function calculateTimeLeft(){
-        return endTime - Date.now()
-    }
+        
+    }, [start, timeLeft, pause, endTime])
+    
     function getTime(milli){
         return {
             days : Math.floor(milli / (1000 * 60 * 60 * 24)),

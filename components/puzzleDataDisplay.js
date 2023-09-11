@@ -1,20 +1,22 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import formatMilliseconds from "@/utils/formatTime"
 export default function DisplayPuzzleData({timeSpent, successRate, attempts, solution, result, puzzle_id}){
     const [exit, setExit] = useState(false)
     function convertToDateString(){ 
         let dateStr = ""
         if(timeSpent){
-            const { days, hours, minutes, seconds} = timeSpent
+
+            const { days, hours, minutes, seconds} = formatMilliseconds(timeSpent)
             if(days == 1)dateStr += days + " day "
-            else if(days != 0) dateStr += days + " days "
+            else if(days&&days != 0) dateStr += days + " days "
             if(hours == 1) dateStr += hours + " hour "
-            else if(hours != 0) dateStr += hours + " hours "
+            else if(hours&&hours != 0) dateStr += hours + " hours "
             if(minutes == 1) dateStr += minutes + " minute "
-            else if(minutes != 0) dateStr += minutes + " minutes "
+            else if(minutes&&minutes != 0) dateStr += minutes + " minutes "
             if(seconds == 1) dateStr += seconds + " second"
-            else if(seconds != 0) dateStr += seconds+ " seconds"
+            else if(seconds&&seconds != 0) dateStr += seconds+ " seconds"
         }
         return dateStr
     }

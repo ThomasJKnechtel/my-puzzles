@@ -1,23 +1,53 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import getPuzzle from "../api/db/getPuzzle";
 import PuzzleChess from "@/components/puzzleChess";
 import PGNViewer from "@/components/pgnViewer";
 import DisplayPuzzleData from "@/components/puzzleDataDisplay";
 import Stopwatch from "@/components/stopwatch";
-
+import { addMove, getMove } from "@/utils/PGNViewerObject";
+import { addMoveToGameState, playMove } from "@/utils/gameState";
+function reducer(state, action){
+    const { gameState, currentMove, pgnViewerObject, fen} = state
+    if(action.type == "INITIALIZE"){
+        return { ...state, gameState : action.gameState, fen : action.gameState.startingFEN}
+    }else if(action.type == "ADD_MOVE"){
+        let [newGameState, newPgnViewerObject, newFEN, coordinates] = [gameState, pgnViewerObject, fen, currentMove?currentMove.coordinates:null ]
+        if(newGameState.state == "PLAYERS_TURN"){
+            newFEN = action.fen
+            addMoveToGameState(newGameState, action.move.notation.notation, newFEN)
+            coordinates = addMove(newPgnViewerObject, coordinates, action.move)
+            let newCurrentMove = getMove(newPgnViewerObject, coordinates)
+            if(newGameState.state == "OPPONENTS_TURN"){
+                const game = new Chess(newFEN)
+                const [turn, moveNumber, MOVE] = [game.turn(), game.moveNumber(), game.move(gameState.nextMove)]
+                coordinates = addMove(newPgnViewerObject, newCurrentMove.coordinates, {'turn':turn, 'moveNumber': moveNumber, 'notation': {notation:MOVE.san }} )
+                newCurrentMove = getMove(newPgnViewerObject, coordinates)
+                newFEN = game.fen()
+                playMove(newGameState, newFEN)
+            }else{
+                newGameState.finishedTime = Date.now()
+            }
+            return { ...state, gameState: newGameState, currentMove : newCurrentMove, pgnViewerObject : newPgnViewerObject, fen: newFEN}
+        }
+        
+    }else if(action.type == "SET_CURRENT_MOVE"){
+        const newCurrentMove = action.currentMove
+        const game = new Chess(gameState.startingFEN)
+        newCurrentMove.continuation.map((move)=>{
+            game.move(move)
+        })
+        return {...state, fen : game.fen()}
+    }
+    return state
+}
 export default function PlayPuzzlePage({puzzle, session}){
-    const [gameState, setGameState] = useState(null)
-    const [pgnViewerObject, setPgnViewerObject] = useState([])
-    const [currentMove, setCurrentMove] = useState(null)
-    const [timeSpent, setTimeSpent] = useState(null)
-    const {puzzle_id, continuation, fen, turn}=JSON.parse(puzzle)
+    const [state, dispatch] = useReducer(reducer, {gameState:[], pgnViewerObject:[], currentMove:null, fen:''})
     const [success_rate, setSuccessRate] = useState(0)
     const [attempts, setAttempts] = useState(0)
+    const {gameState, fen, currentMove, pgnViewerObject} = state
     useEffect(()=>{
-        const gameContianer = document.getElementById('container')
-                    
-        setTimeout(()=>{gameContianer.style.display = "inline-flex"}, 500)
+        const {puzzle_id, continuation, fen, turn} = JSON.parse(puzzle)
         const startState = {
             "puzzle_id": puzzle_id,
             "start_time": Date.now(),
@@ -30,24 +60,17 @@ export default function PlayPuzzlePage({puzzle, session}){
             "startingFEN" : fen, 
             "currentMoveNumber" : 0
         }
-        setGameState(startState)
+        dispatch({type:'INITIALIZE', gameState:startState})
     }, [puzzle])
     useEffect(()=>{
-        if(gameState){
             if(gameState.state == "COMPLETED" || gameState.state == "FAILED"){
-                const gameContianer = document.getElementById('container')
-                const displayContainer = document.getElementById('displayContainer')    
-                gameContianer.style.display = "none"
-                setTimeout(()=>{
-                    gameContianer.style.display = "inline-flex"
-                    displayContainer.style.display = "block"
-                }, 300)
+                
                 fetch("/api/db/getPuzzleStats", {
                     'method': "POST",
                     'headers':{
                         'content-type': 'application/text'
                     },
-                    'body': puzzle_id
+                    'body': gameState.puzzle_id
                 }).then( response => {
                     if(!response.ok){
                         console.log(response.status)
@@ -62,26 +85,31 @@ export default function PlayPuzzlePage({puzzle, session}){
                         'headers':{
                             'content-type':'application/json'
                         },
-                        'body':JSON.stringify({puzzle_id, newSuccessRate, newAttempts})
+                        'body':JSON.stringify({'puzzle_id':gameState.puzzle_id, newSuccessRate, newAttempts})
                     })
                     setAttempts(newAttempts)
                     setSuccessRate(newSuccessRate)
                 })
+                document.getElementById('displayContainer').style.display = 'flex'
             }
-        }
-        
-    }, [gameState])
+        }, [gameState.puzzle_id, gameState.state])
 
+        function addMove(move, fen){
+            dispatch({type:'ADD_MOVE', move:move, fen:fen})
+        }
+        function setCurrentMove(move){
+            dispatch({type:'SET_CURRENT_MOVE', currentMove:move})
+        }
     return (
     
-        <div id="container" className=" w-full justify-center flex-row mt-5 hidden "> 
+        <div id="container" className=" w-full inline-flex justify-center flex-row mt-5"> 
        
-            <Stopwatch start={true} stop={gameState&&(gameState.state=="COMPLETED"||gameState.state=="FAILED")} setTimeSpent={setTimeSpent}></Stopwatch>
+            <Stopwatch start={true} stop={gameState.state=="COMPLETED"||gameState.state=="FAILED"}></Stopwatch>
         
             
             <div>
                 
-                    <PuzzleChess gameState={gameState} setGameState={setGameState} pgnViewerObject={pgnViewerObject} setPgnViewerObject={setPgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}></PuzzleChess>  
+                    <PuzzleChess fen={fen} gameState={gameState.state} addMove={addMove} playersTurn={gameState.playerTurn}></PuzzleChess>  
                 
                 
             </div>
@@ -90,7 +118,7 @@ export default function PlayPuzzlePage({puzzle, session}){
             </div>
             
                 <div id="displayContainer" className=" absolute mx-auto z-10 top-10 shadow-2xl hidden">
-                <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={timeSpent} solution={gameState&&gameState.continuation} result={gameState&&gameState.state} puzzle_id={puzzle_id}></DisplayPuzzleData>
+                <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={gameState.finishedTime-gameState.start_time} solution={gameState.continuation} result={gameState.state} puzzle_id={gameState.puzzle_id}></DisplayPuzzleData>
                 </div>
             
         </div>

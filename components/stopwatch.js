@@ -1,36 +1,28 @@
 import { useEffect, useState } from "react";
 
-export default function Stopwatch({start, stop, setTimeSpent}){
+export default function Stopwatch({start, stop}){
     const [startTime, setStartTime] = useState(null)
-   
     const [currentTime, setCurrentTime] = useState(null)
     useEffect(()=>{
         if(start){
             setStartTime(Date.now())
         }
-        
-        
     }, [start])
-    useEffect(()=>{
-        if(stop){
-            setTimeSpent(getTime(Date.now()-startTime))
-        }
-    }, [stop])
+    
     useEffect(()=>{
         let timer = null
-        
         let isDisplayed = false
         if(start&&!stop){
             const secondsDisplay = document.getElementById('secondsDisplay')
             timer = setInterval(()=>{
-            setCurrentTime(Date.now())
-            if(isDisplayed&&secondsDisplay){
-                 secondsDisplay.style.visibility = "visible"
-            }else if(secondsDisplay){
-                secondsDisplay.style.visibility = "hidden"
-            }
-            isDisplayed = !isDisplayed
-        }, 1000)
+                setCurrentTime(Date.now())
+                if(isDisplayed&&secondsDisplay){
+                    secondsDisplay.style.visibility = "visible"
+                }else if(secondsDisplay){
+                    secondsDisplay.style.visibility = "hidden"
+                }
+                isDisplayed = !isDisplayed
+            }   , 1000)
         }
        
         if(stop){
@@ -39,7 +31,7 @@ export default function Stopwatch({start, stop, setTimeSpent}){
         return () => {
             clearInterval(timer); // Clean up the timer on unmount or when dependencies change
           }
-    }, [startTime, stop])
+    }, [ stop, start])
     function getTime(milli){
         return {
             days : Math.floor(milli / (1000 * 60 * 60 * 24)),
