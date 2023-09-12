@@ -1,6 +1,7 @@
-import getTimeInMillis from "@/utils/getTimeMillis"
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import Image from "next/image"
 import { useEffect, useState } from "react"
+
 export default function SearchBar({setGamesPgns}){
     const [showForm, setShowForm] = useState(false)
     async function getGames(){
@@ -11,14 +12,14 @@ export default function SearchBar({setGamesPgns}){
         const formData = new FormData(form)
         const searchPerams = new URLSearchParams(formData)
 
-        url += player +"?"
+        url += `${player }?`
         let dateFromObject = null
         let dateToObject = null
         const perfTypes = searchPerams.getAll('perfType')
         const [opponent, dateFrom, timeFrom, dateTo, timeTo] = [searchPerams.get('opponent'), searchPerams.get('dateFrom'), searchPerams.get('timeFrom'), searchPerams.get('dateTo'), searchPerams.get('timeTo')]
 
-        if(dateFrom) dateFromObject = new Date(dateFrom+" "+timeFrom)
-        if(dateTo) dateToObject =  new Date(dateTo + " " + timeTo)
+        if(dateFrom) dateFromObject = new Date(`${dateFrom} ${timeFrom}`)
+        if(dateTo) dateToObject =  new Date(`${dateTo  } ${  timeTo}`)
         const lichessSearchPerams = new URLSearchParams()
         if(opponent)    lichessSearchPerams.append('vs', lichessSearchPerams.get('opponent'))
         lichessSearchPerams.append('perfTypes', perfTypes)
@@ -26,7 +27,6 @@ export default function SearchBar({setGamesPgns}){
   
         if(dateFromObject) lichessSearchPerams.append('since', dateFromObject.getTime())
         if(dateToObject) lichessSearchPerams.append('until', dateToObject.getTime())
-        console.log(url+lichessSearchPerams.toString())
         url+=lichessSearchPerams.toString()
         fetch(url).then( response => {
             if(!response.ok){
@@ -51,13 +51,14 @@ export default function SearchBar({setGamesPgns}){
         
         <div className="inline-flex flex-row items-center bg-white px-1 rounded-r-full mx-24 relative w-96 justify-between focus:">
                  
-                <input id="player" type="text" placeholder="Enter a Lichess username" className=" w-64"></input>
+                <input id="player" type="text" placeholder="Enter a Lichess username" className=" w-64" />
                 <div className=" inline-flex flex-row">
-
-                
-                <label id="searchErrorMessage" className="text-xs text-red-800 hidden font-medium opacity-50">No Games Found</label>
-                <div className="relative focus-within:bg-slate-200 peer-focus:bg-opacity-0"><button className=' m-1 ' onClick={()=>setShowForm(!showForm)}><Image src="https://img.icons8.com/external-smashingstocks-detailed-outline-smashing-stocks/66/external-parameters-festivals-and-events-smashingstocks-detailed-outline-smashing-stocks.png" alt="perameters" width={15} height={15}/></button><div className=" absolute top-[25px] right-0 shadow-md"><SearchPerameterForm setShowForm={setShowForm}></SearchPerameterForm></div></div>
-                <button className="" onClick = {getGames} ><Image src="https://img.icons8.com/ios/50/search--v1.png" alt="search" width={15} height={15} className=""/></button></div>
+                    <label id="searchErrorMessage" className="text-xs text-red-800 hidden font-medium opacity-50">No Games Found</label>
+                    <div className="relative focus-within:bg-slate-200 peer-focus:bg-opacity-0">
+                        <button type="button" className=' m-1 ' onClick={()=>setShowForm(!showForm)}><Image src="https://img.icons8.com/external-smashingstocks-detailed-outline-smashing-stocks/66/external-parameters-festivals-and-events-smashingstocks-detailed-outline-smashing-stocks.png" alt="perameters" width={15} height={15}/></button>
+                        <div className=" absolute top-[25px] right-0 shadow-md"><SearchPerameterForm setShowForm={setShowForm} /></div>
+                    </div>
+                <button type="button" className="" onClick = {getGames} ><Image src="https://img.icons8.com/ios/50/search--v1.png" alt="search" width={15} height={15} className=""/></button></div>
          </div>
         
         
@@ -68,19 +69,19 @@ function SearchPerameterForm({setShowForm}){
     
     return (
         <form id="searchPerametersForm" method="dialog" className=" bg-white relative z-10 px-4 rounded-md border-2">
-        <button className=" absolute right-1 text-sm text-slate-400 font-mono" onClick={()=>{setShowForm(false)}}>✖</button>
+        <button type="button" className=" absolute right-1 text-sm text-slate-400 font-mono" onClick={()=>{setShowForm(false)}}>✖</button>
         <fieldset className=" m-2 w-full">
-        <div className=" inline-flex flex-col "><label className=" font-medium" htmlFor="opponent">Opponent</label><input type="text" name="opponent" className=" w-80 border-2 shadow-sm bg-slate-100 "></input></div>
+        <div className=" inline-flex flex-col "><label className=" font-medium" htmlFor="opponent">Opponent</label><input type="text" name="opponent" className=" w-80 border-2 shadow-sm bg-slate-100 " /></div>
         </fieldset>
         <fieldset className=" flex justify-between m-2 border-t-2 p-2">
             <label className=" font-medium" htmlFor="perfType">Format</label>
             <div className=" inline-flex flex-col">
-            <div><input  type="checkbox" name="perfType" defaultChecked defaultValue={"UltraBullet"}></input><label  >UltraBullet</label></div>
-            <div><input type="checkbox" name="perfType" defaultChecked defaultValue={"Bullet"}></input><label >Bullet</label></div>
-            <div><input type="checkbox" name="perfType" defaultChecked defaultValue={"Blitz"}></input><label >Blitz</label></div>
-            <div><input type="checkbox" name="perfType" defaultChecked defaultValue={"Rapid"}></input><label >Rapid</label></div>
-            <div><input type="checkbox" name="perfType" defaultChecked defaultValue={"Classical"}></input><label >Classical</label></div>
-            <div><input type="checkbox" name="perfType" defaultChecked defaultValue={"Correspondence"}></input><label >Correspondence</label></div>
+            <div><input  type="checkbox" name="perfType" defaultChecked defaultValue="UltraBullet" /><label  >UltraBullet</label></div>
+            <div><input type="checkbox" name="perfType" defaultChecked defaultValue="Bullet" /><label >Bullet</label></div>
+            <div><input type="checkbox" name="perfType" defaultChecked defaultValue="Blitz" /><label >Blitz</label></div>
+            <div><input type="checkbox" name="perfType" defaultChecked defaultValue="Rapid" /><label >Rapid</label></div>
+            <div><input type="checkbox" name="perfType" defaultChecked defaultValue="Classical" /><label >Classical</label></div>
+            <div><input type="checkbox" name="perfType" defaultChecked defaultValue="Correspondence" /><label >Correspondence</label></div>
 
             </div>
         </fieldset>
@@ -89,13 +90,26 @@ function SearchPerameterForm({setShowForm}){
             <div className=" inline-flex flex-row justify-between">
                 <label className=" font-medium">Dates</label>
                 <div className=" ml-20">
-                <div className=" inline-flex flex-row justify-end w-full py-2" ><label className="mr-4">From</label><span className=" inline-flex"><input type="date" name="dateFrom" className="border-2 shadow-sm bg-slate-100 mr-2"></input><input type="time" name="timeFrom" className="border-2 shadow-sm bg-slate-100"></input></span></div>
-                <div className=" inline-flex flex-row justify-end w-full py-2" ><label className="mr-4">To</label><span className=" inline-flex"><input type="date" name="dateTo" className="border-2 shadow-sm bg-slate-100 mr-2"></input><input type="time" name="timeTo" className="border-2 shadow-sm bg-slate-100"></input></span></div>
+                    <div className=" inline-flex flex-row justify-end w-full py-2" >
+                        <label className="mr-4">From</label>
+                        <span className=" inline-flex">
+                            <input type="date" name="dateFrom" className="border-2 shadow-sm bg-slate-100 mr-2" />
+                            <input type="time" name="timeFrom" className="border-2 shadow-sm bg-slate-100" />
+                        </span>
+                    </div>
+                    <div className=" inline-flex flex-row justify-end w-full py-2" >
+                        <label className="mr-4">To</label>
+                        <span className=" inline-flex">
+                            <input type="date" name="dateTo" className="border-2 shadow-sm bg-slate-100 mr-2" />
+                            <input type="time" name="timeTo" className="border-2 shadow-sm bg-slate-100" />
+                        </span>
+                    </div>
                 </div>
             </div>
         </fieldset>
         <fieldset className=" m-2 w-full flex justify-between p-2 border-t-2">
-            <label className=" font-medium">Games</label><input type="number" max={100} min={0} defaultValue={10} className="border-2 shadow-sm bg-slate-100" name="max"></input>
+            <label className=" font-medium">Games</label>
+            <input type="number" max={100} min={0} defaultValue={10} className="border-2 shadow-sm bg-slate-100" name="max" />
         </fieldset>
         </form>
     )

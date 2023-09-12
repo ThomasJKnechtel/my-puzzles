@@ -7,6 +7,7 @@ import DisplayPuzzleData from "@/components/puzzleDataDisplay";
 import Stopwatch from "@/components/stopwatch";
 import { addMove, getMove } from "@/utils/PGNViewerObject";
 import { addMoveToGameState, playMove } from "@/utils/gameState";
+import { Chess } from "chess.js";
 function reducer(state, action){
     const { gameState, currentMove, pgnViewerObject, fen} = state
     if(action.type == "INITIALIZE"){

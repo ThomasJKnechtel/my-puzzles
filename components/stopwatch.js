@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from "react";
 
 export default function Stopwatch({start, stop}){
@@ -42,8 +44,9 @@ export default function Stopwatch({start, stop}){
             total : milli
         }
     }
+    // eslint-disable-next-line no-shadow
     function convertToDateTime(startTime, currentTime){
-        const {days, hours, minutes, seconds, microseconds}= getTime(currentTime-startTime)
+        const {days, hours, minutes, seconds}= getTime(currentTime-startTime)
         return ( 
            
             <div className="">
@@ -65,22 +68,24 @@ export default function Stopwatch({start, stop}){
                     <span className="w-8 inline-block font-bold text-2xl text-center"><label>{hours}</label></span>
                     <span className="font-bold text-2xl w-8 inline-block">:</span> </>
                 }
-                {minutes > 0 && days==0 ?
+                {minutes > 0 && days===0 ?
                     <>
                     <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label className=" w-32">{minutes/10 < 1&&0}{minutes}</label></span>
                     <span className="font-bold text-2xl">:</span></>
-                    :days == 0 ?
+                    :days === 0 &&
                     <>
                     <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label className=" w-32">00</label></span>
-                    <span className="font-bold text-2xl">:</span></>
-                    :<></>
+                    <span className="font-bold text-2xl">:</span>
+                    </>
+                    
                 }
-                {(seconds != 0 && hours == 0)?<>
-                    <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center"><label>{seconds/10 < 1&&0}{seconds}</label></span></>
-                    :hours == 0?(<>
+                {(seconds !== 0 && hours === 0)?
+                    <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block text-center">
+                        <label>{seconds/10 < 1&&0}{seconds}</label>
+                    </span>
+                    :hours === 0&&(
                         <span className="bg-slate-600 m-1 rounded-md p-1 font-medium text-white text-lg w-8 inline-block"><label>00</label></span>
-            
-                    </>):(<></>)
+                    )
                 }
             
             </div>
@@ -95,7 +100,7 @@ export default function Stopwatch({start, stop}){
             convertToDateTime(startTime, currentTime)
        
         }
-        <div id="secondsDisplay" className=" rounded-full w-1 h-1 bg-slate-400 absolute top-1 right-1"></div>
+        <div id="secondsDisplay" className=" rounded-full w-1 h-1 bg-slate-400 absolute top-1 right-1" />
         </div>
     )
 }

@@ -19,6 +19,7 @@ function reducer(state, action){
         return { ...state, pgnViewerObject:action.pgnViewerObject}
     }
     if(action.type === "ADD_MOVE"){
+        // eslint-disable-next-line prefer-const
         let [ newPgnViewerObject, newFEN, coordinates] = [ pgnViewerObject, fen, currentMove?currentMove.coordinates:null ]
         newFEN = action.fen
         coordinates = addMoveToPGNViewer(newPgnViewerObject, coordinates, action.move)

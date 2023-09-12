@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { useSession, signIn, signOut } from 'next-auth/react'
-import { Popup} from "./popup"
 import { createContext, useEffect, useState} from 'react'
+import { useSession, signIn, signOut } from 'next-auth/react'
+import Popup from './popup'
 import SearchBar from './searchbar'
 
 
@@ -36,28 +36,23 @@ export default function Layout({ search, children }){
                     className="h-[30px]  relative"/>
                     
                     <h1 className="text-3xl font-bold font-serif">MyPuzzles</h1>
-                {search&&<SearchBar setGamesPgns={setGamesPgns}></SearchBar>}
+                {search&&<SearchBar setGamesPgns={setGamesPgns}/>}
                 {
                 session?(
-                    <Popup 
-                        buttonChildren={<Image src={session.user.image} alt="profilePick" width={50} height={50} className="rounded-lg focus:border-2 border-gray-400 "/>}
-                        headerChildren={<><h3 className="text-center my-2  font-bold">{session.user.name}</h3><label className="text-center text-xs mx-2 font-semibold">{session.user.email}</label></>}
-                    ><><button className='button-3 green'>Profile</button><br></br><button className='button-3 green' onClick={()=>{signOut()}}>Log Out</button></></Popup>
-                        
-                    
+                    <Popup session={session}/>
+
                 ):(
-                    <button className="button-3 green mr-0 ml-auto" onClick={()=>signIn()}>Sign In</button>
+                    <button type="button" className="button-3 green mr-0 ml-auto" onClick={()=>signIn()}>Sign In</button>
                 )
                 }
             </header> 
             
             <main className='h-full overflow-auto'>
-                {
+                
                 <LayoutContext.Provider value={{gamesPgns:gamesPgns, setGamesPgns:setGamesPgns, session:session}}>
                     {children}
                 </LayoutContext.Provider>
-                    
-                    }
+            
             </main>
             <footer className = "inline-flex flex-row justify-center w-full align-middle">
                 <label>Contact me:</label><Link href="thomasknechtel@cmail.carleton.ca">thomasknechtel@cmail.carleton.ca</Link>

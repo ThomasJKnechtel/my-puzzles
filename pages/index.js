@@ -1,12 +1,10 @@
 import { LayoutContext } from "@/components/layout";
 import Layout from "@/components/layout";
-import { GamesTable } from "@/components/table";
-import getSocket from "@/utils/socket";
-
-import { useEffect, useState } from "react";
+import GamesTable from "@/components/table";
 
 
-export default function LoginPage({socket, setSocket}) {
+
+export default function LoginPage() {
   
 
   function generatePuzzles(gamesPgns){

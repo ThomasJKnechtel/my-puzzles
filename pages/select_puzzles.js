@@ -1,8 +1,11 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, useEffect } from "react"
+import { useSession } from "next-auth/react";
 import PuzzleTable  from "../components/puzzleTable"
 import Layout from "../components/layout"
 import PuzzleFormSelection from "@/components/puzzleSelection"
-import { useSession } from "next-auth/react";
 import LoadingIcon from "@/components/loadingIcon";
 
 import getPuzzles from "./api/db/getPuzzles";
@@ -13,8 +16,6 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
     const [puzzles, setPuzzles] = useState(JSON.parse(puzzlesFromSearch))
     const [progress,  setProgress] = useState(0)
     const [displayProgress, setDisplayProgress] = useState(false)
-    const [displayTable, setDisplayTable] = useState(true)
-    const [popupOpen, setPopupOpen] = useState(false)
 
     useEffect(() => {
         if(socket && !puzzles){
@@ -28,6 +29,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
       useEffect(()=>{
         if(socket){
             socket.on('puzzles', newPuzzles=>{
+                // eslint-disable-next-line no-param-reassign
                 newPuzzles = JSON.parse(newPuzzles)
                
                 if(puzzles){
@@ -43,8 +45,8 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
                 setDisplayProgress(false)
                 setProgress(0)
             })
-            socket.on('progress', progress=>{
-              setProgress(progress)
+            socket.on('progress', newProgress=>{
+              setProgress(newProgress)
             })
             socket.on('puzzlesCompleted', ()=>{
               setDisplayProgress(false)
@@ -54,20 +56,18 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
         sessionStorage.setItem('puzzles', JSON.stringify(puzzles))
       }, [socket, puzzles])
       
-      function onTableButtonClick(e){
+      function onTableButtonClick(){
         document.getElementById('puzzleTable').style.display="block"
         document.getElementById('puzzleForm').style.display="none"
         document.getElementById('formButton').style.opacity=0.5
         document.getElementById('tableButton').style.opacity=1
-        setDisplayTable(true)
 
       }
-      function onFormButtonClick(e){
+      function onFormButtonClick(){
         document.getElementById('puzzleTable').style.display="none"
         document.getElementById('puzzleForm').style.display="block"
         document.getElementById('formButton').style.opacity=1
         document.getElementById('tableButton').style.opacity=0.5
-        setDisplayTable(false)
         
       }
       //
@@ -76,14 +76,16 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
         <div className=" flex flex-col items-center w-full ">
 
         
-          <div className=" bg-white pl-8 w-full"><button  id="tableButton" onClick={onTableButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600">Puzzles</button><button id="formButton" onClick={onFormButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600 opacity-50">Select Puzzles</button>
-            <PuzzleFormSelection loggedIn={session} ></PuzzleFormSelection>
-            <PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} saved={saved}></PuzzleTable>
+          <div className=" bg-white pl-8 w-full mb-4">
+            <button type="button"  id="tableButton" onClick={onTableButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600">Puzzles</button>
+            <button type="button" id="formButton" onClick={onFormButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600 opacity-50">Select Puzzles</button>
+            <PuzzleFormSelection loggedIn={session}  />
+            <PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} saved={saved} />
           </div>
-          {displayProgress&&<><LoadingIcon progress={progress}></LoadingIcon>
+          {displayProgress&&<><LoadingIcon progress={progress} />
             <label>{progress}%</label></>
           }
-          <PlayForm puzzles={puzzles}></PlayForm>
+          <PlayForm puzzles={puzzles} />
         
         </div>
         </Layout>
@@ -91,7 +93,6 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
 
 }
 export async function getServerSideProps(context){
-  console.log(context.query)
   let puzzles = null
   let saved = false
   if(Object.keys(context.query).length){

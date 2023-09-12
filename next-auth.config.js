@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 export default {
     providers: [
       {
@@ -11,14 +12,12 @@ export default {
         requestTokenUrl: 'https://accounts.google.com/o/oauth2/auth',
         authorizationUrl: 'https://accounts.google.com/o/oauth2/auth',
         profileUrl: 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json',
-        profile: (profile) => {
-          return {
+        profile: (profile) => ({
             id: profile.id,
             name: profile.name,
             email: profile.email,
             image: profile.picture,
-          };
-        },
+          }),
         clientId: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbacks: {
