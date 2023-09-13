@@ -46,7 +46,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
                 setProgress(0)
             })
             socket.on('progress', newProgress=>{
-              setProgress(newProgress)
+              setProgress(parseInt(newProgress, 10))
             })
             socket.on('puzzlesCompleted', ()=>{
               setDisplayProgress(false)
@@ -83,7 +83,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
             <PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} saved={saved} />
           </div>
           {displayProgress&&<><LoadingIcon progress={progress} />
-            <label>{progress}%</label></>
+            <label>{progress&&progress.toFixed(0)}%</label></>
           }
           <PlayForm puzzles={puzzles} />
         

@@ -63,13 +63,14 @@ export default function PuzzleTable({puzzles, setPuzzles, session, saved}){
         
         <table className=" w-full table-fixed">
             
-            <thead className=" bg-slate-300 mb-2  shadow-lg h-10 sticky top-0 z-10"><tr className="h-14 sticky top-0 z-10" ><th className=" sticky top-0 z-10" /><th  className=" sticky top-0 z-10">White</th><th className="sticky top-0 z-10">Black</th><th className="sticky top-0 z-10">Date</th><th className=" sticky top-0 z-10">Date Uploaded</th><th className=" sticky top-0 z-10">Attempts</th><th className=" sticky top-0 z-10">Success Rate</th>{session&&<th className="w-13 sticky top-0 z-10"><button type="button" onClick={()=>setPuzzles([])} className=" text-2xl button-3 bg-blue-500">🖫</button></th>}<th className="w-13 sticky top-0 z-10"><button type="button" onClick={()=>setPuzzles([])} className="button-3 font-medium text-sm bg-red-700 hover:bg-red-800"><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={20} height={20} className=""/></button></th><th className="" sticky top-0 z-10>View</th></tr></thead>
+            <thead className=" bg-slate-300 mb-2  shadow-lg h-10 sticky top-0 z-10"><tr className="h-14 sticky top-0 z-10" ><th className=" sticky top-0 z-10" /><th  className=" sticky top-0 z-10">White</th><th className="sticky top-0 z-10">Black</th><th className="sticky top-0 z-10">Date</th><th className=" sticky top-0 z-10">Date Uploaded</th><th className=" sticky top-0 z-10">Attempts</th><th className=" sticky top-0 z-10">Success Rate</th><th className="w-13 sticky top-0 z-10"><label className=" ">Save</label></th><th className="w-13 sticky top-0 z-10"><button type="button" onClick={()=>setPuzzles([])} className="button-3 font-medium text-sm bg-red-700 hover:bg-red-800"><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={20} height={20} className=""/></button></th><th className="" sticky top-0 z-10>View</th></tr></thead>
          <tbody>
              <tr className="h-10" />
          </tbody>   
         
         <tbody id="puzzleTableBody" className="border-2" >
             {   puzzles &&(
+                 // eslint-disable-next-line array-callback-return, consistent-return
                  puzzles.map((puzzle, index) =>{
                         if(puzzle){
                              // eslint-disable-next-line react/no-array-index-key
