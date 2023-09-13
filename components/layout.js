@@ -8,7 +8,7 @@ import SearchBar from './searchbar'
 
 export const LayoutContext = createContext({})
 
-export default function Layout({ search, children }){
+export default function Layout({ search, children, searchLink, selectPuzzles }){
     const { data : session } = useSession()
     const [gamesPgns , setGamesPgns ] = useState([])
     
@@ -37,6 +37,14 @@ export default function Layout({ search, children }){
                     
                     <h1 className="text-3xl font-bold font-serif">MyPuzzles</h1>
                 {search&&<SearchBar setGamesPgns={setGamesPgns}/>}
+                <div className=' mx-12'>
+                {searchLink&&
+                    <Link href='/' className=' hover:text-white mx-3'>Select Games</Link>
+                }
+                {selectPuzzles&&
+                    <Link href='/select_puzzles' className=' hover:text-white mx-3'>Select Puzzles</Link>
+                }
+                </div>
                 {
                 session?(
                     <Popup session={session}/>

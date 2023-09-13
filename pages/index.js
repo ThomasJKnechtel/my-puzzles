@@ -15,15 +15,14 @@ export default function LoginPage() {
   }
   return (
 
-      <Layout search >
-        <GamesTable></GamesTable>
+      <Layout search selectPuzzles>
+        <GamesTable/>
         <LayoutContext.Consumer>
           {
-            (context)=>{
-              return (context.gamesPgns.length!==0? (
+            (context)=>(context.gamesPgns.length!==0? (
                 <div className='w-full inline-flex flex-row justify-center'>
                     
-                         <button onClick ={()=>{generatePuzzles(context.gamesPgns)}} className="button-3 green text-l font-semibold">
+                         <button type="button" onClick ={()=>{generatePuzzles(context.gamesPgns)}} className="button-3 green text-l font-semibold">
                             Generate Puzzles
                         </button>
                     
@@ -32,7 +31,6 @@ export default function LoginPage() {
                 <div className='flex w-full h-full justify-center'><label >Search by player username, opponent name, date or time control to generate puzzles</label></div>
               )
               )
-            }
           }
           
         </LayoutContext.Consumer>
