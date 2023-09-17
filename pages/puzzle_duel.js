@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
@@ -10,30 +10,37 @@ export default function PuzzlePage({socket}){
     const {data: sessionData } = useSession()
     const [turn, setTurn] = useState('w')
     const [puzzleState, setPuzzleState] = useState(null)
+    
+    const addMove = useCallback((move)=>{
+      if(socket){
+        socket.emit('ADD_MOVE', {'move':move.notation.notation})
+      }
+    }, [socket])
+
     useEffect(()=>{
         if(socket){
             socket.emit('ConnectToGame', {token: sessionData.token} )
             socket.on('game_message', (message)=>{
 
-                console.log(sessionData)
                 const gameState = JSON.parse(message)
+                console.log(gameState)
                 if(gameState.challenger === sessionData.user.name){
-                    const puzzleState = JSON.parse(gameState.challengersPuzzleState)
+                    const puzzleState = gameState.challengerPuzzleState
                     setFen(puzzleState.fen)
-                    setTurn(puzzleState.turn)
+                    setTurn(puzzleState.playerTurn)
                     setPuzzleState(puzzleState.state)
                 }else{
-                    const puzzleState = JSON.parse(gameState.opponentsPuzzleState)
+                    const puzzleState = gameState.opponentPuzzleState
                     setFen(puzzleState.fen)
-                    setTurn(puzzleState.turn)
+                    setTurn(puzzleState.playerTurn)
                     setPuzzleState(puzzleState.state)
                 }
                
             })
         }
-    }, [socket])
+    }, [socket, sessionData])
     return (
-        <PuzzleChess gameState={puzzleState} fen={fen} playersTurn={turn}/>
+        <PuzzleChess addMove={addMove} gameState={puzzleState} fen={fen} playersTurn={turn}/>
     )
 }
 
