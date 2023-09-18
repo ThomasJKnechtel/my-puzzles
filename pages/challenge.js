@@ -21,8 +21,8 @@ export default function ChallengePage({socket, puzzles}){
             socket.on('challenges', (currentChallenges)=>{
                 setChallenges(currentChallenges)
             })
-            socket.on('game_message', (message)=>{
-                if(JSON.parse(message)?.state === "IN_PROGRESS")
+            socket.on('game_message', (gameState)=>{
+                if(gameState.state === "WAITING")
                 window.location.href = "/puzzle_duel"
             })
         }
