@@ -22,8 +22,7 @@ export default function ChallengePage({socket, puzzles}){
                 setChallenges(currentChallenges)
             })
             socket.on('game_message', (gameState)=>{
-                if(gameState.state === "WAITING")
-                window.location.href = "/puzzle_duel"
+                if(gameState.state.state === "WAITING") window.location.href = "/puzzle_duel"
             })
         }
     }, [socket])
@@ -33,9 +32,6 @@ export default function ChallengePage({socket, puzzles}){
             const puzzleIds = selectedPuzzles.map(selectedPuzzle=>selectedPuzzle.puzzle_id)
             const timeControl = document.querySelector('input[name="timeControl"]:checked').value
             socket.emit('createChallenge', {token: sessionData.token, challenge:{challengerPuzzleIds:puzzleIds, timeControl}})
-            socket.on('game_message', (message)=>{
-                console.log(message)
-            })
         }
     }
     function acceptChallenge(challenge){
@@ -135,7 +131,7 @@ export async function getServerSideProps(context) {
         },
       };
     }
-    const puzzles = JSON.stringify(await getPuzzles({username: session.user.name, sortCriteria:'dateUploaded'}))
+    const puzzles = JSON.stringify(await getPuzzles({username: session.username, sortCriteria:'dateUploaded'}))
     return {
       props: {
         puzzles

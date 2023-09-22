@@ -61,6 +61,24 @@ const nextConfig = {
             hostname: 'img.icons8.com',
             port: '',
             pathname: '/emoji/48/cross-mark-emoji.png'
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
+            pathname: '/fluency/96/user-male-circle--v1.png'
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
+            pathname: '/windows/32/user-male-circle.png'
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
+            pathname: '/tiny-color/16/checked.png'
           }
 
         ],
