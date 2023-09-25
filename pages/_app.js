@@ -1,5 +1,6 @@
 import { SessionProvider } from "next-auth/react"
 import  "../styles/globals.css"
+import '../styles/ag-grid.css'
 import Script from "next/script"
 import { useEffect, useState } from "react"
 import getSocket from "@/utils/socket"

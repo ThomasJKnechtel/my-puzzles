@@ -12,8 +12,13 @@
   },
   "dependencies": {
     "@chrisoakman/chessboardjs": "^1.0.0",
+    "@emotion/react": "^11.11.1",
     "@mliebelt/pgn-parser": "^1.4.12",
     "@nestjs/bull": "^10.0.1",
+    "@table-library/react-table-library": "^4.1.7",
+    "@tanstack/table-core": "^8.10.1",
+    "ag-grid-community": "^30.1.0",
+    "ag-grid-react": "^30.1.0",
     "bull": "^4.11.3",
     "chess.js": "^1.0.0-beta.6",
     "chessboardjsx": "^2.4.7",
