@@ -12,7 +12,6 @@ export default function LobbyPuzzleTable({puzzles, setSelectedPuzzles}){
     
   const gridRef = useRef(); // Optional - for accessing Grid's API
   const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
-  const [open, setOpen] = useState(true)
   // Each Column Definition results in one Column.
   const [columnDefs, setColumnDefs] = useState([
     {field: 'Puzzle ID', filter: true, checkboxSelection: true, cellStyle:{'text-decoration-line':'underline', 'color':'blue'}},
@@ -57,34 +56,13 @@ export default function LobbyPuzzleTable({puzzles, setSelectedPuzzles}){
   const onGridReady = (params) => {
     gridRef.current = params.api;
   };
-   function minimize(){
-    if(open){
-        document.getElementById('TableContainer').style.height = "20px"
-        document.getElementById('AgGridContainer').style.display = "none"
-        document.getElementById('minimize').style.display = "none"
-        document.getElementById('maximize').style.display = "block"
-        setOpen(false)
-    }
-  }
-  function maximize(){
-    if(!open){
-         document.getElementById('TableContainer').style.height = "100%"
-        document.getElementById('AgGridContainer').style.display = "block"
-       
-        document.getElementById('minimize').style.display = "block"
-        document.getElementById('maximize').style.display = "none"
-        setOpen(true)
-    }
-  }
+  
 
   return (
     
-        <div id="TableContainer" className="ag-theme-alpine border-2 h-full" >
-            <div className=' w-full flex flex-row items-center justify-end p-[1px]'>
-                <button id="minimize" type='button' onClick={minimize} className=' w-3 h-[3px] bg-slate-400 rounded-md' > </button>
-                <button id="maximize" type="button" onClick={maximize} className=' hidden' ><Image src={"https://img.icons8.com/ios-filled/50/plus-math.png"} alt="maximize" width={15} height={15}/></button>
-            </div>
-            <div id="AgGridContainer" className=' w-full h-full' style={{width:'100%', height: '100%'}}>
+        
+            
+            <div id="AgGridContainer" className=' ag-theme-alpine w-full h-full' style={{width:'100%', height: '100%'}}>
                 <AgGridReact
                     ref={gridRef} // Ref for accessing Grid's API
 
@@ -101,10 +79,7 @@ export default function LobbyPuzzleTable({puzzles, setSelectedPuzzles}){
                     onGridReady={onGridReady}
                     />
         </div>
-        
-      
-        
-      </div>
+     
    
   );
 

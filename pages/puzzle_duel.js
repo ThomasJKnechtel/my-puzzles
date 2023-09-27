@@ -44,15 +44,15 @@ export default function PuzzlePage({socket}){
         }
     }, [socket, sessionData])
     useEffect(()=>{
-      if(gameState.finishTime){
+      if(gameState.state.finishTime){
         setTimeout(()=>{
         if(socket){
           socket.emit('TIMES_UP')
         }
-      }, gameState.finishTime-Date.now())
+      }, gameState.state.finishTime-Date.now())
       }
       
-    }, [socket, gameState.finishTime])
+    }, [socket, gameState.state.finishTime])
     return (
       <div className=" w-full h-full flex flex-row justify-center items-center relative gap-5">
       <span className=" absolute right-2 top-2">

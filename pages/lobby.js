@@ -12,8 +12,10 @@ import { useCallback } from "react";
 import Image from "next/image";
 
 import Layout from "@/components/layout";
-import LobbyPuzzleTable from "@/components/lobbyPuzzleTable";
+import LobbyPuzzleTable from "@/components/lobby/lobbyPuzzleTable";
 import { useMemo } from "react";
+import ChallengeForm from "@/components/lobby/challengeForm";
+import ChallengePuzzleTable from "@/components/lobby/challengePuzzleTable";
 
 
 const Chessboard = dynamic(() => import('chessboardjsx'), {
@@ -38,68 +40,23 @@ export default function LobbyPage({socket, puzzles}){
             })
         }
     }, [socket])
-    
-    useEffect(()=>{
-
-    }, [formOpen])
-
-    function createChallenge(){
-        if(socket){
-            const puzzleIds = selectedPuzzles.map(selectedPuzzle=>selectedPuzzle.puzzle_id)
-            const timeControl = document.querySelector('input[name="timeControl"]:checked').value
-            socket.emit('createChallenge', {token: sessionData.token, challenge:{challengerPuzzleIds:puzzleIds, timeControl}})
-        }
-    }
-    function acceptChallenge(challenge){
-        const {challenger, challengerPuzzleIds, timeControl} = challenge
-        if(socket && challengerPuzzleIds.length === selectedPuzzles.length){
-            const puzzleIds = selectedPuzzles.map(selectedPuzzle=>selectedPuzzle.puzzle_id)
-            socket.emit('challengeAccepted', {token: sessionData.token, challenge: {...challenge, challenger, challengerPuzzleIds, timeControl, opponentPuzzles:puzzleIds}})
-            
-        }
-    }
-    function onPuzzleChecked(event, puzzle){
-        const checkedPuzzle = event.currentTarget
-        if(checkedPuzzle.checked){
-            setSelectedPuzzles(oldPuzzles => oldPuzzles.concat([puzzle]))
-        }else{
-            setSelectedPuzzles(oldPuzzles => oldPuzzles.filter(oldPuzzle => oldPuzzle.puzzle_id !== parseInt(checkedPuzzle.value, 10)))
-        }
-    }
-    
+   
     return (
         <div className=" flex flex-row items-stretch justify-stretch w-full h-full ">
-            <div className=" flex flex-col w-full h-full justify-stretch basis-4/5">
-                <div className=" bg-white flex flex-col items-center gap-3 justify-evenly basis-2/5">
-                <div className=' w-full flex flex-row items-center justify-center relative'>
-                    <h1 className=" font-bold font-serif text-xl self-center ">Create Challenge</h1>
-                    <button id="minimize" type='button' onClick={()=>setFormOpen(true)}  className=' w-3 h-[3px] bg-slate-400 rounded-md absolute right-1' > </button>
-                    <button id="maximize" type="button"  className=' hidden' ><Image src={"https://img.icons8.com/ios-filled/50/plus-math.png"} alt="maximize" width={15} height={15}/></button>
+            <div className=" flex flex-col w-full h-full justify-stretch basis-3/5">
+                <div className={formOpen?" basis-2/5":" basis-10"}>
+                    <ChallengeForm formOpen={formOpen} setFormOpen={setFormOpen} selectedPuzzles={selectedPuzzles} socket={socket} token={sessionData?.token}/>
                 </div>
-                    
-                    <table className=" border-2">
-                        <thead className=" border-2">
-                            <tr><th className=" px-2">Puzzle ID</th><th className=" px-2">Rating</th><th className=" px-2">Attempts</th><th className=" px-2">Success Rate</th></tr>
-                        
-                        </thead> 
-                        <tbody className=" bg-white">
-                            {
-                                selectedPuzzles.map(puzzle => (
-                                    <tr className=" border-b-2 border-slate-50" key={puzzle["Puzzle ID"]}><td>{puzzle["Puzzle ID"]}</td><td>{puzzle["Rating"]}</td><td>{puzzle["Attempts"]}</td><td>{puzzle["Success Rate"]}</td></tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
-                    <button className=" button-3">Challenge</button>
-            </div>
-                <div className=" basis-3/5">
+                
+                <div className={ formOpen?" basis-3/5":" basis-full"}>
                 {
-                    useMemo(()=>(<LobbyPuzzleTable setSelectedPuzzles={setSelectedPuzzles} puzzles={JSON.parse(puzzles)}/>), [puzzles])
+                    useMemo(()=><LobbyPuzzleTable setSelectedPuzzles={setSelectedPuzzles} puzzles={JSON.parse(puzzles)}/>, [puzzles])
+                    
                 } 
                 </div>
             </div>
-            <div className=" basis-1/5">
-                <h1>Incoming Challenges</h1>
+            <div className=" basis-2/5 ">
+                <ChallengePuzzleTable challenges={challenges} username={sessionData?.username} socket={socket} selectedPuzzles={selectedPuzzles} token={sessionData?.token}></ChallengePuzzleTable>
             </div>
         </div>
         
