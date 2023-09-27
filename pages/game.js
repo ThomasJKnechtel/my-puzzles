@@ -8,7 +8,7 @@ import Link from "next/link";
 
 import { Chess } from "chess.js";
 import LegalChess from "@/components/chessboard";
-import Layout from "@/components/layout";
+import Layout from "@/components/layout/layout";
 import getPGNViewerObject, { getMove, addMove as addMoveToPGNViewer } from "@/utils/PGNViewerObject";
 import PGNViewer from "@/components/pgnViewer";
 import GameDataDisplay from "@/components/displayGameData";

@@ -1,5 +1,5 @@
-import { LayoutContext } from "@/components/layout";
-import Layout from "@/components/layout";
+import { LayoutContext } from "@/components/layout/layout";
+import Layout from "@/components/layout/layout";
 import GamesTable from "@/components/table";
 
 

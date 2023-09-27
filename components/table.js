@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { parseGame } from "@mliebelt/pgn-parser"
-import { LayoutContext } from "./layout"
+import { LayoutContext } from "./layout/layout"
 
 function View({pgn}){
     return <Link href={{pathname: '/game', query:{pgn: encodeURIComponent(JSON.stringify(pgn))}}}><button type="button" className="button-3 green font-medium text-sm hover:bg-green-500">View</button></Link>

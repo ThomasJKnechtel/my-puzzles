@@ -12,7 +12,7 @@ import DisplayPuzzleData from "@/components/puzzleDataDisplay";
 import Stopwatch from "@/components/stopwatch";
 import { addMove, getMove } from "@/utils/PGNViewerObject";
 import { addMoveToGameState, playMove } from "@/utils/gameState";
-import Layout from "@/components/layout";
+import Layout from "@/components/layout/layout";
 
 function reducer(state, action){
     const { gameState, currentMove, pgnViewerObject, fen} = state

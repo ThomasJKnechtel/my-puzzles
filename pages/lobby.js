@@ -11,7 +11,7 @@ import getPuzzles from "./api/db/getPuzzles";
 import { useCallback } from "react";
 import Image from "next/image";
 
-import Layout from "@/components/layout";
+import Layout from "@/components/layout/layout";
 import LobbyPuzzleTable from "@/components/lobby/lobbyPuzzleTable";
 import { useMemo } from "react";
 import ChallengeForm from "@/components/lobby/challengeForm";

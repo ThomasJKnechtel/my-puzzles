@@ -3,13 +3,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react";
-import PuzzleTable  from "../components/puzzleTable"
-import Layout from "../components/layout"
-import PuzzleFormSelection from "@/components/puzzleSelection"
-import LoadingIcon from "@/components/loadingIcon";
-
+import PuzzleTable  from "../components/select_puzzles/puzzleTable"
+import Layout from "../components/layout/layout"
+import PuzzleFormSelection from "@/components/select_puzzles/puzzleSelection"
+import LoadingIcon from "@/components/select_puzzles/loadingIcon";
+import PlayForm from "@/components/select_puzzles/playForm";
 import getPuzzles from "./api/db/getPuzzles";
-import PlayForm from "@/components/playForm";
+
 
 export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
     const { data : session } = useSession()
