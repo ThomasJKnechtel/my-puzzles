@@ -20,7 +20,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
     useEffect(() => {
         if(socket && !puzzles){
             socket.emit('gamesPgns', sessionStorage.getItem('gamePgns'))
-            sessionStorage.setItem('gamePgns',JSON.stringify([])) 
+            sessionStorage.setItem('gamePgns', JSON.stringify([])) 
             setProgress(0)
             setDisplayProgress(true)
         }   

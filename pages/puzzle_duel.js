@@ -32,7 +32,7 @@ export default function PuzzlePage({socket}){
             socket.emit('ConnectToGame', {token: sessionData.token} )
             socket.on('game_message', (newGameState)=>{
               console.log(newGameState)
-              const {state, challenger,  opponent} = newGameState
+              const { challenger,  opponent} = newGameState
               
                 if(challenger.username === sessionData.username){
                   setGameState({...newGameState, playerState: challenger, opponentState: opponent}) 
