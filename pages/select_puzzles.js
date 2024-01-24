@@ -17,16 +17,25 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
     const [progress,  setProgress] = useState(0)
     const [displayProgress, setDisplayProgress] = useState(false)
 
+    /**
+     * Send puzzles to server and dipslay progress. 
+     */
     useEffect(() => {
-        if(socket && !puzzles){
+      const puzzlesGenerated = sessionStorage.getItem('puzzlesGenerated')
+        if(socket && puzzlesGenerated){
             socket.emit('gamesPgns', sessionStorage.getItem('gamePgns'))
             sessionStorage.setItem('gamePgns', JSON.stringify([])) 
+            sessionStorage.setItem('puzzlesGenerated', false)
             setProgress(0)
             setDisplayProgress(true)
         }   
 
-      }, [socket, puzzles]) 
-      useEffect(()=>{
+      }, [socket]) 
+    
+    /**
+     * If message received from server update puzzle list if message is recieved. Update progress bar. 
+     */
+    useEffect(()=>{
         if(socket){
             socket.on('puzzles', newPuzzles=>{
                 // eslint-disable-next-line no-param-reassign

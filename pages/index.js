@@ -9,6 +9,7 @@ export default function LoginPage() {
 
   function generatePuzzles(gamesPgns){
     if(gamesPgns.length>0){
+      sessionStorage.setItem('puzzlesGenerated', true)
        window.location.href="/select_puzzles"
     }
     

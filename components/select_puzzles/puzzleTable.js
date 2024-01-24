@@ -26,7 +26,7 @@ function Puzzle({id, white, black, date, fen, continuation, puzzles, setPuzzles,
         setPuzzles(lst)
     }
     async function savePuzzle(){
-        const username = session.username
+        const {username} = session
         setSaved(true)
         fetch('/api/db/addPuzzle', {
             method: "POST",
