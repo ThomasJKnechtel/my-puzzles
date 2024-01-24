@@ -24,8 +24,6 @@
     "chessboardjsx": "^2.4.7",
     "child_process": "^1.0.2",
     "concurrently": "^8.2.0",
-    "eslint": "8.44.0",
-    "eslint-config-next": "13.4.9",
     "fs": "^0.0.1-security",
     "google": "^2.1.0",
     "jsonwebtoken": "^9.0.2",
@@ -48,6 +46,8 @@
   "devDependencies": {
     "@babel/preset-env": "^7.22.10",
     "@babel/preset-react": "^7.22.5",
+    "eslint": "8.44.0",
+    "eslint-config-next": "13.4.9",
     "@testing-library/jest-dom": "^6.1.2",
     "@testing-library/react": "^14.0.0",
     "autoprefixer": "^10.4.14",
