@@ -15,7 +15,7 @@ export default function App({
    useEffect(()=>{
    
     if(!socket){
-        const newSocket = io('http://localhost:5050')
+        const newSocket = io('http://20.80.240.215:5050')
         setSocket(newSocket)
     }
     
