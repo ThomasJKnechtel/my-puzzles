@@ -16,7 +16,7 @@ export default function LoginPage() {
   }
   return (
 
-      <Layout search selectPuzzles>
+      <Layout search selectPuzzles lobby>
         <GamesTable/>
         <LayoutContext.Consumer>
           {

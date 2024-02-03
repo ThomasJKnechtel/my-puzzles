@@ -7,7 +7,7 @@ import getUser from '../db/getUser'
 
 
 export const authOptions = {
-  secret: process.env.AUTH_SECRET,
+  secret:  process.env.AUTH_SECRET,
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({

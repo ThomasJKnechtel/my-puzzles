@@ -1,4 +1,4 @@
-/* eslint-disable import/no-anonymous-default-export */
+/* eslint-disable import/no-anonymous-default-export /
 export default {
     providers: [
       {
@@ -24,11 +24,7 @@ export default {
           async signIn(user, account, profile) {
             // Optionally, customize the signIn callback logic
             return true;
-          },
-          async redirect(url, baseUrl) {
-            // Optionally, customize the redirect callback logic
-            return url.startsWith(baseUrl) ? url : baseUrl;
-          },
+          }
         },
       },
     ],

@@ -81,7 +81,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
       }
       //
       return (
-        <Layout searchLink>
+        <Layout searchLink lobby>
         <div className=" flex flex-col items-center w-full ">
 
         

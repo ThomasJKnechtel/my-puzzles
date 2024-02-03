@@ -3,14 +3,14 @@ const { createServer } = require("https");
 const { parse } = require("url");
 const next = require("next");
 const fs = require("fs");
-const port = 3000;
+const port = 80;
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const httpsOptions = {
-    key: fs.readFileSync("c:/mychesspuzzles.com-ssl-bundle/private.key.pem"),
-    cert: fs.readFileSync("c:/mychesspuzzles.com-ssl-bundle/domain.cert.pem")
+    key: fs.readFileSync("/home/Thomas-admin/mychesspuzzles.com-ssl-bundle/private.key.pem"),
+    cert: fs.readFileSync("/home/Thomas-admin/mychesspuzzles.com-ssl-bundle/domain.cert.pem")
 };
 
 app.prepare().then(() => {

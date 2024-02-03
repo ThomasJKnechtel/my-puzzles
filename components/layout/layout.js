@@ -8,7 +8,7 @@ import SearchBar from './searchbar'
 
 export const LayoutContext = createContext({})
 
-export default function Layout({ search, children, searchLink, selectPuzzles }){
+export default function Layout({ search, children, searchLink, selectPuzzles, lobby }){
     const { data : session } = useSession()
     const [gamesPgns , setGamesPgns ] = useState([])
     
@@ -44,6 +44,9 @@ export default function Layout({ search, children, searchLink, selectPuzzles }){
                 {selectPuzzles&&
                     <Link href='/select_puzzles' className=' hover:text-white mx-3'>Select Puzzles</Link>
                 }
+	    	{lobby&&
+			<Link href='/lobby' className=' hover:text-white mx-3'>Lobby</Link>
+		}
                 </div>
                 {
                 session?(
