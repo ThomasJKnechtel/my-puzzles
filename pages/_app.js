@@ -3,7 +3,6 @@ import  "../styles/globals.css"
 import '../styles/ag-grid.css'
 import Script from "next/script"
 import { useEffect, useState } from "react"
-import getSocket from "@/utils/socket"
 import { io } from "socket.io-client"
 
 export default function App({
@@ -15,7 +14,7 @@ export default function App({
    useEffect(()=>{
    
     if(!socket){
-        const newSocket = io('https://mychesspuzzles.com:5050')
+        const newSocket = io(process.env.NEXT_PUBLIC_WEBSOCKET_URL)
         setSocket(newSocket)
     }
     
