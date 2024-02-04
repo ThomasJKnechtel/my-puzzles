@@ -28,34 +28,40 @@ export default function Layout({ search, children, searchLink, selectPuzzles, lo
     return (
         <div className="relative inline-flex flex-col align-middle h-full w-full">
             
-            <header className="inline-flex flex-row items-center bg-slate-500 p-2">
-                <Image src = "https://img.icons8.com/ios-glyphs/30/pawn.png" 
+            <header className="flex flex-row items-center justify-between gap-1 bg-slate-500 flex-wrap pt-1">
+                <div className=' inline-flex flex-row items-center'>
+                    <Image src = "https://img.icons8.com/ios-glyphs/30/pawn.png" 
                     alt = "logo"
                     width={30}
                     height={30}
                     className="h-[30px]  relative"/>
                     
                     <h1 className="text-3xl font-bold font-serif">MyPuzzles</h1>
-                {search&&<SearchBar setGamesPgns={setGamesPgns}/>}
-                <div className=' mx-12'>
-                {searchLink&&
-                    <Link href='/' className=' hover:text-white mx-3'>Select Games</Link>
-                }
-                {selectPuzzles&&
-                    <Link href='/select_puzzles' className=' hover:text-white mx-3'>Select Puzzles</Link>
-                }
-	    	{lobby&&
-			<Link href='/lobby' className=' hover:text-white mx-3'>Lobby</Link>
-		}
                 </div>
+                
+                
                 {
                 session?(
                     <Popup session={session}/>
 
                 ):(
-                    <button type="button" className="button-3 green mr-0 ml-auto" onClick={()=>signIn()}>Sign In</button>
+                    <button type="button" className="button-3 green mr-1 ml-auto sm:order-4 my-1" onClick={()=>signIn()}>Sign In</button>
                 )
                 }
+                <div className=' flex flex-row flex-wrap gap-1 justify-center sm:order-3 sm:bg-slate-500 bg-slate-50 p-1'>
+                   {search&&<SearchBar setGamesPgns={setGamesPgns}/>}
+                    
+                        {searchLink&&
+                            <Link href='/' className=' hover:text-gray-300 mx-3'>Select Games</Link>
+                        }
+                        {selectPuzzles&&
+                            <Link href='/select_puzzles' className=' hover:text-gray-300 mx-3'>Select Puzzles</Link>
+                        }
+                        {lobby&&
+                        <Link href='/lobby' className=' hover:text-gray-300 mx-3'>Lobby</Link>
+                        }
+                     
+                </div>
             </header> 
             
             <main className='h-full overflow-auto'>

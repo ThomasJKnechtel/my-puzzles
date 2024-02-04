@@ -23,7 +23,7 @@ export default function LoginPage() {
             (context)=>(context.gamesPgns.length!==0? (
                 <div className='w-full inline-flex flex-row justify-center'>
                     
-                         <button type="button" onClick ={()=>{generatePuzzles(context.gamesPgns)}} className="button-3 green text-l font-semibold">
+                         <button type="button" onClick ={()=>{generatePuzzles(context.gamesPgns)}} className="button-3 green text-l font-semibold m-4">
                             Generate Puzzles
                         </button>
                     

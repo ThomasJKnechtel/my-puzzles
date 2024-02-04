@@ -106,8 +106,15 @@ input:checked + .slider:before {
     outline: none;
   }
   
-  
-  
+  .element::-webkit-scrollbar{
+    width:10px;
+  }
+  .element::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Change the color of the thumb */
+}
+.element::-webkit-scrollbar-track {
+  background-color: transparent; /* Change the color of the track */
+}
   .button-3:focus {
     box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
     outline: none;

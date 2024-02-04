@@ -49,9 +49,9 @@ export default function SearchBar({setGamesPgns}){
     return (
       
         
-        <div className="inline-flex flex-row items-center bg-white px-1 rounded-r-full mx-24 relative w-96 justify-between focus:">
+        <div className="inline-flex flex-row items-center max-h-6 bg-white p-1 rounded-r-full relative w-96 justify-between border-black border-2 focus:">
                  
-                <input id="player" type="text" placeholder="Enter a Lichess username" className=" w-64" />
+                <input id="player" type="text" placeholder="Enter a Lichess username" className=" w-64 max-h-4" />
                 <div className=" inline-flex flex-row">
                     <label id="searchErrorMessage" className="text-xs text-red-800 hidden font-medium opacity-50">No Games Found</label>
                     <div className="relative focus-within:bg-slate-200 peer-focus:bg-opacity-0">
@@ -68,10 +68,10 @@ export default function SearchBar({setGamesPgns}){
 function SearchPerameterForm({setShowForm}){
     
     return (
-        <form id="searchPerametersForm" method="dialog" className=" bg-white relative z-10 px-4 rounded-md border-2">
+        <form id="searchPerametersForm" method="dialog" className=" bg-white relative z-10 px-4 rounded-md border-2 max-w-sm">
         <button type="button" className=" absolute right-1 text-sm text-slate-400 font-mono" onClick={()=>{setShowForm(false)}}>✖</button>
         <fieldset className=" m-2 w-full">
-        <div className=" inline-flex flex-col "><label className=" font-medium" htmlFor="opponent">Opponent</label><input type="text" name="opponent" className=" w-80 border-2 shadow-sm bg-slate-100 " /></div>
+        <div className=" inline-flex flex-col "><label className=" font-medium" htmlFor="opponent">Opponent</label><input type="text" name="opponent" className=" border-2 shadow-sm bg-slate-100 " /></div>
         </fieldset>
         <fieldset className=" flex justify-between m-2 border-t-2 p-2">
             <label className=" font-medium" htmlFor="perfType">Format</label>
@@ -87,21 +87,21 @@ function SearchPerameterForm({setShowForm}){
         </fieldset>
         <fieldset className=" flex justify-between w-full m-2 border-t-2 p-2">
             
-            <div className=" inline-flex flex-row justify-between">
+            <div className=" inline-flex flex-col sm:flex-row justify-between">
                 <label className=" font-medium">Dates</label>
-                <div className=" ml-20">
+                <div className="">
                     <div className=" inline-flex flex-row justify-end w-full py-2" >
-                        <label className="mr-4">From</label>
+                        <label className="mr-4 ">From</label>
                         <span className=" inline-flex">
-                            <input type="date" name="dateFrom" className="border-2 shadow-sm bg-slate-100 mr-2" />
-                            <input type="time" name="timeFrom" className="border-2 shadow-sm bg-slate-100" />
+                            <input type="date" name="dateFrom" className="border-2 shadow-sm bg-slate-100 mr-2 text-sm" />
+                            <input type="time" name="timeFrom" className="border-2 shadow-sm bg-slate-100 text-sm" />
                         </span>
                     </div>
                     <div className=" inline-flex flex-row justify-end w-full py-2" >
                         <label className="mr-4">To</label>
                         <span className=" inline-flex">
-                            <input type="date" name="dateTo" className="border-2 shadow-sm bg-slate-100 mr-2" />
-                            <input type="time" name="timeTo" className="border-2 shadow-sm bg-slate-100" />
+                            <input type="date" name="dateTo" className="border-2 shadow-sm bg-slate-100 mr-2 text-sm" />
+                            <input type="time" name="timeTo" className="border-2 shadow-sm bg-slate-100 text-sm" />
                         </span>
                     </div>
                 </div>
