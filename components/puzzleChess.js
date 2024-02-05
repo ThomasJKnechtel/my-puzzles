@@ -2,12 +2,13 @@ import dynamic from 'next/dynamic';
 import { Chess } from 'chess.js';
 import { useCallback } from 'react';
 
+
   const Chessboard = dynamic(() => import('chessboardjsx'), {
     ssr: false  // <- this do the magic ;)
   });
 
-export default function PuzzleChess({fen, gameState, addMove, playersTurn, }) {
-
+export default function PuzzleChess({fen, gameState, addMove, playersTurn, boardSize=600 }) {
+  
   const onDrop = useCallback(({sourceSquare, targetSquare})=>{
     try{
       const game = new Chess(fen)
@@ -26,6 +27,6 @@ export default function PuzzleChess({fen, gameState, addMove, playersTurn, }) {
       console.log(err)
      }
   }, [fen,addMove,gameState])
-    return <Chessboard id="game" position={fen} onDrop={onDrop} draggable orientation={playersTurn==='w'?'white':'black'}/>
+    return <Chessboard width={boardSize} id="game" position={fen} onDrop={onDrop} draggable orientation={playersTurn==='w'?'white':'black'}/>
 
 }

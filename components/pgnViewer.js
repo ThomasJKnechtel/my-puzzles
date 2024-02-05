@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import {  getLastMove, getMove, getNextMove } from "@/utils/PGNViewerObject";
+import { useEffect } from "react";
 
 
 
-export default function PGNViewer({pgnViewerObject, currentMove, setCurrentMove}){
+export default function PGNViewer({pgnViewerObject, currentMove, setCurrentMove, display, width, height}){
 
     function onMoveClick(e){
         const button = e.currentTarget
@@ -101,13 +102,21 @@ export default function PGNViewer({pgnViewerObject, currentMove, setCurrentMove}
         
         
     }
+    useEffect(()=>{
+        if(display){
+            document.querySelector('#pgnViewerContainer').classList.remove('hidden')
+        }else{
+            document.querySelector('#pgnViewerContainer').classList.add('hidden')
+        }
+        
+    }, [display])
   
     
     return (
-    <div>
-        <div className=" h-[500px] overflow-y-scroll bg-white">
+    <div id='pgnViewerContainer' className={` w-80 h-full`}>
+        <div className=" overflow-y-scroll bg-white w-full h-4/5">
         
-            <table className=" bg-white p-2 border-2 w-[20.5rem]">
+            <table className=" bg-white p-2 border-2 w-full ">
             <thead className=" border-b-2"><tr><th></th><th>White</th><th>Black</th></tr></thead>
             <colgroup><col className=" bg-slate-200 w-10" /><col className=" border-r-2" /><col /></colgroup>
             <tbody>
@@ -123,7 +132,7 @@ export default function PGNViewer({pgnViewerObject, currentMove, setCurrentMove}
            
         
     </div>
-    <button type="button" onClick={onBackMoveClick} className=" w-[10.25rem] bg-white p-1 border-2 mt-1">Back</button><button onClick ={onNextMoveClick} className=" w-[10.25rem] bg-white p-1 border-2">Next</button>
+    <button type="button" onClick={onBackMoveClick} className=" w-1/2 bg-white p-1 border-2 mt-1">Back</button><button onClick ={onNextMoveClick} className=" w-1/2 bg-white p-1 border-2">Next</button>
     </div>
     
     )

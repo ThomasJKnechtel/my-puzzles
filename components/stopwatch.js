@@ -95,7 +95,7 @@ export default function Stopwatch({start, stop}){
 
     return (
         
-        <div className="bg-slate-700 h-fit m-1 p-1 rounded-lg border-solid border-4 border-gray-600 relative">
+        <div className="bg-slate-700 h-fit w-fit m-1 p-1 rounded-lg border-solid border-4 border-gray-600 relative">
         {
             convertToDateTime(startTime, currentTime)
        

@@ -85,7 +85,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
         <div className=" flex flex-col items-center w-full ">
 
         
-          <div className=" bg-white pl-8 w-full mb-4">
+          <div className=" bg-white sm:pl-8 w-full mb-4">
             <button type="button"  id="tableButton" onClick={onTableButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600">Puzzles</button>
             <button type="button" id="formButton" onClick={onFormButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600 opacity-50">Select Puzzles</button>
             <PuzzleFormSelection loggedIn={session}  />

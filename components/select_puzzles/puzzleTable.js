@@ -49,7 +49,21 @@ function Puzzle({id, white, black, date, fen, continuation, puzzles, setPuzzles,
 
     }
     // eslint-disable-next-line no-nested-ternary
-    return (<tr className="bg-slate-50 p-4 odd:bg-slate-300 "><td className="text-left align-middle"><button type="button" className=" border-slate-400 hover:border-2"><Chessboard position={fen} id={fen} width={140} /></button></td><td>{white}</td><td>{black}</td><td>{date}</td>{dateUploaded?<td>{dateUploaded}</td>:<td>N/A</td>}<td>{attempts&&<label>{attempts}</label>}</td><td>{success_rate&&<label>{success_rate}</label>}</td><td>{!session?<label>Must be logged in</label>:isSaved?<label>Saved</label>:<button type="button" onClick={()=>{savePuzzle()}} className=" text-2xl button-3 bg-blue-500">🖫</button>}</td><td><button type="button" onClick={()=>{removePuzzle(puzzles, setPuzzles)}} className="button-3 text-xl font-medium bg-red-700 hover:bg-red-800 "><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={20} height={20} className=""/></button></td><td>{isSaved?<Link className="button-3 green" href={{pathname:`/play/${puzzleId}`}}>View</Link>:<label>Must be saved</label>}</td></tr>)
+    return (
+    <tr className="bg-slate-50 p-4 odd:bg-slate-300 ">
+    <td className="text-left align-middle">
+    <label>{black}</label>
+    <button type="button" className=" border-slate-400 hover:border-2"><Chessboard position={fen} id={fen} width={140} /></button>
+    <label>{white}</label>
+    </td>
+   <td className=" whitespace-nowrap">{date}</td>
+    {dateUploaded?<td className=" whitespace-nowrap">{dateUploaded}</td>:<td>N/A</td>}
+    <td>{attempts&&<label>{attempts}</label>}</td>
+    <td>{success_rate&&<label>{success_rate}</label>}</td>
+    <td>{!session?<label className=" whitespace-nowrap">Log In</label>:isSaved?<label>Saved</label>:<button type="button" onClick={()=>{savePuzzle()}} className=" text-2xl button-3 bg-blue-500">🖫</button>}</td>
+    <td><button type="button" onClick={()=>{removePuzzle(puzzles, setPuzzles)}} className=" p-1 rounded-md text-xl font-medium bg-red-700 hover:bg-red-800 w-[24px] "><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={20} height={20} className=""/></button></td>
+    <td>{isSaved?<Link href={{pathname:`/play/${puzzleId}`}}><button className=" green p-1 rounded-md w-6"><Image src="https://img.icons8.com/fluency-systems-regular/48/binoculars.png" alt="look" width={20} height={20}/></button></Link>:<label>Must be saved</label>}</td>
+    </tr>)
   
 }
 
@@ -57,13 +71,13 @@ export default function PuzzleTable({puzzles, setPuzzles, session, saved}){
     
     return (
         
-        <div id="puzzleTable" className="  w-full  overflow-y-auto h-[500px] ">
+        <div id="puzzleTable" className=" min-w-full  overflow-y-auto h-[500px] overflow-x-auto ">
         
         
         
-        <table className=" w-full table-fixed">
+        <table className=" min-w-full table-fixed">
             
-            <thead className=" bg-slate-300 mb-2  shadow-lg h-10 sticky top-0 z-10"><tr className="h-14 sticky top-0 z-10" ><th className=" sticky top-0 z-10" /><th  className=" sticky top-0 z-10">White</th><th className="sticky top-0 z-10">Black</th><th className="sticky top-0 z-10">Date</th><th className=" sticky top-0 z-10">Date Uploaded</th><th className=" sticky top-0 z-10">Attempts</th><th className=" sticky top-0 z-10">Success Rate</th><th className="w-13 sticky top-0 z-10"><label className=" ">Save</label></th><th className="w-13 sticky top-0 z-10"><button type="button" onClick={()=>setPuzzles([])} className="button-3 font-medium text-sm bg-red-700 hover:bg-red-800"><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={20} height={20} className=""/></button></th><th className="" sticky top-0 z-10>View</th></tr></thead>
+            <thead className=" bg-slate-300 mb-2  shadow-lg h-10 sticky top-0 z-10"><tr className="h-14 sticky top-0 z-10" ><th className=" sticky top-0 z-10 w-[150px]" /><th className="sticky top-0 z-10 ">Date</th><th className=" sticky top-0 z-10 ">Uploaded</th><th className="  sticky top-0 z-10">Attempts</th><th className="  sticky top-0 z-10">Success Rate</th><th className="sticky top-0 z-10"><label className=" ">Save</label></th><th className=" sticky top-0 z-10 "><button type="button" onClick={()=>setPuzzles([])} className=" p-1 rounded-md w-6 bg-red-700 hover:bg-red-800"><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={20} height={20} className=""/></button></th><th className=" sticky top-0 z-10 w-6 "/></tr></thead>
          <tbody>
              <tr className="h-10" />
          </tbody>   

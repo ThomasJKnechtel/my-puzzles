@@ -4,7 +4,9 @@
 /* eslint-disable import/no-unresolved */
 
 import { useCallback, useEffect, useReducer, useState } from "react";
+import Image from "next/image";
 import { Chess } from "chess.js";
+import useWindowSize from "@/components/useWindowSize";
 import getPuzzle from "../api/db/getPuzzle";
 import PuzzleChess from "@/components/puzzleChess";
 import PGNViewer from "@/components/pgnViewer";
@@ -13,6 +15,7 @@ import Stopwatch from "@/components/stopwatch";
 import { addMove, getMove } from "@/utils/PGNViewerObject";
 import { addMoveToGameState, playMove } from "@/utils/gameState";
 import Layout from "@/components/layout/layout";
+import FocusButton from "@/components/FocusButton";
 
 function reducer(state, action){
     const { gameState, currentMove, pgnViewerObject, fen} = state
@@ -54,6 +57,9 @@ export default function PlayPuzzlePage({puzzle}){
     const [success_rate, setSuccessRate] = useState(0)
     const [attempts, setAttempts] = useState(0)
     const {gameState, fen, currentMove, pgnViewerObject} = state
+    const [width, height] = useWindowSize()
+    const [boardFocus, setBoardFocus] = useState(false)
+    
     useEffect(()=>{
         const {puzzle_id, continuation, fen, turn} = JSON.parse(puzzle)
         const startState = {
@@ -102,7 +108,15 @@ export default function PlayPuzzlePage({puzzle}){
                 document.getElementById('displayContainer').style.display = 'flex'
             }
         }, [gameState.puzzle_id, gameState.state])
-
+        const calculateBoardSize = useCallback(()=>{
+            if(!boardFocus){
+                if(width>height) return height*4/6
+                return width 
+            }
+            if(width>height) return height*7/8
+            return width 
+        }, [width, height,boardFocus])
+     
         const addMove = useCallback((move, fen)=>{
             dispatch({type:'ADD_MOVE', move, fen})
         }, [])
@@ -110,24 +124,28 @@ export default function PlayPuzzlePage({puzzle}){
             dispatch({type:'SET_CURRENT_MOVE', currentMove:move})
         }, [])
     return (
-        <Layout selectPuzzles searchLink>
-        <div id="container" className=" w-full inline-flex justify-center flex-row mt-5"> 
+        <Layout selectPuzzles searchLink display={!boardFocus}>
+        <div id="container" className=" w-full flex max-sm:flex-col mt-5 justify-center items-stretch flex-wrap"> 
        
-            <Stopwatch start stop={gameState.state==="COMPLETED"||gameState.state==="FAILED"} />
+           
         
             
-            <div>
-                
-                    <PuzzleChess fen={fen} gameState={gameState.state} addMove={addMove} playersTurn={gameState.playerTurn} />  
-                
+            <div className=" flex max-md:flex-col ">
+                 <Stopwatch start stop={gameState.state==="COMPLETED"||gameState.state==="FAILED"} />
+                 <span className=" relative">
+                    <PuzzleChess fen={fen} gameState={gameState.state} addMove={addMove} playersTurn={gameState.playerTurn} boardSize={calculateBoardSize()} />
+                    <span className=" absolute top-0 right-0"><FocusButton focus={boardFocus} setFocus={setBoardFocus}/></span>
+                 </span>
+                    
+                    
                 
             </div>
-            <div className="ml-1">
-                <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove} />
+            <div className=" w-fit">
+                <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove} display={!boardFocus} />
             </div>
             
                 <div id="displayContainer" className=" absolute mx-auto z-10 top-10 shadow-2xl hidden">
-                <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={gameState.finishedTime-gameState.start_time} solution={gameState.continuation} result={gameState.state} puzzle_id={gameState.puzzle_id} />
+                <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={gameState.finishedTime-gameState.start_time} solution={gameState.continuation} result={gameState.state} puzzle_id={gameState.puzzle_id}  />
                 </div>
             
         </div>
