@@ -13,6 +13,8 @@ import GameResultDisplay from "@/components/gameResultDisplay";
 import { addMoveToGameState, playMove } from "@/utils/gameState";
 import { addMove, getMove } from "@/utils/PGNViewerObject";
 import Layout from "@/components/layout/layout";
+import useWindowSize from "@/components/useWindowSize";
+import FocusButton from "@/components/FocusButton";
 
 function reducer(state, action){
     const {finishedPuzzlesStats, gameState, puzzles, currentMove, pgnViewerObject, fen} = state
@@ -76,6 +78,8 @@ export default function Blitz({socket}){
     const [state, dispatch] = useReducer(reducer, {gameState:{}, puzzles:[], finishedPuzzlesStats:[], gameFinished:false, currentMove:null, pgnViewerObject:[], fen:null})
     const {finishedPuzzlesStats, gameState, currentMove, pgnViewerObject, gameFinished, fen} = state
     const [timeControl, setTimeControl] = useState(3)
+    const [boardFocus, setBoardFocus] = useState(false)
+    const [width, height] = useWindowSize()
     useEffect(()=>{
         if(socket){
             
@@ -97,7 +101,7 @@ export default function Blitz({socket}){
     useEffect(()=>{
         const puzzleList = JSON.parse(sessionStorage.getItem('puzzles'))
         const gameContianer = document.getElementById('container')
-        setTimeout(()=>{gameContianer.style.display = "inline-flex"}, 300)
+        //setTimeout(()=>{gameContianer.style.display = "inline-flex"}, 300)
         const {puzzle_id, continuation, fen, turn} = puzzleList.pop()
         const startState = {
             "puzzle_id": puzzle_id,
@@ -120,6 +124,14 @@ export default function Blitz({socket}){
     const setCurrentMove = useCallback((currentMove)=>{
         dispatch({type: 'SET_CURRENT_MOVE', currentMove})
     }, [])
+    const calculateBoardSize = useCallback(()=>{
+        if(!boardFocus){
+            if(width>height) return height*4/6
+            return width*6/7 
+        }
+        if(width>height) return height*7/8
+        return width 
+    }, [width, height,boardFocus])
     /**
      * When game finished display stats and update state with new game
      */
@@ -131,31 +143,26 @@ export default function Blitz({socket}){
     }, [gameState.state])
 
     return (
-    <Layout searchLink selectPuzzles>
-        <div id="container" className=" w-full flex-col justify-center items-center hidden">
-        <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
-        {gameFinished&&
+    <Layout searchLink selectPuzzles display={!boardFocus}>
+        <div className=" w-full flex max-sm:flex-col mt-5 justify-center items-center h-full">
+            <span className=" flex max-md:flex-col ">
+                <Timer time={timeControl*60*1000} start pause={gameFinished} />
+                <span className=" relative w-fit">
+                    <PuzzleChess gameState={gameState.state} fen={fen} addMove={addMove} playersTurn={gameState.playerTurn} boardSize={calculateBoardSize()} />
+                    <span className=" absolute top-0 right-0 z-20"><FocusButton focus={boardFocus} setFocus={setBoardFocus} /></span>
+                </span>
+                
+            </span>
+            <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove} display={!boardFocus} />
+            <PuzzleResultsDisplay puzzlesStats={finishedPuzzlesStats} />
+        </div>  
+        
+       
+   {gameFinished&&
             <div className=" absolute z-50 m-10">
                 <GameResultDisplay puzzleStats={finishedPuzzlesStats} />
             </div>
         }
-            
-            <div>
-                <Timer time={timeControl*60*1000} start pause={gameFinished} />
-            </div>
-            
-            <div>
-                
-                    <PuzzleChess gameState={gameState.state} fen={fen} addMove={addMove} playersTurn={gameState.playerTurn} />  
-            </div>
-            <div className="ml-1">
-                    <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove} />
-            </div>
-        </div>
-        <div id="gameContainer">
-                    <PuzzleResultsDisplay puzzlesStats={finishedPuzzlesStats} />
-        </div>
-    </div>
     </Layout>
     
     )
