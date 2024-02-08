@@ -5,12 +5,17 @@ import Link from "next/link";
 import { authOptions } from "./api/auth/[...nextauth]";
 import PuzzleChess from "@/components/puzzleChess";
 import Timer from "@/components/timer";
+import useWindowSize from "@/components/useWindowSize";
+import PuzzleDuelInfo from "@/components/puzzleDuelInfo";
+import FocusButton from "@/components/FocusButton";
 
 export default function PuzzlePage({socket}){
    
     const {data: sessionData } = useSession()
     const [gameState, setGameState]= useState({state: {}, opponentState: {}, playerState: {}})
-    
+    const [boardFocus, setBoardFocus] = useState(false)
+    const [width, height] = useWindowSize()
+
     const addMove = useCallback((move)=>{
       if(socket){
         socket.emit('ADD_MOVE', {'move':move.notation.notation})
@@ -53,45 +58,26 @@ export default function PuzzlePage({socket}){
       }
       
     }, [socket, gameState.state.finishTime])
+    const calculateBoardSize = useCallback(()=>{
+      if(!boardFocus){
+          if(width>height) return height*4/6
+          return width 
+      }
+      if(width>height) return height*7/8
+      return width 
+      }, [width, height,boardFocus])
+
     return (
-      <div className=" w-full h-full flex flex-row justify-center items-center relative gap-5">
+      <div className=" w-full h-full flex max-sm:flex-col justify-center items-center relative gap-5">
       <span className=" absolute right-2 top-2">
         <Timer time={(gameState.state.finishTime)?(gameState.state.finishTime-Date.now()):3*60*1000} start={gameState.state.state === "IN_PROGRESS"} pause={gameState.state.state==="FINISHED"} />
       </span>
-      
-        <PuzzleChess addMove={addMove} gameState={gameState.playerState?.puzzleState?.state} fen={gameState?.playerState?.puzzleState?.fen} playersTurn={gameState.playerState.puzzleState?.playerTurn}/>
-        <div className=" basis-1/5 bg-white flex flex-col items-center gap-5 rounded-md">
-          <h1 className=" font-bold text-3xl font-mono green w-full text-center text-white p-2 rounded-t-md">Puzzle Duel</h1> 
-          <h1 className=" font-medium text-[20px] opacity-70">{gameState.state.timeControl}</h1>
-          <div className=" inline-flex flex-row gap-2">
-           
-            <div className=" flex items-center flex-col font-medium">
-              <h2 >{gameState.playerState.username}</h2>
-              <h3 className=" text-xs opacity-50 inline-flex flex-row">{`${gameState.playerState.rating}`}{gameState.state?.state === "FINISHED"&&<span className=" opacity-60 inline-flex flex-row"><h3 className=" ml-1">{gameState.playerState?.ratingChange>=0?"+":"-"}</h3><h3>{Math.abs(gameState.playerState?.ratingChange)}</h3></span>}</h3>
-              <h3  className={gameState.playerState.state==="CONNECTED"||gameState.playerState.state==="READY"||gameState.playerState?.state==="WON"||gameState.playerState?.state==="FINISHED"?" text-green-500 text-[10px] opacity-50":"text-red-600 text-[10px] opacity-50"}>{gameState?.playerState.state}</h3>
-              <h3>{gameState.playerState?.puzzlesCompleted}</h3>
-              </div>
-            <h2 className=" italic">vs</h2>
-            <div className=" flex items-center flex-col font-medium">
-            <h2>{gameState.opponentState.username}</h2>
-            <h3 className=" text-xs opacity-50">{gameState.opponentState.rating}{gameState.state.state === "FINISHED"&&<span className=" opacity-60 inline-flex flex-row"><h3 className=" ml-1">{gameState.opponentState.ratingChange>=0?"+":"-"}</h3><h3>{Math.abs(gameState.opponentState.ratingChange)}</h3></span>}</h3>
-            <h3  className={gameState?.opponentState?.state==="CONNECTED"||gameState.opponentState.state==="READY"||gameState.opponentState.state==="WON"||gameState.opponentState.state==="FINISHED"?" text-green-500 text-[10px] opacity-50":"text-red-600 text-[10px] opacity-50"}> {gameState.opponentState.state}</h3>
-            <h3>{gameState.opponentState.puzzlesCompleted}</h3>
-            </div>
-            
-          </div>
-          <h2 className=" font-medium opacity-70 mb-5">{`Puzzles: ${gameState.state.numberOfPuzzles}`}</h2>
-          {gameState?.state?.state === "WAITING"&&
-            <button id="readyButton" type="button" className="button-3 green m-5" onClick={ready}>Ready</button>
-          }
-          {gameState?.state?.state === "IN_PROGRESS"&&
-            <button id="resignButton" type="button" className="button-3 green m-5" onClick={resign}>Resign</button>
-          }
-          {gameState?.state?.state === "FINISHED"&&
-            <Link className=" button-3 green mb-5" href="/challenge">To Lobby</Link>
-          }
-          
-        </div>
+      <div className=" relative">
+        <PuzzleChess addMove={addMove} gameState={gameState.playerState?.puzzleState?.state} fen={gameState?.playerState?.puzzleState?.fen} playersTurn={gameState.playerState.puzzleState?.playerTurn} boardSize={calculateBoardSize()}/>
+        <span className=" absolute top-0 right-0"><FocusButton setFocus={setBoardFocus} focus={boardFocus}/></span>
+      </div>
+        
+        {(gameState.state.state!=="IN_PROGRESS"||width>800)&&!boardFocus&&<span className=" max-sm:absolute z-20"><PuzzleDuelInfo gameState={gameState} ready={ready} resign={resign}/></span>}
       </div>
         
     )

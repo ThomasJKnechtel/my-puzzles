@@ -8,7 +8,7 @@ const Chessboard = dynamic(() => import('chessboardjsx'), {
         ssr: false  // <- this do the magic ;)
 });
 
-export default function LegalChess({fen, addMove}) {
+export default function LegalChess({fen, addMove, boardSize}) {
 
   
   const onDrop = useCallback(({sourceSquare, targetSquare})=>{
@@ -31,7 +31,7 @@ export default function LegalChess({fen, addMove}) {
     
 
     
-    return <Chessboard transitionDuration={100} id="game" position={fen} onDrop={onDrop} draggable/>
+    return <Chessboard transitionDuration={100} id="game" position={fen} onDrop={onDrop} draggable width={boardSize}/>
 
 }
 

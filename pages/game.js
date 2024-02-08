@@ -12,6 +12,7 @@ import Layout from "@/components/layout/layout";
 import getPGNViewerObject, { getMove, addMove as addMoveToPGNViewer } from "@/utils/PGNViewerObject";
 import PGNViewer from "@/components/pgnViewer";
 import GameDataDisplay from "@/components/displayGameData";
+import useWindowSize from "@/components/useWindowSize";
 
 function reducer(state, action){
     const { currentMove, pgnViewerObject, fen} = state
@@ -38,7 +39,9 @@ function reducer(state, action){
 function GameLayout(){
  const [state, dispatch] = useReducer(reducer, {currentMove: null, fen : 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', pgnViewerObject:[]})
  const [pgn, setPgn] = useState('')
+ const [boardFocus, setBoardFocus] = useState(false)
  const {pgnViewerObject, fen, currentMove} = state
+ const [width, height] = useWindowSize()
   useEffect(()=>{
     // eslint-disable-next-line no-restricted-globals
     const searchParams = new URLSearchParams(location.search)
@@ -53,20 +56,31 @@ function GameLayout(){
     const setCurrentMove = useCallback((newCurrentMove)=>{
         dispatch({type:'SET_CURRENT_MOVE', currentMove:newCurrentMove})
     }, [])
-
+    const calculateBoardSize = useCallback(()=>{
+        if(!boardFocus){
+            if(width>height) return height*4/6
+            return width 
+        }
+        if(width>height) return height*7/8
+        return width 
+        }, [width, height,boardFocus])
+  
     return(
-        <div className=" w-full inline-flex justify-center flex-row mt-5 "> 
+        <div className=" w-full flex justify-center max-sm:flex-col gap-1 max-sm:items-center "> 
             
             <div>
-                <LegalChess fen={fen} addMove={addMove}/>         
+                <LegalChess fen={fen} addMove={addMove} boardSize={calculateBoardSize()}/>         
             </div>
-            <div className="ml-1">
-                <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove}/>
+            <div className=" flex  ml-1 max-h-[600px] h-[180px]">
+                <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove} display/>
             </div>
-            <div className=" ml-2">
-                <GameDataDisplay pgn={pgn}/>
-                <Link href="/"><button type="button" className="button-3 green mt-4">Back to Search</button></Link>
-            </div>
+            {width>800&&
+                <div className=" ml-2">
+                    <GameDataDisplay pgn={pgn}/>
+                    <Link href="/"><button type="button" className="button-3 green mt-4">Back to Search</button></Link>
+                </div>
+            }
+            
             
         </div>
     )
