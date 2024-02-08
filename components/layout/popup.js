@@ -27,7 +27,7 @@ export default function Popup({ session}){
     }
     document.addEventListener('mousedown', closeOpenPopup)
     return (
-        <div className = "mr-2 ml-auto relative z-50">
+        <div>
             <button type='button' className="rounded-lg focus:border-2 border-gray-400" onClick={popupButtonClicked}><header className="">
                 <Image src={session.user.image} alt="profilePick" width={50} height={50} className="rounded-lg focus:border-2 border-gray-400 "/>
                 </header></button>

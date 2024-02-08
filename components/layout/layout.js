@@ -51,7 +51,10 @@ export default function Layout({ search, children, searchLink, selectPuzzles, lo
                 
                 {
                 session?(
-                    <Popup session={session}/>
+                    <span className=' z-20 sm:order-4'>
+                        <Popup session={session}/>
+                    </span>
+                    
 
                 ):(
                     <button type="button" className="button-3 green mr-1 ml-auto sm:order-4 my-1" onClick={()=>signIn()}>Sign In</button>

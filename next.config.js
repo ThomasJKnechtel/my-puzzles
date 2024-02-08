@@ -57,6 +57,12 @@ const nextConfig = {
           {
             protocol: 'https',
             hostname: 'img.icons8.com',
+            port:'',
+            pathname:'/skeuomorphism/32/experimental-checked-skeuomorphism.png'
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
             port: '',
             pathname: '/ios-filled/50/FFFFFF/puzzle.png'
           },

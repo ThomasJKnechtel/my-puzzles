@@ -17,6 +17,7 @@ export default function LoginPage() {
   return (
 
       <Layout search selectPuzzles lobby>
+      <div className=" w-full h-full flex flex-col items-center">
         <GamesTable/>
         <LayoutContext.Consumer>
           {
@@ -35,6 +36,8 @@ export default function LoginPage() {
           }
           
         </LayoutContext.Consumer>
+      </div>
+        
         
       </Layout>
     

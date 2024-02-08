@@ -144,16 +144,16 @@ export default function Blitz({socket}){
 
     return (
     <Layout searchLink selectPuzzles display={!boardFocus}>
-        <div className=" w-full flex max-sm:flex-col mt-5 justify-center items-center h-full">
+        <div className=" w-full flex max-sm:flex-col justify-center items-center h-full">
             <span className=" flex max-md:flex-col ">
                 <Timer time={timeControl*60*1000} start pause={gameFinished} />
                 <span className=" relative w-fit">
                     <PuzzleChess gameState={gameState.state} fen={fen} addMove={addMove} playersTurn={gameState.playerTurn} boardSize={calculateBoardSize()} />
                     <span className=" absolute top-0 right-0 z-20"><FocusButton focus={boardFocus} setFocus={setBoardFocus} /></span>
                 </span>
-                
+                <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove} display={!boardFocus} />
             </span>
-            <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove} display={!boardFocus} />
+            
             <PuzzleResultsDisplay puzzlesStats={finishedPuzzlesStats} />
         </div>  
         
