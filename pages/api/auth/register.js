@@ -1,34 +1,22 @@
-import { getToken } from "next-auth/jwt"
+
+import { getServerSession } from "next-auth"
 import { authOptions } from "./[...nextauth]"
-import db from "@/utils/dbConnect"
+import db from "@/utils/dbConnect";
+
 
 export default async function register(req, res){
- 
-    try{
-        const token = await getToken({req, secret: authOptions.secret })
-        const username = req.body
-        if(token){
-            if(username){
-                const regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g;
-                
-                if(regex.test(username)){
-                   res.status(400).json({err:"Invalid Username"}) 
-                }else{
-                    const query = `EXEC ADD_USER @user_id = ${token.sub}, @username='${username}'`
-                    
-                    await db.query(query)
-                    res.status(200).send()
-                } 
-            }else res.status(400).json({err: "No Username"})
-            
-           
-        }else{
-            res.redirect('/login')
+    const session = await getServerSession(req, res, authOptions)
+    const {username} = req.body
+    if(session){
+        console.log('test')
+        const regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g;
+        if(!regex.test(username)&&username.length>3&&username.length<15){
+            const query = `EXEC RegisterUser @userID='${session.user.id}', @username='${username}'`
+            const result = await db.query(query)
+            res.json(result.recordset[0])
         }
-    }catch(err){
-        console.log(err)
-        res.status(400).json({err: "Username already exists"})
-        
+    }else{
+        res.status(401)
     }
     
 }

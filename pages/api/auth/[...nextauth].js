@@ -35,9 +35,17 @@ export const authOptions = {
     },
     async session({ session, token}) {
       session.username = token.username
+      session.user.id = token.sub
       session.token = jwt.sign(token, process.env.AUTH_SECRET)
       return session
     },
+    async redirect({url, baseUrl}){
+      if(url.indexOf('signup')>=0){
+        return url
+      }
+      return '/'
+      
+    }
     
   }
 }

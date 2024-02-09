@@ -93,6 +93,14 @@ export async function getServerSideProps(context) {
         },
       };
     }
+    if(!session.username){
+      return {
+          redirect: {
+            destination: '/signup',
+            permanent: false,
+          },
+        };
+  }
     
     return {
       props: {

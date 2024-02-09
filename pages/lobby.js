@@ -97,6 +97,14 @@ export async function getServerSideProps(context) {
         },
       };
     }
+    if(!session.username){
+        return {
+            redirect: {
+              destination: '/signup',
+              permanent: false,
+            },
+          };
+    }
     const puzzles = JSON.stringify(await getPuzzles({username: session.username, sortCriteria:'dateUploaded'}))
     return {
       props: {
