@@ -100,8 +100,6 @@ export default function Blitz({socket}){
     }, [socket, timeControl])
     useEffect(()=>{
         const puzzleList = JSON.parse(sessionStorage.getItem('puzzles'))
-        const gameContianer = document.getElementById('container')
-        //setTimeout(()=>{gameContianer.style.display = "inline-flex"}, 300)
         const {puzzle_id, continuation, fen, turn} = puzzleList.pop()
         const startState = {
             "puzzle_id": puzzle_id,
@@ -144,7 +142,7 @@ export default function Blitz({socket}){
 
     return (
     <Layout searchLink selectPuzzles display={!boardFocus}>
-        <div className=" w-full flex max-sm:flex-col justify-center items-center h-full">
+        <div className=" w-full flex max-sm:flex-col justify-center items-center h-full relative">
             <span className=" flex max-md:flex-col ">
                 <Timer time={timeControl*60*1000} start pause={gameFinished} />
                 <span className=" relative w-fit">
@@ -155,15 +153,16 @@ export default function Blitz({socket}){
             </span>
             
             <PuzzleResultsDisplay puzzlesStats={finishedPuzzlesStats} />
-        </div>  
-        
-       
-   {gameFinished&&
+            {gameFinished&&
             <div className=" absolute z-50 m-10">
                 <GameResultDisplay puzzleStats={finishedPuzzlesStats} />
             </div>
-        }
-    </Layout>
+            }
+    
+        </div>  
+        
+    </Layout>   
+   
     
     )
 }
