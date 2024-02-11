@@ -88,6 +88,12 @@ const nextConfig = {
             protocol: 'https',
             hostname: 'img.icons8.com',
             port: '',
+            pathname: '/fluency-systems-regular/48/pen-squared.png'
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
             pathname: '/emoji/48/cross-mark-emoji.png'
           },
           {
