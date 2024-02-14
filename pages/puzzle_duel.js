@@ -5,7 +5,7 @@ import Link from "next/link";
 import { authOptions } from "./api/auth/[...nextauth]";
 import PuzzleChess from "@/components/puzzleChess";
 import Timer from "@/components/timer";
-import useWindowSize from "@/components/useWindowSize";
+import useWindowSize from "@/components/hooks/useWindowSize";
 import PuzzleDuelInfo from "@/components/puzzleDuelInfo";
 import FocusButton from "@/components/FocusButton";
 

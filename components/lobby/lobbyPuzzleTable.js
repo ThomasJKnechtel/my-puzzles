@@ -26,13 +26,13 @@ export default function LobbyPuzzleTable({puzzles, setSelectedPuzzles}){
   // DefaultColDef sets props common to all Columns
   const defaultColDef = useMemo( ()=> ({
       sortable: true,
-      
+      resizable: true,
+      flex:1
     }));
-
-  // Example of consuming Grid Event
-  const cellClickedListener = useCallback( event => {
-    console.log('cellClicked', event);
-  }, []);
+  const gridOptions = {
+   
+    headerHeight:30
+  }
 
   // Example load data from server
   useEffect(() => {
@@ -70,13 +70,12 @@ export default function LobbyPuzzleTable({puzzles, setSelectedPuzzles}){
                     
                     columnDefs={columnDefs} // Column Defs for Columns
                     defaultColDef={defaultColDef} // Default Column Properties
-
                     animateRows // Optional - set to 'true' to have rows animate when sorted
                     rowSelection='multiple' // Options - allows click selection of rows
-                    gridOptions={{headerHeight:30}}
-                    onCellClicked={cellClickedListener} // Optional - registering for Grid Event
+                    gridOptions={gridOptions}
                     onSelectionChanged={getSelectedPuzzles}
                     onGridReady={onGridReady}
+                    
                     />
         </div>
      

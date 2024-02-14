@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { parseGame } from "@mliebelt/pgn-parser"
 import { LayoutContext } from "./layout/layout"
-import useWindowSize from "./useWindowSize"
+import useWindowSize from "./hooks/useWindowSize"
 
 function View({pgn, width}){
     return <Link href={{pathname: '/game', query:{pgn: encodeURIComponent(JSON.stringify(pgn))}}}><button type="button" className=" p-1 rounded-md green font-medium text-sm hover:bg-green-500"><Image src="https://img.icons8.com/fluency-systems-regular/48/binoculars.png" alt="look" width={width>800?30:20} height={width>800?30:20} className=""/></button></Link>

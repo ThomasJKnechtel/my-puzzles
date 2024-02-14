@@ -26,6 +26,7 @@
     "chessboardjsx": "^2.4.7",
     "child_process": "^1.0.2",
     "concurrently": "^8.2.0",
+    "cross-env": "^7.0.3",
     "fs": "^0.0.1-security",
     "google": "^2.1.0",
     "jsonwebtoken": "^9.0.2",

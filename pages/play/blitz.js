@@ -13,7 +13,7 @@ import GameResultDisplay from "@/components/gameResultDisplay";
 import { addMoveToGameState, playMove } from "@/utils/gameState";
 import { addMove, getMove } from "@/utils/PGNViewerObject";
 import Layout from "@/components/layout/layout";
-import useWindowSize from "@/components/useWindowSize";
+import useWindowSize from "@/components/hooks/useWindowSize";
 import FocusButton from "@/components/FocusButton";
 
 function reducer(state, action){

@@ -12,7 +12,7 @@ import Layout from "@/components/layout/layout";
 import getPGNViewerObject, { getMove, addMove as addMoveToPGNViewer } from "@/utils/PGNViewerObject";
 import PGNViewer from "@/components/pgnViewer";
 import GameDataDisplay from "@/components/displayGameData";
-import useWindowSize from "@/components/useWindowSize";
+import useWindowSize from "@/components/hooks/useWindowSize";
 
 function reducer(state, action){
     const { currentMove, pgnViewerObject, fen} = state

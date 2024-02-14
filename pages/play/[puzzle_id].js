@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
 import Image from "next/image";
 import { Chess } from "chess.js";
-import useWindowSize from "@/components/useWindowSize";
+import useWindowSize from "@/components/hooks/useWindowSize";
 import getPuzzle from "../api/db/getPuzzle";
 import PuzzleChess from "@/components/puzzleChess";
 import PGNViewer from "@/components/pgnViewer";

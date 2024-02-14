@@ -13,22 +13,13 @@ import getPuzzles from "./api/db/getPuzzles";
 
 import Layout from "@/components/layout/layout";
 import LobbyPuzzleTable from "@/components/lobby/lobbyPuzzleTable";
-import ChallengeForm from "@/components/lobby/challengeForm";
-import ChallengePuzzleTable from "@/components/lobby/challengePuzzleTable";
 import FocusButton from "@/components/FocusButton";
 import ChallengeSection from "@/components/lobby/challengeSection";
 
-
-const Chessboard = dynamic(() => import('chessboardjsx'), {
-    ssr: false  // <- this do the magic ;)
-});
-
-
-export default function LobbyPage({socket, puzzles}){
+export default function LobbyPage({socket, puzzles, query}){
     const [challenges, setChallenges] = useState([])
     const [selectedPuzzles, setSelectedPuzzles] = useState([])
     const [formFocus, setFormFocus] = useState(true)
-    const {data: sessionData } = useSession()
 
     useEffect(()=>{
         if(socket){
@@ -67,14 +58,12 @@ export default function LobbyPage({socket, puzzles}){
                     <span className=" relative w-full"><button type="button" onClick={()=>setFormFocus(focus=>!focus)} className=" font-bold p-1 block w-full border-b-2 text-center relative ">Challenge</button> <span className=" absolute top-0 right-0" ><FocusButton setFocus={setFormFocus} focus={formFocus}/></span></span>
                     
                     {!formFocus&&
-                        <ChallengeSection selectedPuzzles={selectedPuzzles} challenges={challenges} username={sessionData.username} socket={socket} token={sessionData?.token} />
+                        <ChallengeSection selectedPuzzles={selectedPuzzles} challenges={challenges} socket={socket} query={query}/>
                     }
                 </div>
              
              </div>
            
-           {/* <ChallengePuzzleTable challenges={challenges} username={sessionData?.username} socket={socket} selectedPuzzles={selectedPuzzles} token={sessionData?.token} formFocus={formFocus}></ChallengePuzzleTable> 
-       */}
         </Layout>
        
         
@@ -108,7 +97,8 @@ export async function getServerSideProps(context) {
     const puzzles = JSON.stringify(await getPuzzles({username: session.username, sortCriteria:'dateUploaded'}))
     return {
       props: {
-        puzzles
+        puzzles,
+        query: context.query
       },
     };
   }

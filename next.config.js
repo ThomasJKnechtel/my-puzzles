@@ -38,6 +38,24 @@ const nextConfig = {
           {
             protocol: 'https',
             hostname: 'img.icons8.com',
+            port: '',
+            pathname: '/ios/50/settings--v1.png',
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
+            pathname: '/ios/50/appointment-reminders--v1.png',
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
+            pathname: '/pastel-glyph/64/person-male--v3.png',
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
             port:'',
             pathname:'/fluency-systems-regular/48/binoculars.png'
 

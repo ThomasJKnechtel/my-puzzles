@@ -26,7 +26,8 @@ export default function RatingChart({ data, lastUpdated }) {
           text: "No data to display",
         },
       },
-    width:380
+    width:380,
+    height:300
   });
 
   return (
