@@ -51,6 +51,12 @@ const nextConfig = {
             protocol: 'https',
             hostname: 'img.icons8.com',
             port: '',
+            pathname: '/ios/50/share--v1.png',
+          },
+          {
+            protocol: 'https',
+            hostname: 'img.icons8.com',
+            port: '',
             pathname: '/pastel-glyph/64/person-male--v3.png',
           },
           {

@@ -7,13 +7,14 @@ import { useState } from "react";
 import formatDate from "@/utils/formatDate";
 import Link from "next/link";
 import { getSession } from "next-auth/react";
+import Share from "../share";
 
 const Chessboard = dynamic(() => import('chessboardjsx'), {
     ssr: false  // <- this do the magic ;)
     });
 
 // eslint-disable-next-line camelcase
-function Puzzle({id, white, black, date, fen, continuation, puzzles, setPuzzles, dateUploaded, session, saved, turn, attempts, success_rate }){
+function Puzzle({id, white, black, date, fen, continuation, puzzles, setPuzzles, dateUploaded, session, saved, turn, attempts, success_rate, socket, username, token }){
     const [isSaved, setSaved] = useState(saved)
     const [puzzleId, setPuzzleId] = useState(id)
     function removePuzzle(){
@@ -52,22 +53,26 @@ function Puzzle({id, white, black, date, fen, continuation, puzzles, setPuzzles,
     return (
     <tr className="bg-slate-50 p-4 odd:bg-slate-300 ">
     <td className="text-left align-middle">
-    <label>{black}</label>
-    <button type="button" className=" border-slate-400 hover:border-2"><Chessboard position={fen} id={fen} width={140} /></button>
-    <label>{white}</label>
+        <label>{black}</label>
+        <button type="button" className=" border-slate-400 hover:border-2"><Chessboard position={fen} id={fen} width={140} /></button>
+        <label>{white}</label>
     </td>
-   <td className=" whitespace-nowrap">{date}</td>
-    {dateUploaded?<td className=" whitespace-nowrap">{dateUploaded}</td>:<td>N/A</td>}
+    <td className=" whitespace-nowrap">{date}</td>
+    {dateUploaded?
+        <td className=" whitespace-nowrap">{dateUploaded}</td>:
+        <td>N/A</td>
+    }
     <td>{attempts&&<label>{attempts}</label>}</td>
     <td>{success_rate&&<label>{success_rate}</label>}</td>
     <td>{!session?<label className=" whitespace-nowrap">Log In</label>:isSaved?<label>Saved</label>:<button type="button" onClick={()=>{savePuzzle()}} className=" text-2xl button-3 bg-blue-500">🖫</button>}</td>
-    <td><button type="button" onClick={()=>{removePuzzle(puzzles, setPuzzles)}} className=" p-1 rounded-md text-xl font-medium bg-red-700 hover:bg-red-800 w-[24px] "><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={20} height={20} className=""/></button></td>
-    <td>{isSaved?<Link href={{pathname:`/play/${puzzleId}`}}><button className=" green p-1 rounded-md w-6"><Image src="https://img.icons8.com/fluency-systems-regular/48/binoculars.png" alt="look" width={20} height={20}/></button></Link>:<label>Must be saved</label>}</td>
+    <td><button type="button" onClick={()=>{removePuzzle(puzzles, setPuzzles)}} className=" p-1 rounded-md text-xl font-medium bg-red-700 hover:bg-red-800 "><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={50} height={50} className="sm:w-[50px] sm:h-[50px]"/></button></td>
+    <td>{isSaved?<Link href={{pathname:`/play/${puzzleId}`}}><button className=" green p-1 rounded-md"><Image src="https://img.icons8.com/fluency-systems-regular/48/binoculars.png" alt="look" width={50} height={50} className="sm:w-[50px] sm:h-[50px]"/></button></Link>:<label>Must be saved</label>}</td>
+    <td>{isSaved&&<Share socket={socket} puzzleId={puzzleId} username={username} token={token} />}</td>
     </tr>)
   
 }
 
-export default function PuzzleTable({puzzles, setPuzzles, session, saved}){
+export default function PuzzleTable({puzzles, setPuzzles, session, saved, socket}){
     
     return (
         
@@ -75,9 +80,9 @@ export default function PuzzleTable({puzzles, setPuzzles, session, saved}){
         
         
         
-        <table className=" min-w-full table-fixed">
+        <table className=" min-w-full table-fixed text-xl">
             
-            <thead className=" bg-slate-300 mb-2  shadow-lg h-10 sticky top-0 z-10"><tr className="h-14 sticky top-0 z-10" ><th className=" sticky top-0 z-10 w-[150px]" /><th className="sticky top-0 z-10 ">Date</th><th className=" sticky top-0 z-10 ">Uploaded</th><th className="  sticky top-0 z-10">Attempts</th><th className="  sticky top-0 z-10">Success Rate</th><th className="sticky top-0 z-10"><label className=" ">Save</label></th><th className=" sticky top-0 z-10 "><button type="button" onClick={()=>setPuzzles([])} className=" p-1 rounded-md w-6 bg-red-700 hover:bg-red-800"><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={20} height={20} className=""/></button></th><th className=" sticky top-0 z-10 w-6 "/></tr></thead>
+            <thead className=" bg-slate-300 mb-2  shadow-lg h-10 sticky top-0 z-10"><tr className="h-14 sticky top-0 z-10" ><th className=" sticky top-0 z-10 w-[150px]" /><th className="sticky top-0 z-10 order-5">Date</th><th className=" sticky top-0 z-10 ">Uploaded</th><th className="  sticky top-0 z-10">Attempts</th><th className="  sticky top-0 z-10">Success Rate</th><th className="sticky top-0 z-10"><label className=" ">Save</label></th><th className=" sticky top-0 z-10 min-w-[50px] "><button type="button" onClick={()=>setPuzzles([])} className=" p-1 rounded-md bg-red-700 hover:bg-red-800 order-3"><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={20} height={20} className=""/></button></th><th className=" sticky top-0 z-10 min-w-[50px] order-3"/><th className=" sticky top-0 z-10"/></tr></thead>
          <tbody>
              <tr className="h-10" />
          </tbody>   
@@ -88,7 +93,7 @@ export default function PuzzleTable({puzzles, setPuzzles, session, saved}){
                  puzzles.map((puzzle, index) =>{
                         if(puzzle){
                              // eslint-disable-next-line react/no-array-index-key
-                             return <Puzzle key={index} id={puzzle.puzzle_id} white={puzzle.white} black = {puzzle.black} date = {formatDate(puzzle.date)} fen = {puzzle.fen} continuation={puzzle.continuation} puzzles={puzzles} setPuzzles={setPuzzles} dateUploaded={puzzle.dateUploaded?formatDate(puzzle.date_uploaded):"N/A" } saved={saved}session={session} turn={puzzle.turn} attempts={puzzle.attempts} success_rate={puzzle.success_rate} />
+                             return <Puzzle key={index} id={puzzle.puzzle_id} white={puzzle.white} black = {puzzle.black} date = {formatDate(puzzle.date)} fen = {puzzle.fen} continuation={puzzle.continuation} puzzles={puzzles} setPuzzles={setPuzzles} dateUploaded={puzzle.dateUploaded?formatDate(puzzle.date_uploaded):"N/A" } saved={saved}session={session} turn={puzzle.turn} attempts={puzzle.attempts} success_rate={puzzle.success_rate} socket={socket} username={session?.username} token={session?.token}/>
                         }
                        
                     })

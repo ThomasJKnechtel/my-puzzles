@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { signOut } from 'next-auth/react'
-
+import Link from 'next/link'
 export default function Popup({ session}){
     const [isOpen, setOpen] = useState(false)
     const popupRef = useRef(null)
@@ -33,7 +33,7 @@ export default function Popup({ session}){
                 </header></button>
             {isOpen&& (
                 <div ref={popupRef} className = "absolute border-2 right-0 rounded-lg shadow-lg flex flex-col gap-2 p-2 bg-white">
-                   <button type="button" className='button-3 green'>Profile</button>
+                   <Link href={`/profile/${session.username}`} className='button-3 green'>Profile</Link>
                    <button type="button" className='button-3 green' onClick={()=>{signOut()}}>Log Out</button>
                     
                 </div>

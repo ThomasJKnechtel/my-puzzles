@@ -13,7 +13,7 @@ export default function AcceptChallenge({queryStr, puzzles, socket}){
     const [selectedPuzzles, setSelectedPuzzles] = useState([])
     function acceptChallenge(e){
         e.preventDefault()
-        if(session && socket && selectedPuzzles?.length === query.challengerPuzzles.length){
+        if(session && socket && selectedPuzzles?.length === query?.challengerPuzzles?.length){
             const puzzleIds = selectedPuzzles.map(puzzle => puzzle["Puzzle ID"])
             socket.emit('friendAcceptsChallenge', {token: session.token, puzzleIds, challengeId: query.challengeId})
             window.location.href="/puzzle_duel"
@@ -31,7 +31,7 @@ export default function AcceptChallenge({queryStr, puzzles, socket}){
             <div className=" w-full h-4/5 m-2 border-2 self-center">
                  {useMemo(()=><LobbyPuzzleTable setSelectedPuzzles={setSelectedPuzzles} puzzles={JSON.parse(puzzles)}/>, [puzzles])}
             </div>
-           <label className=" font-medium text-xl text-slate-600 my-1">Selected Puzzles: {selectedPuzzles.length}/{query.challengerPuzzles.length}</label>
+           <label className=" font-medium text-xl text-slate-600 my-1">Selected Puzzles: {selectedPuzzles.length}/{query?.challengerPuzzles?.length}</label>
             <input type="submit" className=" bg-green-600 px-2 py-1 rounded-md font-medium hover:bg-green-500 w-fit"></input>
         </form>
     </div>

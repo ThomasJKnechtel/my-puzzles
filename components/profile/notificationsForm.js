@@ -41,6 +41,12 @@ export default function NotificationsForm({socket, session}){
             socket.emit('setNotifications', {token:session.token, notifications:{friendRequests, friendRequestsAccepted, puzzleDuelChallenges: newChallenges, sharedPuzzles}})
         }
     }
+    function removeSharedPuzzle(puzzleId){
+        const newSharedPuzzles = sharedPuzzles.filter(puzzle => puzzle.puzzleId !== puzzleId)
+        if(socket){
+            socket.emit('setNotifications',  {token:session.token, notifications:{friendRequests, friendRequestsAccepted, puzzleDuelChallenges, sharedPuzzles:newSharedPuzzles}} )
+        }
+    }
     return (
     <div id="notificationForm" className=" bg-slate-300 p-2 rounded-md relative hidden">
         <h1 className=" font-bold text-2xl border-b-2">Notifications</h1>
@@ -50,7 +56,7 @@ export default function NotificationsForm({socket, session}){
  <table>
             <tbody>
             {
-                friendRequests.map(request => <tr><td className=" w-[300px] text-left">{request.user_name} wants to be friends</td><td><button onClick={()=>addFriend(request.user_id)} type="button" className=" hover:text-lg">&#x2713;</button></td><td><button onClick={()=>{removeFriendNotification(request.user_id)}} type="button" className=" hover:text-lg">✗</button></td></tr>)
+                friendRequests.map(request => <tr><td className=" w-[300px] text-left">{request.username} wants to be friends</td><td><button onClick={()=>addFriend(request.user_id)} type="button" className=" hover:text-lg">&#x2713;</button></td><td><button onClick={()=>{removeFriendNotification(request.user_id)}} type="button" className=" hover:text-lg">✗</button></td></tr>)
             }
             </tbody>
         </table>
@@ -62,7 +68,7 @@ export default function NotificationsForm({socket, session}){
             <table>
             <tbody>
             {
-                friendRequestsAccepted.map(message => <tr><td className=" w-[300px] text-left">{message.user_name} accepted your friend request</td><td><button onClick={()=>removeFriendAcceptedNotification(message.user_id)} type="button" className=" hover:text-lg">✗</button></td></tr>)
+                friendRequestsAccepted.map(message => <tr><td className=" w-[300px] text-left">{message.username} accepted your friend request</td><td><button onClick={()=>removeFriendAcceptedNotification(message.userId)} type="button" className=" hover:text-lg">✗</button></td></tr>)
             }
             </tbody>
         </table>):(
@@ -91,7 +97,7 @@ export default function NotificationsForm({socket, session}){
             <table>
             <tbody>
             {
-                sharedPuzzles.map(message => <tr><td className=" w-[300px] text-left">{message.user_name} sent you a challenge</td><td><button type="button" className=" hover:text-lg">✗</button></td></tr>)
+                sharedPuzzles.map(message => <tr><td className=" w-[300px] text-left">{message.username} shared a puzzle: <Link href={`/play/${message.puzzleId}`} className=" underline text-blue-600 hover:text-blue-500">{message.puzzleId}</Link></td><td><button onClick={()=>removeSharedPuzzle(message.puzzleId)} type="button" className=" hover:text-lg">✗</button></td></tr>)
             }
             </tbody>
         </table>):(

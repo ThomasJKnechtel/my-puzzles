@@ -15,7 +15,7 @@ export default function FriendsPopup({user_id, username}){
         })
     }
     return (
-        <div id="friendsPopup" className=" bg-slate-200 p-2 rounded-md min-h-[300px] min-w-[300px] shadow-md relative hidden">
+        <div id="friendsPopup" className=" bg-slate-200 p-2 rounded-md min-h-[300px] max-sm:max-w-[300px] shadow-md relative hidden shrink">
 
         <h1 className=" font-bold text-2xl border-b-2 border-slate-300 ">Friends</h1>
         <button type="button" onClick={()=>document.querySelector('#friendsPopup').classList.add('hidden')} className=" absolute right-0 top-0">✖</button>

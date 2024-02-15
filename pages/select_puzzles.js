@@ -89,7 +89,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
             <button type="button"  id="tableButton" onClick={onTableButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600">Puzzles</button>
             <button type="button" id="formButton" onClick={onFormButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600 opacity-50">Select Puzzles</button>
             <PuzzleFormSelection loggedIn={session}  />
-            <PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} saved={saved} />
+            <PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} saved={saved} socket={socket}/>
           </div>
           {displayProgress&&<><LoadingIcon progress={progress} />
             <label>{progress&&progress.toFixed(0)}%</label></>

@@ -31,7 +31,7 @@ export default function PuzzleDuelInfo({ gameState, ready, resign}){
             <button id="resignButton" type="button" className="button-3 green m-5" onClick={resign}>Resign</button>
           }
           {gameState?.state?.state === "FINISHED"&&
-            <Link className=" button-3 green mb-5" href="/challenge">To Lobby</Link>
+            <Link className=" button-3 green mb-5" href="/lobby">To Lobby</Link>
           }
           
         </div>

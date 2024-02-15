@@ -20,7 +20,8 @@ module.exports = {
           500: '#964d22',
           700: '#241a0f',
           900: '#1c1c24'
-        }
+        },
+        'trueRed':'#EDAEAE'
       }
     },
 
