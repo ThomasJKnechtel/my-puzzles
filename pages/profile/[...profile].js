@@ -124,7 +124,6 @@ export async function getServerSideProps(context){
       },
     };
   }
-  return { props: {}}
     const {profile} = context.query
     const query = `EXEC GetProfileData @username='${profile}'`
     const result = await db.query(query)
