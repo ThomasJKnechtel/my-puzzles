@@ -4,7 +4,8 @@
 
 import { useSession } from "next-auth/react"
 import Image from "next/image"
-
+import { getServerSession } from "next-auth"
+import { authOptions } from "../api/auth/[...nextauth]"
 import db from "@/utils/dbConnect"
 import RatingChart from "@/components/profile/RatingChart"
 import Layout from "@/components/layout/layout"
@@ -114,10 +115,21 @@ export default function ProfilePage({profileData, socket}){
 }
 
 export async function getServerSideProps(context){
+  const session = await getServerSession(context.req, context.res, authOptions)
+  if(session){
+    if(session.username) return {
+      redirect: {
+        destination: '/signup',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {}}
     const {profile} = context.query
     const query = `EXEC GetProfileData @username='${profile}'`
     const result = await db.query(query)
     const profileData = result?.recordset[0]
+
    
     return { props: {profileData: JSON.stringify(profileData)}}
    

@@ -1,6 +1,8 @@
 import { LayoutContext } from "@/components/layout/layout";
 import Layout from "@/components/layout/layout";
 import GamesTable from "@/components/table";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 
 
@@ -44,4 +46,17 @@ export default function LoginPage() {
   
     
   );
+}
+
+export async function getServerSideProps(context){
+  const session = await getServerSession(context.req, context.res, authOptions)
+  if(session){
+    if(session.username) return {
+      redirect: {
+        destination: '/signup',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {}}
 }

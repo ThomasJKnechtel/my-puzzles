@@ -4,7 +4,8 @@
 /* eslint-disable import/no-unresolved */
 
 import { useCallback, useEffect, useReducer, useState } from "react";
-import Image from "next/image";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
 import { Chess } from "chess.js";
 import useWindowSize from "@/components/hooks/useWindowSize";
 import getPuzzle from "../api/db/getPuzzle";
@@ -154,7 +155,15 @@ export default function PlayPuzzlePage({puzzle}){
 }
 
 export async function getServerSideProps(context){
-    
+  const session = await getServerSession(context.req, context.res, authOptions)
+  if(session){
+    if(session.username) return {
+      redirect: {
+        destination: '/signup',
+        permanent: false,
+      },
+    };
+  }
     const {puzzle_id} = context.query
     
     const puzzle = await getPuzzle(parseInt(puzzle_id, 10))

@@ -3,6 +3,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 import PuzzleTable  from "../components/select_puzzles/puzzleTable"
 import Layout from "../components/layout/layout"
 import PuzzleFormSelection from "@/components/select_puzzles/puzzleSelection"
@@ -102,6 +104,15 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
 
 }
 export async function getServerSideProps(context){
+  const session = await getServerSession(context.req, context.res, authOptions)
+  if(session){
+    if(session.username) return {
+      redirect: {
+        destination: '/signup',
+        permanent: false,
+      },
+    };
+  }
   let puzzles = null
   let saved = false
   if(Object.keys(context.query).length){

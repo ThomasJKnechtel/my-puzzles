@@ -4,6 +4,8 @@
 /* eslint-disable import/no-unresolved */
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { Chess } from "chess.js";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
 import PGNViewer from "@/components/pgnViewer";
 import PuzzleChess from "@/components/puzzleChess";
 import Timer from "@/components/timer";
@@ -165,4 +167,17 @@ export default function Blitz({socket}){
    
     
     )
+}
+
+export async function getServerSideProps(context){
+    const session = await getServerSession(context.req, context.res, authOptions)
+  if(session){
+    if(session.username) return {
+      redirect: {
+        destination: '/signup',
+        permanent: false,
+      },
+    };
+  }
+  return { props: {}}
 }
