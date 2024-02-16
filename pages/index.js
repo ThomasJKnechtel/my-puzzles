@@ -51,7 +51,7 @@ export default function LoginPage() {
 export async function getServerSideProps(context){
   const session = await getServerSession(context.req, context.res, authOptions)
   if(session){
-    if(session.username) return {
+    if(!session.username) return {
       redirect: {
         destination: '/signup',
         permanent: false,
