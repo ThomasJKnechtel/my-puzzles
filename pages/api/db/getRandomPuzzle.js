@@ -1,4 +1,4 @@
-import db from "@/utils/dbConnect"
+import connectDB from "@/utils/dbConnect"
 
 export default async function getRandomPuzzle(req, res){
     try{
@@ -7,7 +7,7 @@ export default async function getRandomPuzzle(req, res){
         secondLastPuzzle=secondLastPuzzle?secondLastPuzzle:null
         thirdLastPuzzle=thirdLastPuzzle?thirdLastPuzzle:null
         const query = `EXEC getRandomPuzzle @lastPuzzle=${lastPuzzle}, @secondLastPuzzle=${secondLastPuzzle}, @thirdLastPuzzle=${thirdLastPuzzle}`
-        console.log(query)
+        const db = await connectDB()
         const result = (await db.query(query)).recordset
         const puzzle_id = result[0].puzzle_id
         

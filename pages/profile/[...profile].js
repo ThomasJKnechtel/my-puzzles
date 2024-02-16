@@ -5,8 +5,8 @@
 import { useSession } from "next-auth/react"
 import Image from "next/image"
 import { getServerSession } from "next-auth"
+import Link from "next/link"
 import { authOptions } from "../api/auth/[...nextauth]"
-import db from "@/utils/dbConnect"
 import RatingChart from "@/components/profile/RatingChart"
 import Layout from "@/components/layout/layout"
 
@@ -14,10 +14,8 @@ import SideBar from "@/components/profile/sideBar"
 
 import SettingsPopup from "@/components/profile/settingsPopup"
 import FriendsPopup from "@/components/profile/friendsPopup"
-import { useEffect } from "react"
 import NotificationsForm from "@/components/profile/notificationsForm"
-import AcceptChallengeForm from "@/pages/acceptChallenge"
-import Link from "next/link"
+import connectDB from "@/utils/dbConnect"
 
 
 
@@ -126,9 +124,9 @@ export async function getServerSideProps(context){
   }
     const {profile} = context.query
     const query = `EXEC GetProfileData @username='${profile}'`
+    const db = await connectDB()
     const result = await db.query(query)
     const profileData = result?.recordset[0]
-
    
     return { props: {profileData: JSON.stringify(profileData)}}
    

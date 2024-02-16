@@ -1,4 +1,4 @@
-import db from "@/utils/dbConnect"
+import connectDB from "@/utils/dbConnect";
 
 export default async function removeFriend(req, res){
     function removeFriendFromList(userId, list){
@@ -11,7 +11,7 @@ export default async function removeFriend(req, res){
     }
     const {username, friendUsername, user_id, friendId} = req.body
     const queryUserFriends = `EXEC GetFriendIds @username='${username}'`
-    
+    const db = await connectDB()
     const userFriends = (await db.query(queryUserFriends)).recordset[0]
     
     const queryFriendFriends = `EXEC GetFriendIds @username='${friendUsername}'`

@@ -1,4 +1,5 @@
 import mssql from "mssql"
+
 const sqlConfig = {
     user:'MyPuzzles',
     password: process.env.PASSWORD,
@@ -9,6 +10,11 @@ const sqlConfig = {
         trustServerCertificate: true
     }
 }
+
 const db = mssql
 db.connect(sqlConfig)
-export default db
+export default async function connectDB(){
+    await db.connect(sqlConfig)
+    return db
+}
+

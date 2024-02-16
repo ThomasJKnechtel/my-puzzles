@@ -1,7 +1,9 @@
-import db from "@/utils/dbConnect"
+import connectDB from "@/utils/dbConnect"
+
 
 export default async function addUser(req, res){
     try{
+        const db = await connectDB()
         const user = await db.query`SELECT 1 FROM users WHERE user_id = 1`
         
         if(user.recordset.length == 0){

@@ -1,4 +1,4 @@
-import db from "@/utils/dbConnect"
+import connectDB from "@/utils/dbConnect"
 
 export default async function getPuzzles(searchParams){
     let {player, opponent, startDate, endDate, startDateUploaded, endDateUploaded, numberOfPuzzles, sortCriteria, username} = searchParams
@@ -12,7 +12,7 @@ export default async function getPuzzles(searchParams){
     sortCriteria = sortCriteria || null
     username = username?`'${username}'`:null
     const query = `EXEC get_puzzles @player=${player}, @opponent=${opponent}, @fromDatePlayed=${startDate}, @toDatePlayed=${endDate}, @fromDateUploaded=${startDateUploaded}, @toDateUploaded=${endDateUploaded},  @sortCriteria=${sortCriteria}, @numberOfPuzzles=${numberOfPuzzles}, @username=${username}`
-    console.log(query)
+    const db = await connectDB()
     const result = await db.query(query)
     return result.recordsets[0]
 }
