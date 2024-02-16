@@ -16,7 +16,7 @@ export default function NewNotificationDisplay({socket}){
     }
     useEffect(()=>{
         document.querySelector('#newNotificationDisplay').classList.remove('hidden')
-        if(newNotification.challengeAccepted){
+        if(newNotification?.challengeAccepted){
             window.location.href='/puzzle_duel'
         }
     }, [newNotification])
