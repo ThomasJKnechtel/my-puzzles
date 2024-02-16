@@ -12,7 +12,6 @@ export default function Popup({ session}){
     const closePopup = ()=>{
         setOpen(false)
     }
-    useEffect(()=>console.log(session), [session])
     const popupButtonClicked = ()=>{
         if(isOpen){
             closePopup()

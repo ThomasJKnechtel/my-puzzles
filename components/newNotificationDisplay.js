@@ -1,10 +1,12 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import useNotifications from "./hooks/useNotifications";
 import { useEffect } from "react";
+import useNotifications from "./hooks/useNotifications";
+import useCookies from "./hooks/useCookies";
 
 export default function NewNotificationDisplay({socket}){
     const {data: session} = useSession()
+    const cookies = useCookies()
     const {newNotification} = useNotifications(socket, session)
     function addFriend(friendId){
         if(socket && session){
@@ -15,11 +17,15 @@ export default function NewNotificationDisplay({socket}){
         document.querySelector('#newNotificationDisplay').classList.add('hidden')
     }
     useEffect(()=>{
-        document.querySelector('#newNotificationDisplay').classList.remove('hidden')
+        if(cookies.showNotifications==='true'){
+            document.querySelector('#newNotificationDisplay').classList.remove('hidden')
+        }else{
+            document.querySelector('#newNotificationDisplay').classList.add('hidden')
+        }
         if(newNotification?.challengeAccepted){
             window.location.href='/puzzle_duel'
         }
-    }, [newNotification])
+    }, [newNotification, cookies.showNotifications])
     return (
         <div id="newNotificationDisplay" className=" absolute z-50 bg-slate-50 shadow-md mx-auto w-fit left-0 right-0 top-1 rounded-sm ">
             {newNotification?.friendRequest&&
@@ -41,6 +47,7 @@ export default function NewNotificationDisplay({socket}){
                 <label className=" mx-2 py-1 ">{newNotification.username} shared a puzzle: <Link onClick={close} className=" underline text-blue-600 hover:text-blue-500" href={`/play/${newNotification.puzzleId}`}>{newNotification.puzzleId}</Link></label><button onClick={close} type="button" className=" hover:text-lg">✗</button>
             </>    
             }
+        
         </div>
     )
 }

@@ -5,7 +5,6 @@ export default function useCookies(){
     useEffect(()=>{
 
         const userCookies = document.cookie.replace(/\s/g, "").split(';');
-        console.log(userCookies)
         const parsedCookies = {};
 
         userCookies.forEach(cookie => {

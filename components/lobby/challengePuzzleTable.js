@@ -9,9 +9,6 @@ export default function ChallengePuzzleTable({challenges, username, selectedPuzz
             
         }
     }
-    useEffect(()=>{
-        console.log(challenges)
-    }, [challenges])
     return (
         <div className=" flex flex-col items-center bg-white border-2 h-full w-full gap-10 p-2">
             <h1 className=" font-bold text-xl">Incoming Challenges</h1>

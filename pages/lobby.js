@@ -38,7 +38,7 @@ export default function LobbyPage({socket, puzzles, query}){
         }else{
             document.querySelector('#tableContainer').classList.add('hidden')
         }
-    })
+    }, [formFocus])
    
     return (
         <Layout>

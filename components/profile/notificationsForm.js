@@ -30,7 +30,7 @@ export default function NotificationsForm({socket, session}){
         }
     }
     function removeFriendAcceptedNotification(friendId){
-        const newFriendsAccepted = friendRequestsAccepted.filter(id => id !== friendId)
+        const newFriendsAccepted = friendRequestsAccepted.filter(friend => friend.userId !== friendId)
         if(socket){
             socket.emit('setNotifications', {token:session.token, notifications:{friendRequests, friendRequestsAccepted: newFriendsAccepted, puzzleDuelChallenges, sharedPuzzles}})
         }

@@ -33,7 +33,7 @@ export default function Layout({ search, children, searchLink, selectPuzzles, lo
             document.querySelector('#footer').classList.add('hidden')
             document.querySelector('#header').classList.add('hidden')
         }
-    })
+    }, [display])
     return (
         <div className="relative inline-flex flex-col align-middle h-full w-full">
             
