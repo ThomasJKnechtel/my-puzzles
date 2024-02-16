@@ -58,7 +58,7 @@ export default function LobbyPage({socket, puzzles, query}){
                     <span className=" relative w-full"><button type="button" onClick={()=>setFormFocus(focus=>!focus)} className=" font-bold p-1 block w-full border-b-2 text-center relative ">Challenge</button> <span className=" absolute top-0 right-0" ><FocusButton setFocus={setFormFocus} focus={formFocus}/></span></span>
                     
                     {!formFocus&&
-                        <ChallengeSection selectedPuzzles={selectedPuzzles} challenges={challenges} socket={socket} query={query}/>
+                        <ChallengeSection selectedPuzzles={selectedPuzzles} challenges={challenges} socket={socket} query={query} defaultForm={query?.friendId?'FriendsForm':'ChallengeForm'}/>
                     }
                 </div>
              

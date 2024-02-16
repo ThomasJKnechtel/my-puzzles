@@ -17,7 +17,7 @@ export default function PlayForm({puzzles}){
          if(mode==="3 Minute" && puzzles){
             window.location.href = "./play/blitz?timeControl=3" 
          }else if(mode==="5 Minute" && puzzles){
-            window.location.href = "./play/blitz?timeControl=3"
+            window.location.href = "./play/blitz?timeControl=5"
          }else if(mode==="Random"){
             sessionStorage.setItem('previousPuzzles', JSON.stringify([]))
             fetch('/api/db/getRandomPuzzle', { 

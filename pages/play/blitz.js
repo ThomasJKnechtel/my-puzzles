@@ -142,7 +142,7 @@ export default function Blitz({socket}){
 
     return (
     <Layout searchLink selectPuzzles display={!boardFocus}>
-        <div className=" w-full flex max-sm:flex-col justify-center items-center h-full relative">
+        <div className=" w-full flex flex-col justify-center items-center h-full relative">
             <span className=" flex max-md:flex-col ">
                 <Timer time={timeControl*60*1000} start pause={gameFinished} />
                 <span className=" relative w-fit">

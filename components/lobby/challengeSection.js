@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ChallengeFriendsForm from "./challengeFriendsForm"
 
 export default function ChallengeSection({selectedPuzzles, challenges, socket, defaultForm, query}){
@@ -20,38 +20,39 @@ export default function ChallengeSection({selectedPuzzles, challenges, socket, d
             socket.emit('createChallenge', {token: session.token, challenge:{challengerPuzzleIds:puzzleIds, timeControl}})
         }
     }
-    function displayForm(form){
-        if(form==="ChallengeForm"){
+    useEffect(()=>{
+        if(focusForm==="ChallengeForm"){
             document.querySelector('#focusChallenge').classList.add("text-blue-600","border-blue-600")
             document.querySelector('#focusIncomingChallenge').classList.add("border-blue-400", "text-blue-400")
             document.querySelector('#focusIncomingChallenge').classList.remove("border-blue-600", "text-blue-600")
             document.querySelector('#focusChallengeFriends').classList.add("border-blue-400", "text-blue-400")
             document.querySelector('#focusChallengeFriends').classList.remove("border-blue-600", "text-blue-600")
-            setFocusForm("ChallengeForm")
-        }else if(form==="IncomingForm"){
+            
+        }else if(focusForm==="IncomingForm"){
             document.querySelector('#focusChallenge').classList.add("text-blue-400","border-blue-400")
             document.querySelector('#focusChallenge').classList.remove("border-blue-600", "text-blue-600")
             document.querySelector('#focusIncomingChallenge').classList.add("border-blue-600", "text-blue-600")
             document.querySelector('#focusChallengeFriends').classList.add("border-blue-400", "text-blue-400")
             document.querySelector('#focusChallengeFriends').classList.remove("border-blue-600", "text-blue-600")
-            setFocusForm("IncomingForm")
-        }else if(form==="FriendsForm"){
+           
+        }else if(focusForm==="FriendsForm"){
             document.querySelector('#focusChallenge').classList.add("text-blue-400","border-blue-400")
             document.querySelector('#focusIncomingChallenge').classList.add("border-blue-400", "text-blue-400")
             document.querySelector('#focusChallengeFriends').classList.add("border-blue-600", "text-blue-600")
             document.querySelector('#focusIncomingChallenge').classList.remove("border-blue-600", "text-blue-600")
             document.querySelector('#focusChallenge').classList.remove("border-blue-600", "text-blue-600")
-            setFocusForm("ChallengeFriends")
+           
 
         }
-    }
+
+    }, [focusForm])
    
     return (    
     <div className="h-full" >
         <span className=" w-full">
-            <button id="focusChallenge" onClick={()=>displayForm("ChallengeForm")} className="text-blue-600 border-b-4 pb-1 px-3 border-blue-600" type="button">Create Challenge</button>
-            <button id="focusIncomingChallenge" onClick={()=>displayForm("IncomingForm")}  type="button" className=" text-blue-600 border-b-4 pb-1 px-3 border-blue-400">Incoming Challenges</button>
-            <button id="focusChallengeFriends" onClick={()=>displayForm("FriendsForm")}  type="button" className=" text-blue-600 border-b-4 pb-1 px-3 border-blue-400">Challenge Friends</button>
+            <button id="focusChallenge" onClick={()=>setFocusForm("ChallengeForm")} className="text-blue-600 border-b-4 pb-1 px-3 border-blue-600" type="button">Create Challenge</button>
+            <button id="focusIncomingChallenge" onClick={()=>setFocusForm("IncomingForm")}  type="button" className=" text-blue-600 border-b-4 pb-1 px-3 border-blue-400">Incoming Challenges</button>
+            <button id="focusChallengeFriends" onClick={()=>setFocusForm("FriendsForm")}  type="button" className=" text-blue-600 border-b-4 pb-1 px-3 border-blue-400">Challenge Friends</button>
         </span>
         {focusForm==="ChallengeForm"&&
         <div className=" w-full h-4/5 inline-flex items-center flex-col justify-between m-1">
@@ -87,7 +88,7 @@ export default function ChallengeSection({selectedPuzzles, challenges, socket, d
         </div>
 
         }
-        {focusForm==="ChallengeFriends"&&
+        {focusForm==="FriendsForm"&&
            <ChallengeFriendsForm username={session?.username} selectedPuzzles={selectedPuzzles} token={session?.token} socket={socket} query={query} />
         }
         
