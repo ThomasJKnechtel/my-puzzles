@@ -10,7 +10,7 @@ export default function LoadingIcon({progress}){
       
       const Childdiv = {
         height: '100%',
-        width: `${progress}%`,
+        width: `${progress*100}%`,
         backgroundColor: "green",
        borderRadius:40,
         textAlign: 'right'

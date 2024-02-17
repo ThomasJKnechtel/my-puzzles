@@ -8,6 +8,31 @@ import SearchBar from './searchbar'
 
 export const LayoutContext = createContext({})
 
+export const metadata = {
+    title: 'MyChessPuzzles',
+    description: 'Generate chess puzzles from a Lichess players games',
+    openGraph: {
+        title: 'MyChessPuzzles - Generate Puzzles',
+        description: 'Generate chess puzzles from a Lichess players games',
+        url: 'https://mychesspuzzles.com',
+        siteName: 'MyChessPuzzles',
+        images:[
+            {
+                url:'https://mychesspuzzles.com/public/images/og.png',
+                width:800,
+                height:395
+            },
+            {
+                url: 'https://mychesspuzzles.com/public/images/og-alt.png',
+                width: 1528, 
+                height:755
+            }
+        ],
+        locale: 'en_US',
+        type: 'website'
+    }
+}
+
 export default function Layout({ search, children, searchLink, selectPuzzles, lobby, display=true }){
     const { data : session } = useSession()
     const [gamesPgns , setGamesPgns ] = useState([])

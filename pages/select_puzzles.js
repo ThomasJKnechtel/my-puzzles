@@ -39,30 +39,19 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
      */
     useEffect(()=>{
         if(socket){
-            socket.on('puzzles', newPuzzles=>{
+            socket.on('puzzlesGenerated', ({puzzles:newPuzzles, progress:newProgress})=>{
                 // eslint-disable-next-line no-param-reassign
-                newPuzzles = JSON.parse(newPuzzles)
-               
+
                 if(puzzles){
                   setPuzzles(newPuzzles.concat(puzzles))
-                  
                 }else{
                   setPuzzles(newPuzzles)
-                  
                 }
-                
-                })
-            socket.on('disconnect', () => {
-                setDisplayProgress(false)
-                setProgress(0)
-            })
-            socket.on('progress', newProgress=>{
-              setProgress(parseInt(newProgress, 10))
-            })
-            socket.on('puzzlesCompleted', ()=>{
-              setDisplayProgress(false)
-              setProgress(0)
-            })
+                setProgress(newProgress)
+                if(newProgress === 1){
+                  setDisplayProgress(false)
+                }
+          }) 
         }
         sessionStorage.setItem('puzzles', JSON.stringify(puzzles))
       }, [socket, puzzles])
@@ -94,7 +83,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
             <PuzzleTable puzzles={puzzles} setPuzzles={setPuzzles} session={session} saved={saved} socket={socket}/>
           </div>
           {displayProgress&&<><LoadingIcon progress={progress} />
-            <label>{progress&&progress.toFixed(0)}%</label></>
+            <label>{progress&&Math.round(progress*100)}%</label></>
           }
           <PlayForm puzzles={puzzles} />
         
