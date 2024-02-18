@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
-export default function ChessSquare({light, dark}){
+export default function ChessSquare({light, dark, defaultChecked}){
     const id = `${light},${dark}`.replace(/#|,/g, '')
    
     function radioChange(e){
@@ -20,7 +20,7 @@ export default function ChessSquare({light, dark}){
             <span style={{backgroundColor: dark}} className='h-1/2 w-1/2 block'/>
             <span style={{backgroundColor: dark}} className='h-1/2 w-1/2 block'/>
             <span style={{backgroundColor: light}} className='h-1/2 w-1/2 block'/>
-            <input id={`input${id}`} type="radio" name="boardStyle" value={`${light},${dark}`} className=" absolute opacity-0  " onChange={radioChange}/>
+            <input id={`input${id}`} type="radio" name="boardStyle" value={`${light},${dark}`} defaultChecked={defaultChecked} className=" absolute opacity-0  " onChange={radioChange}/>
         </label>
     )
 }

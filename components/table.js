@@ -49,7 +49,7 @@ export default function GamesTable(){
              <tr className="h-10" />
          </tbody>   
         
-        <tbody class="border-2" >
+        <tbody >
             {
                 context.gamesPgns.map((pgn) =><Game key={pgn} gamesPgns={context.gamesPgns}  setGamesPgns={context.setGamesPgns} pgn = {pgn} width={width} className="bg-slate-400"   />)
             }   
