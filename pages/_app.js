@@ -36,7 +36,6 @@ export default function App({
    }, [socket])
     return (
         <SessionProvider session={session}>
-            <Script src="/socket.io/socket.io.js"/>
             <NewNotificationDisplay socket={socket}/>
             <Component {...pageProps} socket={socket}/>
             
