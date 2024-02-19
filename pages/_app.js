@@ -6,31 +6,6 @@ import { useEffect, useState } from "react"
 import { io } from "socket.io-client"
 import NewNotificationDisplay from "@/components/newNotificationDisplay"
 
-export const metadata = {
-    title: 'MyChessPuzzles',
-    description: 'Generate chess puzzles from a Lichess players games',
-    openGraph: {
-        title: 'MyChessPuzzles - Generate Puzzles',
-        description: 'Generate chess puzzles from a Lichess players games',
-        url: 'https://mychesspuzzles.com',
-        siteName: 'MyChessPuzzles',
-        images:[
-            {
-                url:'https://mychesspuzzles.com/public/images/og.png',
-                width:800,
-                height:395
-            },
-            {
-                url: 'https://mychesspuzzles.com/public/images/og-alt.png',
-                width: 1528, 
-                height:755
-            }
-        ],
-        locale: 'en_US',
-        type: 'website'
-    }
-}
-
 export default function App({
     Component,
     pageProps: { session, ...pageProps },
@@ -38,10 +13,19 @@ export default function App({
 }){
    const [socket, setSocket] = useState(null)
    useEffect(()=>{
-   
+   async function connectWebSocket(){
+        try{
+            const newSocket = await io(process.env.NEXT_PUBLIC_WEBSOCKET_URL)
+            setSocket(newSocket)
+            if(!newSocket.connected){
+                window.alert('Not Connected to WebSocket')
+            }
+        }catch(err){
+            window.alert(err)
+        }
+    }
     if(!socket){
-        const newSocket = io(process.env.NEXT_PUBLIC_WEBSOCKET_URL)
-        setSocket(newSocket)
+        connectWebSocket()
     }
     
     return () => {
