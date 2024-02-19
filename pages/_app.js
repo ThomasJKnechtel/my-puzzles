@@ -13,19 +13,13 @@ export default function App({
 }){
    const [socket, setSocket] = useState(null)
    useEffect(()=>{
-   async function connectWebSocket(){
-        try{
-            const newSocket = await io(process.env.NEXT_PUBLIC_WEBSOCKET_URL)
-            setSocket(newSocket)
-            if(!newSocket.connected){
-                window.alert('Not Connected to WebSocket')
-            }
-        }catch(err){
-            window.alert(err)
-        }
-    }
     if(!socket){
-        connectWebSocket()
+        const newSocket = io(process.env.NEXT_PUBLIC_WEBSOCKET_URL)
+        setSocket(newSocket)
+        newSocket.on('connect_error', (err)=>{
+            window.alert(err)
+        })
+
     }
     
     return () => {
