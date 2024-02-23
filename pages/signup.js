@@ -23,7 +23,7 @@ export default function SignUp({ providers }){
         }
         return response.json()
       }).then(result => {
-        if(result.Status === "User added successfully"){
+        if(result.Status === "User added successfully."){
           window.location.href = '/'
         }else{
           setError(result.Status)

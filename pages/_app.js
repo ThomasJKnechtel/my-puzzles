@@ -19,7 +19,7 @@ export default function App({
         newSocket.on('connect_error', (err)=>{
             window.alert(err)
         })
-
+	    window.alert(process.env.NEXT_PUBLIC_WEBSOCKET_URL)
     }
     
     return () => {

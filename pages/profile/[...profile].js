@@ -41,7 +41,8 @@ export default function ProfilePage({profileData, socket}){
             document.querySelector('#username-container').classList.add('opacity-80')
         }
     }
-    async function updateUsername(){
+    async function updateUsername(e){
+        e.preventDefault()
         const newUsername = document.querySelector('#username').value
         const regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g;
         if(!regex.test(newUsername)&&newUsername.length>3&&newUsername.length<15){
@@ -52,6 +53,8 @@ export default function ProfilePage({profileData, socket}){
             }).then(response => {
                 if(!response.ok){
                     window.alert(`Error: ${response.status}`)
+                }else{
+                    window.location.href(`/profile/${newUsername}`)
                 }
             })
         }else{

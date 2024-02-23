@@ -49,16 +49,18 @@ export default function SearchBar({setGamesPgns}){
     return (
       
         
-        <div className="inline-flex flex-row items-center max-h-6 bg-white p-1 rounded-r-full relative w-96 justify-between border-black border-2 focus:">
-                 
-                <input id="player" type="text" placeholder="Enter a Lichess username" className=" w-64 max-h-4" />
-                <div className=" inline-flex flex-row">
+        <div onKeyDown={(e)=>{if(e.key==='Enter')getGames()}} className="inline-flex flex-row items-center max-h-6 bg-white p-1 rounded-r-full relative w-96 justify-between border-black border-2 justify-between  ">
+                <input id="player" type="text" placeholder="Enter a Lichess username" className=" w-64 max-h-4"  />
+                <span className=" inline-flex flex-row items-center">
+                 <div className=" inline-flex flex-row">
                     <label id="searchErrorMessage" className="text-xs text-red-800 hidden font-medium opacity-50">No Games Found</label>
                     <div className="relative focus-within:bg-slate-200 peer-focus:bg-opacity-0">
                         <button type="button" className=' m-1 ' onClick={()=>setShowForm(!showForm)}><Image src="https://img.icons8.com/external-smashingstocks-detailed-outline-smashing-stocks/66/external-parameters-festivals-and-events-smashingstocks-detailed-outline-smashing-stocks.png" alt="perameters" width={15} height={15}/></button>
                         <div className=" absolute top-[25px] right-0 shadow-md"><SearchPerameterForm setShowForm={setShowForm} /></div>
                     </div>
                 <button type="button" className="" onClick = {getGames} ><Image src="https://img.icons8.com/ios/50/search--v1.png" alt="search" width={15} height={15} className=""/></button></div>
+                </span>
+               
          </div>
         
         

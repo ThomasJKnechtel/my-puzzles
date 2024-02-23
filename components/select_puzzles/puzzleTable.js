@@ -52,7 +52,7 @@ function Puzzle({id, white, black, date, fen, continuation, puzzles, setPuzzles,
     // eslint-disable-next-line no-nested-ternary
     return (
     <tr className="bg-slate-50 p-4 odd:bg-slate-300 ">
-    <td className="text-left align-middle">
+    <td className=" inline-flex flex-col items-start ">
         <label>{black}</label>
         <button type="button" className=" border-slate-400 hover:border-2"><Chessboard position={fen} id={fen} width={140} /></button>
         <label>{white}</label>
@@ -66,7 +66,7 @@ function Puzzle({id, white, black, date, fen, continuation, puzzles, setPuzzles,
     <td>{success_rate&&<label>{success_rate}</label>}</td>
     <td>{!session?<label className=" whitespace-nowrap">Log In</label>:isSaved?<label>Saved</label>:<button type="button" onClick={()=>{savePuzzle()}} className=" p-1 rounded-md bg-blue-500"><Image src="https://img.icons8.com/ios-filled/100/save--v1.png" width={50} height={50} alt="save"/></button>}</td>
     <td><button type="button" onClick={()=>{removePuzzle(puzzles, setPuzzles)}} className=" p-1 rounded-md text-xl font-medium bg-red-700 hover:bg-red-800 "><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={50} height={50} className="sm:w-[50px] sm:h-[50px]"/></button></td>
-    <td>{isSaved?<Link href={{pathname:`/play/${puzzleId}`}}><button className=" green p-1 rounded-md"><Image src="https://img.icons8.com/fluency-systems-regular/48/binoculars.png" alt="look" width={50} height={50} className="sm:w-[50px] sm:h-[50px]"/></button></Link>:<label>Must be saved</label>}</td>
+    <td>{isSaved?<Link href={{pathname:`/play/${puzzleId}`}}><button className=" green p-1 rounded-md"><Image src="https://img.icons8.com/fluency-systems-regular/48/binoculars.png" alt="look" width={50} height={50} className="sm:w-[50px] sm:h-[50px]"/></button></Link>:<label className="whitespace-nowrap">Must be saved</label>}</td>
     <td>{isSaved&&<Share socket={socket} puzzleId={puzzleId} username={username} token={token} />}</td>
     </tr>)
   
@@ -80,9 +80,9 @@ export default function PuzzleTable({puzzles, setPuzzles, session, saved, socket
         
         
         
-        <table className=" min-w-full table-fixed text-xl">
+        <table className=" min-w-full table-fixed text-xl m-2">
             
-            <thead className=" bg-slate-300 mb-2  shadow-lg h-10 sticky top-0 z-10"><tr className="h-14 sticky top-0 z-10" ><th className=" sticky top-0 z-10 w-[150px]" /><th className="sticky top-0 z-10 order-5">Date</th><th className=" sticky top-0 z-10 ">Uploaded</th><th className="  sticky top-0 z-10">Attempts</th><th className="  sticky top-0 z-10">Success Rate</th><th className="sticky top-0 z-10"><label className=" ">Save</label></th><th className=" sticky top-0 z-10 min-w-[50px] "><button type="button" onClick={()=>setPuzzles([])} className=" p-1 rounded-md bg-red-700 hover:bg-red-800 order-3"><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={20} height={20} className=""/></button></th><th className=" sticky top-0 z-10 min-w-[50px] order-3"/><th className=" sticky top-0 z-10"/></tr></thead>
+            <thead className=" bg-slate-300 mb-2  shadow-lg h-10 sticky top-0 z-10"><tr className="h-14 sticky top-0 z-10 " ><th className=" sticky top-0 z-10 w-[150px]" /><th className="sticky top-0 z-10 order-5">Date</th><th className=" sticky top-0 z-10 p-1 ">Uploaded</th><th className="  sticky top-0 z-10 p-1">Attempts</th><th className="  sticky top-0 z-10 p-1 whitespace-nowrap">Success Rate</th><th className="sticky top-0 z-10 p-1"><label className=" ">Save</label></th><th className=" sticky top-0 z-10 min-w-[50px] p1 "><button type="button" onClick={()=>setPuzzles([])} className=" p-1 rounded-md bg-red-700 hover:bg-red-800 order-3"><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={20} height={20} className=""/></button></th><th className=" sticky top-0 z-10 min-w-[50px] order-3"/><th className=" sticky top-0 z-10"/></tr></thead>
          <tbody>
              <tr className="h-10" />
          </tbody>   

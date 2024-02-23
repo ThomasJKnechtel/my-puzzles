@@ -36,7 +36,7 @@ export default function Layout({ search, children, searchLink, selectPuzzles, lo
         }
     }, [display])
     return (
-        <div className="relative inline-flex flex-col align-middle h-full w-full">
+        <div className="relative inline-flex flex-col justify-between h-full w-full">
             
             <header id="header" className="flex flex-row items-center justify-between gap-1 bg-slate-500 flex-wrap pt-1">
                 <div className=' inline-flex flex-row items-center'>
@@ -87,7 +87,7 @@ export default function Layout({ search, children, searchLink, selectPuzzles, lo
             
             </main>
             <footer id="footer" className = "inline-flex flex-row justify-center w-full ">
-                <label>Contact me:</label><Link href="thomasknechtel@cmail.carleton.ca">thomasknechtel@cmail.carleton.ca</Link>
+                <label>Contact me:</label><Link href="thomasknechtel@outlook.com">thomasknechtel@outlook.com</Link>
             </footer>
         </div>
     )
