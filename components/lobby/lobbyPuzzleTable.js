@@ -75,7 +75,7 @@ export default function LobbyPuzzleTable({puzzles, setSelectedPuzzles}){
                     gridOptions={gridOptions}
                     onSelectionChanged={getSelectedPuzzles}
                     onGridReady={onGridReady}
-                    
+                    rowMultiSelectWithClick
                     />
         </div>
      

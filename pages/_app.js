@@ -16,10 +16,7 @@ export default function App({
     if(!socket){
         const newSocket = io(process.env.NEXT_PUBLIC_WEBSOCKET_URL)
         setSocket(newSocket)
-        newSocket.on('connect_error', (err)=>{
-            window.alert(err)
-        })
-	    window.alert(process.env.NEXT_PUBLIC_WEBSOCKET_URL)
+	  
     }
     
     return () => {

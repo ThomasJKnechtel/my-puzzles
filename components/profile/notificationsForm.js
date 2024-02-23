@@ -48,7 +48,7 @@ export default function NotificationsForm({socket, session}){
         }
     }
     return (
-    <div id="notificationForm" className=" bg-slate-300 p-2 rounded-md relative hidden">
+    <div id="notificationForm" className=" bg-slate-200 p-2 rounded-md relative hidden shadow-md">
         <h1 className=" font-bold text-2xl border-b-2">Notifications</h1>
         <button type="button" onClick={()=>document.querySelector('#notificationForm').classList.add('hidden')} className=" absolute right-0 top-0">✖</button>
         <h2 className=" font-medium text-xl text-slate-600">Friend Requests</h2>

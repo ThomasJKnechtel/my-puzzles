@@ -4,8 +4,6 @@
 /* eslint-disable camelcase */
 import { getServerSession } from "next-auth";
 import { useEffect, useState , useMemo } from "react";
-import { useSession } from "next-auth/react";
-import dynamic from "next/dynamic";
 
 import { authOptions } from "./api/auth/[...nextauth]";
 import getPuzzles from "./api/db/getPuzzles";
@@ -15,6 +13,7 @@ import Layout from "@/components/layout/layout";
 import LobbyPuzzleTable from "@/components/lobby/lobbyPuzzleTable";
 import FocusButton from "@/components/FocusButton";
 import ChallengeSection from "@/components/lobby/challengeSection";
+import connectDB from "@/utils/dbConnect";
 
 export default function LobbyPage({socket, puzzles, query}){
     const [challenges, setChallenges] = useState([])
@@ -41,7 +40,7 @@ export default function LobbyPage({socket, puzzles, query}){
     }, [formFocus])
    
     return (
-        <Layout>
+        <Layout searchLink selectPuzzles>
             <form className=" flex flex-col items-stretch p-2 gap-1 relative">
                 <label className=" relative inline-flex justify-center bg-slate-500 text-slate-300 font-bold rounded-sm text-center shadow-md hover:bg-slate-600 p-1 ">3 Minute<input type="radio" value="3Minute" name="timeControl" checked className=" absolute right-3 top-[10px] checked:text-gray-400"  /></label>
                 <label className=" relative inline-flex justify-center bg-slate-500 text-slate-300 font-bold rounded-sm text-center shadow-md hover:bg-slate-600 p-1">5 Minute<input type="radio" value="5Minute" name="timeControl" className=" absolute right-3 top-[10px] checked:text-gray-400"  /></label>
@@ -49,8 +48,9 @@ export default function LobbyPage({socket, puzzles, query}){
             </form>
             <div  className=" w-full h-4/5 relative  ">
                 {!formFocus&&<label className=" font-bold text-sm text-center w-full block border-b-2 p-1">Select Puzzles</label>}
-                <div id="tableContainer" className=" w-full h-full max-h-[500px] max-w-[1220px] mx-auto">
+                <div id="tableContainer" className=" w-full h-full max-h-[500px] max-w-[1220px] mx-auto flex flex-col items-center">
                     {useMemo(()=><LobbyPuzzleTable setSelectedPuzzles={setSelectedPuzzles} puzzles={JSON.parse(puzzles)}/>, [puzzles])}
+                    <button onClick={()=>setFormFocus(false)} className=" items-center m-2 px-3 py-1 font-medium border-2 rounded-md bg-white ring-2 hover:bg-slate-100 hover:ring-blue-500 hover:font-bold ">Next</button>
                 </div>
                 
                 <div className=" absolute top-0 right-0"><FocusButton focus={formFocus} setFocus={setFormFocus}/></div>
@@ -93,6 +93,23 @@ export async function getServerSideProps(context) {
               permanent: false,
             },
           };
+    }
+    const puzzleIds =  context.query?.puzzleIds
+    if(puzzleIds){
+        try{
+            const query = `EXEC GetPuzzlesById @idList = ${puzzleIds}`
+            const db = await connectDB()
+            const puzzles = JSON.stringify((await db.query(query)).recordsets[0])
+            return {
+                props: {
+                  puzzles,
+                  query: context.query
+                },
+              };
+        }catch(err){
+            console.log(err)
+        }
+        
     }
     const puzzles = JSON.stringify(await getPuzzles({username: session.username, sortCriteria:'dateUploaded'}))
     return {
