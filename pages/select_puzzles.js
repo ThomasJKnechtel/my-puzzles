@@ -61,19 +61,21 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
         document.getElementById('puzzleForm').style.display="none"
         document.getElementById('formButton').style.opacity=0.5
         document.getElementById('tableButton').style.opacity=1
-
+        document.querySelector('#play').classList.remove('hidden')
+        document.querySelector('#play').classList.add('block')
       }
       function onFormButtonClick(){
         document.getElementById('puzzleTable').style.display="none"
         document.getElementById('puzzleForm').style.display="block"
         document.getElementById('formButton').style.opacity=1
         document.getElementById('tableButton').style.opacity=0.5
+        document.querySelector('#play').classList.add("hidden")
         
       }
       //
       return (
         <Layout searchLink lobby>
-        <div className=" flex flex-col items-center w-full relative">
+        <div className=" flex flex-col items-center w-full relative overflow-clip h-full">
 
         
           <div className=" bg-white sm:pl-8 w-full mb-4 ">
@@ -86,11 +88,16 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
             <label>{progress&&Math.round(progress*100)}%</label></>
           }
           {puzzles?.length>0&&
-          <div htmlFor="play" type="button" className="font-bold text-xl border-2  rounded-md bg-white ring-blue-300 ring-2 hover:bg-slate-100 focus:bg-slate-100 focus:ring-blue-500 group" >
+          <div id="play" htmlFor="play" type="button" className="font-bold text-xl border-2  rounded-md bg-white ring-blue-300 ring-2 hover:bg-slate-100 focus:bg-slate-100 focus:ring-blue-500 group" >
           
-            <button className=" w-full h-full px-3 py-1" type="button">Play</button>
+            <button  className=" w-full h-full px-3 py-1" type="button">Play</button>
             <span className=" absolute left-1/2 traslate-x-[-50%] top-1/2 translate-y-[-50%] z-50 translate-x-[-150px] hidden group-focus-within:block">
-            <PlayForm puzzles={puzzles} saved={saved}/>
+            
+            {puzzles?.length>0&&
+              
+                <PlayForm puzzles={puzzles} saved={saved}/>
+             
+            }
             
           </span>
           </div>
