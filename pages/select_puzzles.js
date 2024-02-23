@@ -9,7 +9,7 @@ import PuzzleTable  from "../components/select_puzzles/puzzleTable"
 import Layout from "../components/layout/layout"
 import PuzzleFormSelection from "@/components/select_puzzles/puzzleSelection"
 import LoadingIcon from "@/components/select_puzzles/loadingIcon";
-import PlayForm from "@/components/select_puzzles/playForm";
+import PlayForm from "@/components/select_puzzles/playForm2";
 import getPuzzles from "./api/db/getPuzzles";
 
 
@@ -73,10 +73,10 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
       //
       return (
         <Layout searchLink lobby>
-        <div className=" flex flex-col items-center w-full ">
+        <div className=" flex flex-col items-center w-full relative">
 
         
-          <div className=" bg-white sm:pl-8 w-full mb-4">
+          <div className=" bg-white sm:pl-8 w-full mb-4 ">
             <button type="button"  id="tableButton" onClick={onTableButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600">Puzzles</button>
             <button type="button" id="formButton" onClick={onFormButtonClick} className=" text-2xl font-medium text-blue-600 border-b-4 pb-2 px-3 border-blue-600 opacity-50">Select Puzzles</button>
             <PuzzleFormSelection loggedIn={session}  />
@@ -85,8 +85,18 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
           {displayProgress&&<><LoadingIcon progress={progress} />
             <label>{progress&&Math.round(progress*100)}%</label></>
           }
-          <PlayForm puzzles={puzzles} />
-        
+          {puzzles?.length>0&&
+          <div htmlFor="play" type="button" className="font-bold text-xl border-2  rounded-md bg-white ring-blue-300 ring-2 hover:bg-slate-100 focus:bg-slate-100 focus:ring-blue-500 group" >
+          
+            <button className=" w-full h-full px-3 py-1" type="button">Play</button>
+            <span className=" absolute left-1/2 traslate-x-[-50%] top-1/2 translate-y-[-50%] z-50 translate-x-[-150px] hidden group-focus-within:block">
+            <PlayForm puzzles={puzzles} saved={saved}/>
+            
+          </span>
+          </div>
+          }
+          
+          
         </div>
         </Layout>
       )

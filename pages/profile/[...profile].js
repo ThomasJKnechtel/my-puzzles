@@ -93,10 +93,10 @@ export default function ProfilePage({profileData, socket}){
              
         </div>
         {isMyProfile&&
-            <div className=" h-full  m-2 flex flex-row-reverse  items-start gap-2 max-sm:absolute max-sm:right-0 max-sm:w-full  ">
+            <div className=" h-full  m-2 flex flex-row-reverse  items-start gap-2 absolute right-0 max-sm:w-full  ">
             <SideBar session={session} socket={socket} />
             
-            <div className=" flex flex-col max-w-[700px]">
+            <div className=" flex flex-col max-w-[700px] flex-wrap-reverse md:h-full gap-2">
 
             <SettingsPopup/>
             <FriendsPopup username={session?.username} user_id={session?.user?.id}/>

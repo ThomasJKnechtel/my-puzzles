@@ -42,7 +42,7 @@ export default function SettingsPopup(){
             <label className=" w-[60px] h-[30px] bg-white inline-flex flex-row items-center"><input id="showNotation" name="showNotation" className=" w-full h-0 opacity-0 order-3 checked:order-1 appearance-none  " type="checkbox"/><span className=" h-full w-[40px] bg-slate-400 block order-2"/></label>
             <label className=" font-medium text-slate-600">Board Style</label>
             <div className=" flex w-full flex-wrap gap-2 flex-row"><ChessSquare dark='#964d22' light='#eedc97' defaultChecked/><ChessSquare dark='#241a0f' light='#eedc97'/><ChessSquare dark='#241a0f' light='#7c7c7c'/><ChessSquare dark='#7c7c7c' light='#cccccc'/></div>
-            <input type="submit" className="bg-green-600 w-fit px-2 py-1 font-medium rounded-md shadow-md" />
+            <input type="submit" className=" px-2 py-1 bg-white w-fit rounded-md font-medium border-2 ring-2 border-slate-300 hover:bg-slate-100 hover:ring-blue-400" />
         </form>
     )
     

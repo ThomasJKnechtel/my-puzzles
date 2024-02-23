@@ -76,7 +76,7 @@ export default function PuzzleTable({puzzles, setPuzzles, session, saved, socket
     
     return (
         
-        <div id="puzzleTable" className=" min-w-full  overflow-y-auto h-[500px] overflow-x-auto ">
+        <div id="puzzleTable" className=" min-w-full  overflow-y-auto h-[500px]  md:overflow-x-auto ">
         
         
         
@@ -93,7 +93,7 @@ export default function PuzzleTable({puzzles, setPuzzles, session, saved, socket
                  puzzles.map((puzzle, index) =>{
                         if(puzzle){
                              // eslint-disable-next-line react/no-array-index-key
-                             return <Puzzle key={index} id={puzzle.puzzle_id} white={puzzle.white} black = {puzzle.black} date = {formatDate(puzzle.date)} fen = {puzzle.fen} continuation={puzzle.continuation} puzzles={puzzles} setPuzzles={setPuzzles} dateUploaded={puzzle.dateUploaded?formatDate(puzzle.date_uploaded):"N/A" } saved={saved}session={session} turn={puzzle.turn} attempts={puzzle.attempts} success_rate={puzzle.success_rate} socket={socket} username={session?.username} token={session?.token}/>
+                             return <Puzzle key={index} id={puzzle.puzzle_id} white={puzzle.white} black = {puzzle.black} date = {formatDate(puzzle.date)} fen = {puzzle.fen} continuation={puzzle.continuation} puzzles={puzzles} setPuzzles={setPuzzles} dateUploaded={puzzle.dateUploaded?formatDate(puzzle.date_uploaded):"N/A" } saved={saved} session={session} turn={puzzle.turn} attempts={puzzle.attempts} success_rate={puzzle.success_rate} socket={socket} username={session?.username} token={session?.token}/>
                         }
                        
                     })
