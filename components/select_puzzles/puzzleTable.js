@@ -66,7 +66,7 @@ function Puzzle({id, white, black, date, fen, continuation, puzzles, setPuzzles,
     <td>{success_rate&&<label>{success_rate}</label>}</td>
     <td>{!session?<label className=" whitespace-nowrap">Log In</label>:isSaved?<label>Saved</label>:<button type="button" onClick={()=>{savePuzzle()}} className=" p-1 rounded-md bg-blue-500"><Image src="https://img.icons8.com/ios-filled/100/save--v1.png" width={50} height={50} alt="save"/></button>}</td>
     <td><button type="button" onClick={()=>{removePuzzle(puzzles, setPuzzles)}} className=" p-1 rounded-md text-xl font-medium bg-red-700 hover:bg-red-800 "><Image src="https://img.icons8.com/ios/50/delete-trash.png" alt="trash" width={50} height={50} className="sm:w-[50px] sm:h-[50px]"/></button></td>
-    <td>{isSaved?<Link href={{pathname:`/play/${puzzleId}`}}><button className=" green p-1 rounded-md"><Image src="https://img.icons8.com/fluency-systems-regular/48/binoculars.png" alt="look" width={50} height={50} className="sm:w-[50px] sm:h-[50px]"/></button></Link>:<label className="whitespace-nowrap">Must be saved</label>}</td>
+    <td>{isSaved?<Link href={{pathname:`/play/${puzzleId}`}}><button className=" p-1 rounded-md bg-green-600 hover:bg-green-700 "><Image src="https://img.icons8.com/fluency-systems-regular/48/binoculars.png" alt="look" width={50} height={50} className="sm:w-[50px] sm:h-[50px]"/></button></Link>:<label className="whitespace-nowrap">Must be saved</label>}</td>
     <td>{isSaved&&<Share socket={socket} puzzleId={puzzleId} username={username} token={token} />}</td>
     </tr>)
   
