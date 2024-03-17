@@ -48,7 +48,7 @@ export default function SelectPuzzlesPage({puzzlesFromSearch, saved, socket}){
                   setPuzzles(newPuzzles)
                 }
                 setProgress(newProgress)
-                if(newProgress === 1){
+                if(newProgress == 1){
                   setDisplayProgress(false)
                 }
           }) 

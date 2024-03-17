@@ -145,7 +145,7 @@ export default function PlayPuzzlePage({puzzle}){
                 <PGNViewer pgnViewerObject={pgnViewerObject} currentMove={currentMove} setCurrentMove={setCurrentMove} display={!boardFocus} />
             </div>
             
-                <div id="displayContainer" className=" absolute mx-auto z-10 top-10 shadow-2xl hidden">
+                <div id="displayContainer" className=" absolute mx-auto z-10 top-10 shadow-2xl hidden left-1/2 translate-x-[-50%]">
                 <DisplayPuzzleData attempts={attempts} successRate={success_rate} timeSpent={gameState.finishedTime-gameState.start_time} solution={gameState.continuation} result={gameState.state} puzzle_id={gameState.puzzle_id}  />
                 </div>
             

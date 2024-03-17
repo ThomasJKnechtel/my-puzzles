@@ -38,7 +38,7 @@ export default function Layout({ search, children, searchLink, selectPuzzles, lo
     return (
         <div className="relative inline-flex flex-col justify-between h-full w-full">
             
-            <header id="header" className="flex flex-row items-center justify-between gap-1 bg-slate-500 flex-wrap pt-1 px-1">
+            <header id="header" className="flex flex-row items-center justify-between gap-1 bg-slate-500 flex-wrap pt-1">
                 <div className=' inline-flex flex-row items-center'>
                     <Image src = "https://img.icons8.com/ios-glyphs/30/pawn.png" 
                     alt = "logo"
@@ -52,13 +52,13 @@ export default function Layout({ search, children, searchLink, selectPuzzles, lo
                 
                 {
                 session?(
-                    <span className=' z-20 sm:order-4'>
+                    <span className=' z-20 sm:order-4 m-1'>
                         <Popup session={session}/>
                     </span>
                     
 
                 ):(
-                    <button type="button" className="button-3 green mr-1 ml-auto sm:order-4 my-1" onClick={()=>signIn()}>Sign In</button>
+                    <button type="button" className="button-3 green mr-1 ml-auto sm:order-4 m-1" onClick={()=>signIn()}>Sign In</button>
                 )
                 }
                 <div className=' flex flex-row flex-wrap gap-1 sm:order-3 sm:bg-slate-500 bg-slate-50 p-1 w-full sm:w-fit'>

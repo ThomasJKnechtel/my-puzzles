@@ -8,7 +8,7 @@ export default function PuzzleFormSelection({loggedIn}){
     return (
         
             
-            <form id="puzzleForm" action="" method="GET" className=" bg-white pt-2  pr-8 relative w-full hidden">
+            <form id="puzzleForm" action="" method="GET" className=" bg-white pt-2  pr-8 relative w-full hidden overflow-y-auto overflow-y-auto">
            
            <fieldset className=" border-t-2 ">
                <div className=" flex-col items-start my-2 mx-10"><label className=" font-medium block" htmlFor="player">Player</label><input className=" border-2 shadow-sm bg-slate-100 w-full max-w-md" type="text" name="player" id="player" /></div>
@@ -50,12 +50,11 @@ export default function PuzzleFormSelection({loggedIn}){
                     </div>
                 </fieldset>
                 <fieldset className=" flex flex-row border-t-2">
-                <div className=" flex flex-row justify-end w-full my-2 items-end">
+                <div className=" flex flex-row flex-wrap justify-end w-full my-2 items-end gap-x-10">
 
-                
-                <div className=" inline-flex flex-col mx-10">
-                    <label className=" font-medium" htmlFor="numberOfPuzzles">Number of Puzzles</label><input className=" border-2 shadow-sm bg-slate-100 px-2" type="number" name="numberOfPuzzles" />
-                </div>
+                    <div className=" inline-flex flex-col ">
+                        <label className=" font-medium" htmlFor="numberOfPuzzles">Number of Puzzles</label><input className=" border-2 shadow-sm bg-slate-100 px-2" type="number" name="numberOfPuzzles" />
+                    </div>
                     {loggedIn&&(
                         <div className=" inline-flex flex-col items-end  mx-10"><label className=" font-medium" htmlFor="myPuzzles">From my puzzles</label><label className="switch"><input className=" opacity-0 w-0 h-0" type="checkbox" name="username" value={loggedIn.username} /><span className="slider" /></label></div>)
                     }
