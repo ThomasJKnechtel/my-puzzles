@@ -1,16 +1,12 @@
+[SetUp "1"]
+[FEN "r1bq1rk1/1p2n1b1/p2p1n1p/3Pp1p1/2N1Pp2/2N3P1/PP3PBP/R1BQR1K1 w - - 0 15"]
+[Event "Rated Blitz game"]
+[Date "2024.03.17"]
+[White "Valerii1122334455\"]
 [Black "gmmds2694"]
 [Result "1-0"]
-[UTCDate "2024.03.17"]
-[UTCTime "15:55:52"]
 [WhiteElo "2729"]
 [BlackElo "2798"]
-[WhiteRatingDiff "+6"]
-[BlackRatingDiff "-7"]
-[BlackTitle "GM"]
-[Variant "Standard"]
 [TimeControl "180+0"]
-[ECO "A89"]
-[Opening "Dutch Defense: Leningrad Variation, Matulovic Variation"]
-[Termination "Normal"]
 
-1. a4 Ng6 2. a5 g4 3. Qb3 h5 4. Qb6 Qxb6 5. axb6 Ne8 6. b3 Bd7 7. Ba3 Rf6 8. Na5 Rb8 9. Rec1 Ne7 10. Na4 Nc8 11. Rc7 Bxa4 12. bxa4 Nxb6 13. Rxb7 Rxb7 14. Nxb7 Nxa4 15. Bf1 Nc3 16. Re1 Bf8 17. Bxa6 Be7 18. Bb4 Na4 19. Bb5 Nb2 20. Bxe8 Nd3 21. Rb1 fxg3 22. fxg3 Nf2 23. Be1 Nh3+ 24. Kg2 Rf3 25. Bxh5 Re3 26. Bxg4 Ng5 27. Bf5 Nxe4 28. Bxe4 Rxe4 29. Bb4 Re2+ 30. Kf3 Rxh2 31. Bxd6 Bf6 32. Nc5 Kf7 33. Ne4 1-0
+15. a4 Ng6 16. a5 g4 17. Qb3 h5 18. Qb6 Qxb6 19. axb6 Ne8 20. b3 Bd7 21. Ba3 Rf6 22. Na5 Rb8 23. Rec1 Ne7 24. Na4 Nc8 25. Rc7 Bxa4 26. bxa4 Nxb6 27. Rxb7 Rxb7 28. Nxb7 Nxa4 29. Bf1 Nc3 30. Re1 Bf8 31. Bxa6 Be7 32. Bb4 Na4 33. Bb5 Nb2 34. Bxe8 Nd3 35. Rb1 fxg3 36. fxg3 Nf2 37. Be1 Nh3+ 38. Kg2 Rf3 39. Bxh5 Re3 40. Bxg4 Ng5 41. Bf5 Nxe4 42. Bxe4 Rxe4 43. Bb4 Re2+ 44. Kf3 Rxh2 45. Bxd6 Bf6 46. Nc5 Kf7 47. Ne4 1-0

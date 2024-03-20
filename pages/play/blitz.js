@@ -31,8 +31,8 @@ function reducer(state, action){
             const { continuation, fen, turn} = puzzle
             newGameState = {
                 "start_time": Date.now(),
-                "continuation" : JSON.parse(continuation),
-                "nextMove" : [...JSON.parse(continuation)][0],
+                "continuation" : continuation,
+                "nextMove" : [...continuation][0],
                 "state" : "PLAYERS_TURN",
                 "fen" : fen,
                 "playerTurn" : turn?"w":"b",
@@ -106,8 +106,8 @@ export default function Blitz({socket}){
         const startState = {
             "puzzle_id": puzzle_id,
             "start_time": Date.now(),
-            "continuation" : JSON.parse(continuation),
-            "nextMove" : [...JSON.parse(continuation)][0],
+            "continuation" : continuation,
+            "nextMove" : [...continuation][0],
             "state" : "PLAYERS_TURN",
             "fen" : fen,
             "playerTurn" : turn?"w":"b",

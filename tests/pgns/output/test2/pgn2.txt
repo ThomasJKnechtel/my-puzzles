@@ -1,0 +1,10 @@
+[Event "Rated Blitz game"]
+[Date "2024.03.17"]
+[White "Valerii1122334455"]
+[Black "gmmds2694"]
+[Result "1-0"]
+[WhiteElo "2729"]
+[BlackElo "2798"]
+[TimeControl "180+0"]
+
+11. c5 g5 12. cxd6 cxd6 13. Nd2 f4 14. Nc4 a6 15. a4 Ng6 16. a5 g4 17. Qb3 h5 18. Qb6 Qxb6 19. axb6 Ne8 1-0
